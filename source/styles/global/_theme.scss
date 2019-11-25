@@ -36,5 +36,15 @@ $line-heights: (
 );
 
 $spaces: (
+  '0': px-to-rem(0),
+  '1': px-to-rem(4),
+  '2': px-to-rem(8),
+  '3': px-to-rem(12),
+  '4': px-to-rem(20),
+  '5': px-to-rem(24),
+  '6': px-to-rem(40),
+);
+
+$radii: (
 
 );

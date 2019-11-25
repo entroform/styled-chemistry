@@ -2,10 +2,64 @@
   @error 'theme-system: $spaces variable is not defined.';
 }
 
-
-// This getter function let's you get space variants and it will also check for errors.
-@function space() {
-
+@if not type-of($spaces) == 'map' {
+  @error 'theme-system: $spaces is not a map.';
 }
 
-// Generate margins and paddings.
+// This getter function let's you get space variants and it will also check for errors.
+@function space($__variant: 'default') {
+  @if not map-has-key($spaces, $__variant) {
+    @error 'theme-system: space: Variant "#{$__variant}" is not defined';
+  }
+
+  @return map-get($spaces, $__variant);
+}
+
+// Generate margins and paddings global modifier classes.
+@if $GENERATE_SPACE_CLASSES == true {
+  @each $__size, $__value in $spaces {
+    // Margins
+    .--mt-#{$__size} {
+      margin-top: $__value;
+    }
+    .--mb-#{$__size} {
+      margin-bottom: $__value;
+    }
+    .--my-#{$__size} {
+      margin-top: $__value;
+      margin-bottom: $__value;
+    }
+    .--ml-#{$__size} {
+      margin-left: $__value;
+    }
+    .--mr-#{$__size} {
+      margin-right: $__value;
+    }
+    .--mx-#{$__size} {
+      margin-left: $__value;
+      margin-right: $__value;
+    }
+
+    // Paddings
+    .--pt-#{$__size} {
+      padding-top: $__value;
+    }
+    .--pb-#{$__size} {
+      padding-bottom: $__value;
+    }
+    .--py-#{$__size} {
+      padding-top: $__value;
+      padding-bottom: $__value;
+    }
+    .--pl-#{$__size} {
+      padding-left: $__value;
+    }
+    .--pr-#{$__size} {
+      padding-right: $__value;
+    }
+    .--px-#{$__size} {
+      padding-left: $__value;
+      padding-right: $__value;
+    }
+  }
+}

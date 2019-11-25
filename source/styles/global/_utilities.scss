@@ -1,17 +1,3 @@
-// Config Utility
-
-@function config($__key) {
-  @if not variable-exists($config) {
-    @error 'config: $config variable is not defined.';
-  }
-
-  @if not map-has-key($config, $__key) {
-    @error 'config: #{$__key} field is not defined.';
-  }
-
-  @return map-get($config, $__key);
-}
-
 // Utilities
 
 @function strip-unit($__number) {
@@ -21,18 +7,18 @@
   @return $__number;
 }
 
-@function px-to-rem($_px, $_base: map-get($config, 'font-size')) {
-  @return strip-unit($_px) / strip-unit($_base) + 0rem;
+@function px-to-rem($__px, $__base: $BASE_FONT_SIZE) {
+  @return strip-unit($__px) / strip-unit($__base) + 0rem;
 }
 
-@function rem-to-px($_rem) {
-  @return strip-unit($_rem) * config('font-size');
+@function rem-to-px($__rem) {
+  @return strip-unit($__rem) * $BASE_FONT_SIZE;
 }
 
-@function width-percentage($_number, $_base: 12) {
-  @return (strip-unit($_number) / strip-unit($_base)) * 100 + 0%;
+@function width-percentage($__number, $__base: 12) {
+  @return (strip-unit($__number) / strip-unit($__base)) * 100 + 0%;
 }
 
-@function column-width($_column: 12, $_numberOfColumns: 12) {
-  @return ((px-to-rem(config('width')) / $_numberOfColumns) * $_column) + 0rem;
+@function column-width($__column: 12, $__numberOfColumns: 12) {
+  @return ((px-to-rem($BASE_WIDTH) / $__numberOfColumns) * $__column) + 0rem;
 }
