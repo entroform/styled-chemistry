@@ -1,0 +1,11 @@
+@if not variable-exists($spaces) {
+  @error 'theme-system: $spaces variable is not defined.';
+}
+
+
+// This getter function let's you get space variants and it will also check for errors.
+@function space() {
+
+}
+
+// Generate margins and paddings.
