@@ -1,8 +1,12 @@
-@function color($__color, $__variant: 'default') {
-  @if not variable-exists($config) {
-    @error 'color: $colors variable is not defined.';
-  }
+@if not variable-exists($colors) {
+  @error 'color: $colors variable is not defined.';
+}
 
+@if not type-of($colors) == 'map'{
+  @error 'color: $colors variable is not a map.';
+}
+
+@function color($__color, $__variant: 'default') {
   @if not map-has-key($colors, $__color) {
     @error 'color: Color "#{$__color}" is not defined.';
   }
