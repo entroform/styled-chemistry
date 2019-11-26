@@ -1,5 +1,5 @@
-@import 'theme/color';
-@import 'theme/space';
-@import 'theme/font-size';
-@import 'theme/font-family';
-@import 'theme/line-height';
+@forward 'color';
+@forward 'space';
+@forward 'font-size';
+@forward 'font-family';
+@forward 'line-height';

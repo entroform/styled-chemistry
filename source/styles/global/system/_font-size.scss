@@ -1,4 +1,4 @@
-@if not variable-exists('font-sizes') {
+@if not global-variable-exists('font-sizes') {
   @error '$font-sizes variable is not defined.';
 }
 

@@ -1,4 +1,4 @@
-@if not variable-exists('spaces') {
+@if not global-variable-exists('spaces') {
   @error '$spaces variable is not defined.';
 }
 
@@ -14,7 +14,7 @@
   @return map-get($spaces, $__variant);
 }
 
-@mixin spaceClasses($__className, $__property, $__modifier, $__value) {
+@mixin spaceModifiers($__className, $__property, $__modifier, $__value) {
   .--#{$__className}t-#{$__modifier} {
     #{$__property}-top: $__value;
   }
@@ -43,13 +43,13 @@
 // Generate margins and paddings global modifier classes.
 @if $GENERATE_SPACE_CLASSES == true {
   @each $__size, $__value in $spaces {
-    @include spaceClasses('p', 'padding', $__size, $__value);
-    @include spaceClasses('m', 'margin', $__size, $__value);
+    @include spaceModifiers('p', 'padding', $__size, $__value);
+    @include spaceModifiers('m', 'margin', $__size, $__value);
   }
 
-  @include spaceClasses('p', 'padding', 'auto', auto);
-  @include spaceClasses('p', 'padding', 'none', none);
+  @include spaceModifiers('p', 'padding', 'auto', auto);
+  @include spaceModifiers('p', 'padding', 'none', none);
 
-  @include spaceClasses('m', 'margin', 'auto', auto);  
-  @include spaceClasses('m', 'margin', 'none', none);
+  @include spaceModifiers('m', 'margin', 'auto', auto);  
+  @include spaceModifiers('m', 'margin', 'none', none);
 }
