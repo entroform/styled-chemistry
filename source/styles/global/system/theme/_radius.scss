@@ -8,8 +8,8 @@
 
 @function radius($__radius: 'default') {
   @if not map-has-key($radii, $__radius) {
-    @error '$radii: Radius "#{$__radius}" is not defined';
+    @error 'radius: Radius "#{$__radius}" is not defined.';
   }
 
-  @return map-get($font-sizes, $__radius);
+  @return map-get($radii, $__radius);
 }

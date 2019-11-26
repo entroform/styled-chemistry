@@ -8,7 +8,7 @@
 
 @function font-family($__family: 'default') {
   @if not map-has-key($font-families, $__family) {
-    @error '$font-families: Family "#{$__family}" is not defined';
+    @error 'font-family: Family "#{$__family}" is not defined.';
   }
 
   @return map-get($font-families, $__family);

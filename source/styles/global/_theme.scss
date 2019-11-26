@@ -34,14 +34,6 @@ $font-sizes: (
   '4': px-to-rem(24),
 );
 
-$font-weights: (
-  'default': 400,
-  '0': 400,
-  '1': 500,
-  '2': 600,
-  '3': 700,
-);
-
 $line-heights: (
   'default': 1.5,
   '0': 0,
@@ -49,6 +41,14 @@ $line-heights: (
   '2': 1.2,
   '3': 1.4,
   '4': 2,
+);
+
+$font-weights: (
+  'default': 400,
+  '0': 400,
+  '1': 500,
+  '2': 600,
+  '3': 700,
 );
 
 $spaces: (
@@ -71,4 +71,4 @@ $radii: (
   '5': 24, 
 );
 
-@debug 'theme is laoded';
+@debug 'Theme is loaded';

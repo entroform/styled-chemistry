@@ -8,7 +8,7 @@
 
 @function font-size($__size: 'default') {
   @if not map-has-key($font-sizes, $__size) {
-    @error '$font-sizes: Size "#{$__size}" is not defined';
+    @error '$font-sizes: Size "#{$__size}" is not defined.';
   }
 
   @return map-get($font-sizes, $__size);
