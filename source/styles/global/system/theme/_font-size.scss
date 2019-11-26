@@ -1,0 +1,15 @@
+@if not variable-exists($font-sizes) {
+  @error '$font-sizes variable is not defined.';
+}
+
+@if not type-of($font-sizes) == 'map' {
+  @error '$font-sizes is not a map.';
+}
+
+@function font-size($__size: 'default') {
+  @if not map-has-key($font-sizes, $__size) {
+    @error '$font-sizes: Size "#{$__size}" is not defined';
+  }
+
+  @return map-get($font-sizes, $__size);
+}

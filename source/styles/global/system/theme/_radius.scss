@@ -1,0 +1,15 @@
+@if not variable-exists($radii) {
+  @error '$radii variable is not defined.';
+}
+
+@if not type-of($radii) == 'map' {
+  @error '$radii is not a map.';
+}
+
+@function radius($__radius: 'default') {
+  @if not map-has-key($radii, $__radius) {
+    @error '$radii: Radius "#{$__radius}" is not defined';
+  }
+
+  @return map-get($font-sizes, $__radius);
+}

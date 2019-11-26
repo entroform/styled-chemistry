@@ -19,7 +19,7 @@ $colors: (
   ),
 );
 
-$font-family: (
+$font-families: (
   'sans-serif': ('Helvetica Neue', sans-serif),
 );
 
@@ -28,11 +28,20 @@ $font-sizes: (
 );
 
 $font-weights: (
-
+  'default': 400,
+  '0': 400,
+  '1': 500,
+  '2': 600,
+  '3': 700,
 );
 
 $line-heights: (
-
+  'default': 1.5,
+  '0': 0,
+  '1': 1,
+  '2': 1.2,
+  '3': 1.4,
+  '3': 2,
 );
 
 $spaces: (
@@ -46,5 +55,11 @@ $spaces: (
 );
 
 $radii: (
-
+  'default': 4,
+  '0': 0,
+  '1': 4,
+  '2': 8,
+  '3': 12,
+  '4': 20,
+  '5': 24, 
 );

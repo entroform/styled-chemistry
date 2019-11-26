@@ -1,0 +1,15 @@
+@if not variable-exists($line-heights) {
+  @error '$line-heights variable is not defined.';
+}
+
+@if not type-of($line-heights) == 'map' {
+  @error '$line-heights is not a map.';
+}
+
+@function line-height($__height: 'default') {
+  @if not map-has-key($line-heights, $__height) {
+    @error '$line-heights: Line height "#{$__height}" is not defined';
+  }
+
+  @return map-get($line-heights, $__height);
+}
