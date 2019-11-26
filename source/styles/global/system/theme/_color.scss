@@ -1,4 +1,4 @@
-@if not variable-exists($colors) {
+@if not variable-exists('colors') {
   @error 'color: $colors variable is not defined.';
 }
 
@@ -6,7 +6,7 @@
   @error 'color: $colors variable is not a map.';
 }
 
-@function color($__color, $__variant: 'default') {
+@function colora($__color, $__variant: 'default') {
   @if not map-has-key($colors, $__color) {
     @error 'color: Color "#{$__color}" is not defined.';
   }
@@ -24,7 +24,7 @@
     $__result: map-get($__colorValue, $__variant);
 
     @if not type-of($__result) == 'color' {
-      @error 'color: Variant "#{}", is not of type color.';
+      @error 'color: Variant "#{$__result}", is not of type color.';
     }
 
     @return $__result;

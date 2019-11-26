@@ -1,4 +1,4 @@
-@if not variable-exists($spaces) {
+@if not variable-exists('spaces') {
   @error 'theme-system: $spaces variable is not defined.';
 }
 

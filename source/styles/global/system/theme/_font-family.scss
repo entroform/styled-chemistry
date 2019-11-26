@@ -1,4 +1,4 @@
-@if not variable-exists($font-families) {
+@if not variable-exists('font-families') {
   @error '$font-families variable is not defined.';
 }
 
@@ -6,11 +6,10 @@
   @error '$font-families is not a map.';
 }
 
-// This getter function let's you get space variants and it will also check for errors.
-@function font-families($__family: 'default') {
+@function font-family($__family: 'default') {
   @if not map-has-key($font-families, $__family) {
     @error '$font-families: Family "#{$__family}" is not defined';
   }
 
-  @return map-get($font-familiess, $__family);
+  @return map-get($font-families, $__family);
 }

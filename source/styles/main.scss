@@ -1,1 +1,15 @@
 @import 'reset';
+@import 'global';
+
+$font: font-family('sans-serif');
+@debug $font;
+
+html,
+body {
+  font-family: font-family('sans-serif');
+}
+
+h1 {
+  font-family: font-family('sans-serif');
+  font-size: font-size('0');
+}

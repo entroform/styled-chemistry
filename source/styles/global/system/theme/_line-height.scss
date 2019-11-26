@@ -1,4 +1,4 @@
-@if not variable-exists($line-heights) {
+@if not variable-exists('line-heights') {
   @error '$line-heights variable is not defined.';
 }
 

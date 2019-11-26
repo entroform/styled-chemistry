@@ -1,3 +1,5 @@
+@import url('https://rsms.me/inter/inter.css');
+
 $colors: (
   'white': (
     'default': hsl(0, 0, 0),
@@ -20,11 +22,16 @@ $colors: (
 );
 
 $font-families: (
-  'sans-serif': ('Helvetica Neue', sans-serif),
+  'sans-serif': ('Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif),
 );
 
 $font-sizes: (
   'default': px-to-rem(16),
+  '0': px-to-rem(12),
+  '1': px-to-rem(14),
+  '2': px-to-rem(16),
+  '3': px-to-rem(18),
+  '4': px-to-rem(24),
 );
 
 $font-weights: (
@@ -41,7 +48,7 @@ $line-heights: (
   '1': 1,
   '2': 1.2,
   '3': 1.4,
-  '3': 2,
+  '4': 2,
 );
 
 $spaces: (
@@ -63,3 +70,5 @@ $radii: (
   '4': 20,
   '5': 24, 
 );
+
+@debug 'theme is laoded';
