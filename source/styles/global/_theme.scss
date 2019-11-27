@@ -1,5 +1,9 @@
 @use url('https://rsms.me/inter/inter.css');
 
+$breakpoints: (
+  '0': px-to-rem(420),
+);
+
 $colors: (
   'white': (
     'default': hsl(0, 0, 0),
