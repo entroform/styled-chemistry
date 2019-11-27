@@ -13,3 +13,16 @@
 
   @return map-get($line-heights, $__height);
 }
+
+@mixin -lineHeightModifiers($__modifier, $__value) {
+  .--lh-#{$__modifier} {
+    line-height: $__value;
+  }
+}
+
+// Generate margins and paddings global modifier classes.
+
+@each $__size, $__value in $spaces {
+  @include -lineHeightModifiers('p', 'padding', $__size, $__value);
+  @include -lineHeightModifiers('m', 'margin', $__size, $__value);
+}
