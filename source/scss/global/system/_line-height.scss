@@ -1,0 +1,28 @@
+@if not global-variable-exists('line-heights') {
+  @error '$line-heights variable is not defined.';
+}
+
+@if not type-of($line-heights) == 'map' {
+  @error '$line-heights is not a map.';
+}
+
+@function line-height($__height: 'default') {
+  @if not map-has-key($line-heights, $__height) {
+    @error 'line-height: Line height "#{$__height}" is not defined.';
+  }
+
+  @return map-get($line-heights, $__height);
+}
+
+@mixin -lineHeightModifiers($__modifier, $__value) {
+  .--lh-#{$__modifier} {
+    line-height: $__value;
+  }
+}
+
+// Generate margins and paddings global modifier classes.
+
+@each $__size, $__value in $spaces {
+  @include -lineHeightModifiers('p', 'padding', $__size, $__value);
+  @include -lineHeightModifiers('m', 'margin', $__size, $__value);
+}

@@ -18,6 +18,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "sass": "^1.23.7"
+    "sass": "^1.23.7",
+    "typescript": "^3.7.4",
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "polished": "^3.4.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "styled-components": "^4.4.1"
   }
 }

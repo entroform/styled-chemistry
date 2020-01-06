@@ -1,0 +1,24 @@
+@use 'config';
+
+@function strip-unit($__number) {
+  @if type-of($__number) == 'number' and not unitless($__number) {
+    @return $__number / ($__number * 0 + 1);
+  }
+  @return $__number;
+}
+
+@function px-to-rem($__px, $__base: config.$BASE_FONT_SIZE) {
+  @return strip-unit($__px) / strip-unit($__base) + 0rem;
+}
+
+@function rem-to-px($__rem) {
+  @return strip-unit($__rem) * config.$BASE_FONT_SIZE;
+}
+
+@function width-percentage($__number, $__base: 12) {
+  @return (strip-unit($__number) / strip-unit($__base)) * 100 + 0%;
+}
+
+@function column-width($__column: 12, $__numberOfColumns: 12) {
+  @return ((px-to-rem(config.$BASE_WIDTH) / $__numberOfColumns) * $__column) + 0rem;
+}

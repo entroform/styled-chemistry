@@ -1,0 +1,15 @@
+@if not global-variable-exists('font-families') {
+  @error '$font-families variable is not defined.';
+}
+
+@if not type-of($font-families) == 'map' {
+  @error '$font-families is not a map.';
+}
+
+@function font-family($__family: 'default') {
+  @if not map-has-key($font-families, $__family) {
+    @error 'font-family: Family "#{$__family}" is not defined.';
+  }
+
+  @return map-get($font-families, $__family);
+}
