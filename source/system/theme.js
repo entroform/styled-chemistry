@@ -25,16 +25,16 @@ const atoms = Object.freeze({
       },
     },
     weights: {
-      scale: [200, 400, 500, 700],
+      set: [200, 400, 500, 700],
       default: 1,
     },
     letterSpacings: {
-      scale: [0, 0.1],
+      set: [0, 0.1],
       default: 0,
     },
     lineHeights: {
       default: 1.5,
-      scale: [0, 1, 1.2, 1.4, 2]
+      set: [0, 1, 1.2, 1.4, 2]
     },
   },
   colors: {
