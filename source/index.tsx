@@ -9,5 +9,7 @@ const App = () => {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
-alert('test');
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "./build/types/",
+    "lib": [
+      "dom.iterable",
+      "dom",
+      "esnext"
+    ],
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "outDir": "./build/",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "resolveJsonModule": false,
+    "rootDir": ".",
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext",
+    "jsx": "react",
+  },
+  "include": [
+    "./source/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
