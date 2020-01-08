@@ -2,7 +2,7 @@
 // 2) Create responsivity yet maintaining.
 const DEBUG_MODE = false;
 
-interface StyleSet {
+interface ElementSet {
   readonly set: [string | number];
   readonly default: number;
   readonly alias?: {
@@ -11,38 +11,40 @@ interface StyleSet {
   readonly transform?: (value: string | number) => string;
 }
 
-interface StyleSuperSet {
-  readonly [name: string]: StyleSet;
+interface ElementSuperSet {
+  readonly [name: string]: ElementSet;
 }
 
 interface ThemeElements {
-  fontFamilies: StyleSet;
-  fontSizes: StyleSet;
-  fontWeights: StyleSet;
-  letterSpacings: StyleSet;
-  lineHeights: StyleSet;
-  colors: StyleSuperSet;
-  spaces: StyleSet;
-  radii: StyleSet;
-  borderStyles: StyleSet;
-  borderWidths: StyleSet;
-  breakpoints: StyleSet;
-  zIndices: StyleSet;
-  sizes: StyleSet;
-}
-
-interface ThemeMolecules {
-
+  fontFamilies: ElementSet;
+  fontSizes: ElementSet;
+  fontWeights: ElementSet;
+  letterSpacings: ElementSet;
+  lineHeights: ElementSet;
+  colors: ElementSuperSet;
+  spaces: ElementSet;
+  radii: ElementSet;
+  borderStyles: ElementSet;
+  borderWidths: ElementSet;
+  breakpoints: ElementSet;
+  zIndices: ElementSet;
+  sizes: ElementSet;
 }
 
 interface ThemeCompounds {
-  atoms: ThemeAtoms;
-  molecules: ThemeMolecules;
+  [setName: string]: {
+    [name: string]: string;
+  }
+}
+
+interface Theme {
+  elements: ThemeElements;
+  compounds: ThemeCompounds;
 }
 
 export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
 
-export const isStyleSet = (styleSet: StyleSet): styleSet is StyleSet => {
+export const isElementSet = (styleSet: ElementSet): styleSet is ElementSet => {
   return (
     styleSet
     && typeof styleSet.set !== 'object'
@@ -54,7 +56,7 @@ export const isStyleSet = (styleSet: StyleSet): styleSet is StyleSet => {
   );
 }
 
-export const getValueFromStyleSet = (styleSet: StyleSet) => (key: string | number): string | null => {
+export const getValueFromElementSet = (styleSet: ElementSet) => (key: string | number): string | null => {
   let value: string | number | null = null;
 
   // Return null if set is empty
@@ -93,9 +95,9 @@ export const getValueFromStyleSet = (styleSet: StyleSet) => (key: string | numbe
     : value+'';
 }
 
-export const getValueFromStyleSuperSet = (styleSuperSet: StyleSuperSet) => (name: string) => (key: string | number) => {
-  if (isStyleSet(styleSuperSet[name])) {
-    return getValueFromStyleSet(styleSuperSet[name])(key);
+export const getValueFromElementSuperSet = (styleSuperSet: ElementSuperSet) => (name: string) => (key: string | number) => {
+  if (isElementSet(styleSuperSet[name])) {
+    return getValueFromElementSet(styleSuperSet[name])(key);
   }
   return null;
 }
@@ -103,16 +105,16 @@ export const getValueFromStyleSuperSet = (styleSuperSet: StyleSuperSet) => (name
 export const ThemeAtomicSystem = atoms => {
   // Getters
   const getters = {
-    fontFamily:  getValueFromStyleSet(atoms.fontFamilies),
-    fontSize:  getValueFromStyleSet(atoms.fontSizes),
-    fontWeight:  getValueFromStyleSet(atoms.fontWeights),
-    letterSpacing:  getValueFromStyleSet(atoms.letterSpacings),
-    lineHeight:  getValueFromStyleSet(atoms.lineHeights),
-    color:  getValueFromStyleSuperSet(atoms.colors),
-    space: getValueFromStyleSet(atoms.spaces),
-    radii: getValueFromStyleSet(atoms.radii),
-    borderWidth: getValueFromStyleSet(atoms.borderWidths),
-    zIndices:  getValueFromStyleSet(atoms.zIndices),
+    fontFamily:  getValueFromElementSet(atoms.fontFamilies),
+    fontSize:  getValueFromElementSet(atoms.fontSizes),
+    fontWeight:  getValueFromElementSet(atoms.fontWeights),
+    letterSpacing:  getValueFromElementSet(atoms.letterSpacings),
+    lineHeight:  getValueFromElementSet(atoms.lineHeights),
+    color:  getValueFromElementSuperSet(atoms.colors),
+    space: getValueFromElementSet(atoms.spaces),
+    radii: getValueFromElementSet(atoms.radii),
+    borderWidth: getValueFromElementSet(atoms.borderWidths),
+    zIndices:  getValueFromElementSet(atoms.zIndices),
   }
 
   return {
