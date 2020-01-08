@@ -15,7 +15,7 @@ interface StyleSuperSet {
   readonly [name: string]: StyleSet;
 }
 
-interface ThemeAtoms {
+interface ThemeElements {
   fontFamilies: StyleSet;
   fontSizes: StyleSet;
   fontWeights: StyleSet;
@@ -35,7 +35,7 @@ interface ThemeMolecules {
 
 }
 
-interface Theme {
+interface ThemeCompounds {
   atoms: ThemeAtoms;
   molecules: ThemeMolecules;
 }

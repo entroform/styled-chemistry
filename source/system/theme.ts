@@ -5,7 +5,7 @@ const config = {
   baseLineHeight: 1.55,
 };
 
-const atoms = Object.freeze({
+const elements = Object.freeze({
   fontFamilies: {
     default: 0,
     set: [
@@ -92,7 +92,7 @@ const atoms = Object.freeze({
 // Molecule differ because they are named by convention
 
 // molecules set -> name -> properties -> css
-const molecules = {
+const compounds = {
   gradients: {
     set: [
 
