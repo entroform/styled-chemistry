@@ -6,36 +6,34 @@ const config = {
 };
 
 const atoms = Object.freeze({
-  font: {
-    families: {
-      default: 0,
-      set: [
-        `"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif`,
-      ],
-      alias: {
-        'sans-serif': 0,
-      },
+  fontFamilies: {
+    default: 0,
+    set: [
+      `"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif`,
+    ],
+    alias: {
+      'sans-serif': 0,
     },
-    sizes: {
-      set: [10, 12, 14, 16, 18],
-      default: 0,
-      alias: {
-        small: 0,
-        medium: 2,
-      },
+  },
+  fontSizes: {
+    set: [10, 12, 14, 16, 18],
+    default: 0,
+    alias: {
+      small: 0,
+      medium: 2,
     },
-    weights: {
-      set: [200, 400, 500, 700],
-      default: 1,
-    },
-    letterSpacings: {
-      set: [0, 0.1],
-      default: 0,
-    },
-    lineHeights: {
-      default: 1.5,
-      set: [0, 1, 1.2, 1.4, 2]
-    },
+  },
+  fontWeights: {
+    set: [200, 400, 500, 700],
+    default: 1,
+  },
+  letterSpacings: {
+    set: [0, 0.1],
+    default: 0,
+  },
+  lineHeights: {
+    default: 1.5,
+    set: [0, 1, 1.2, 1.4, 2]
   },
   colors: {
     white: {
@@ -63,6 +61,11 @@ const atoms = Object.freeze({
     default: 0,
     alias: {},
   },
+  borderStyles: {
+    set: [],
+    default: 0,
+    alias: {},
+  },
   borderWidths: {
     set: [0, 4, 8, 12, 20, 24],
     default: 0,
@@ -84,30 +87,25 @@ const atoms = Object.freeze({
 
 // Molecules
 // Compose Type Molecule
-const typography = {
-  forAll: {
-
-  },
-  default: {
-
-  },
-  set: {
-    heading: [
-      {
-        family: 0,
-        weight: 2,
-        letterSpacing: 0,
-      },
-    ],
-    body: [
-      {
-        family: 0,
-        weight: 2,
-      },
-    ],
+const molecules = {
+  typography: {
+    set: {
+      heading: [
+        {
+          family: 0,
+          weight: 2,
+          letterSpacing: 0,
+        },
+      ],
+      body: [
+        {
+          family: 0,
+          weight: 2,
+        },
+      ],
+    },
   },
 }
-
 const boderStyles = {
 
 }
@@ -121,7 +119,6 @@ const theme = {
   typography,
   molecules,
 }
-
 
 // buttons
 // variants

@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+
 export const Flex = ({children, ...props}) => {
   return (
     <div>
@@ -8,10 +10,16 @@ export const Flex = ({children, ...props}) => {
   );
 }
 
-export const space = props => {
-  function mb(value: string): string {
-    return `margin-bottom ${value};`;
+const styleConstructor = (property: string) => {
+  return (value: number | string) => {
+    return `${property}: ${value};`;
   }
+}
+
+
+// SPACE
+
+export const space = props => {
   const keys = Object.keys(props);
 }
 

@@ -1,19 +1,30 @@
-export interface AtomicElement<T> {
+// Scale
+
+// AtomicInventory
+
+//
+
+export interface AtomicScale<T> {
   readonly default: number;
   readonly set: [T];
   readonly alias?: { [key: string]: number };
 }
 
+export interface TypographicMolecularScale<T> {
+}
+
+
+
 export interface AtomicFonts {
-  readonly families: AtomicElement<string>;
-  readonly sizes: AtomicElement<number | string>;
-  readonly weights: AtomicElement<number | string>;
-  readonly letterSpacings: AtomicElement<number | string>;
-  readonly lineHeights: AtomicElement<number | string>;
+  readonly families: AtomicScale<string>;
+  readonly sizes: AtomicScale<number | string>;
+  readonly weights: AtomicScale<number | string>;
+  readonly letterSpacings: AtomicScale<number | string>;
+  readonly lineHeights: AtomicScale<number | string>;
 }
 
 export interface AtomicColors {
-  readonly [color: string]: AtomicElement<string>;
+  readonly [color: string]: AtomicScale<string>;
 }
 
 export type AtomicSpaces = AtomicElement<number | string>;
@@ -37,3 +48,19 @@ export interface TypographicMolecule {
   readonly lineHeight: number | string;
 }
 
+export interface SpaceProps {
+  readonly mt: number | string;
+  readonly mb: number | string;
+  readonly ml: number | string;
+  readonly mr: number | string;
+  readonly mx: number | string;
+  readonly my: number | string;
+}
+
+
+
+// 'background-color': 'colors'
+// 'bg': {
+  'background-propery'
+    scale: 'colors'
+    extraStyle:

@@ -1,38 +1,100 @@
 // 1) Maintain consistency and scalibility.
 // 2) Create responsivity yet maintaining.
 
-// Theme system:
+const DEBUG_MODE = false;
 
-function getValue<T = unknown>(element: ThemeElement<T>) {
-  return (key?: string | number): T | null => {
-    if (!key) {
-      return element.set[element.default] || null;
-    }
-
-    if (element.alias && element.alias[key]) {
-      return element.set[element.alias[key]] || null;
-    }
-
-    return element.set[key] || null;
-  }
+interface StyleSet {
+  readonly set: [string | number];
+  readonly default: number;
+  readonly alias?: {
+    [name: string]: number;
+  };
+  readonly transform?: (value: string | number) => string;
 }
 
-// Typography System
+interface StyleSuperSet {
+  readonly [name: string]: StyleSet;
+}
 
-// Buttons and Inputs system
+export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
 
-// margins, paddings
+export const isStyleSet = (styleSet: StyleSet): styleSet is StyleSet => {
+  if (
+    styleSet
+    && typeof styleSet.set !== 'object'
+    && Array.isArray(styleSet.set) === true
+    && (
+         typeof styleSet.default === 'number'
+      || typeof styleSet.default === 'string'
+    )
+  ) {
+    return true;
+  }
+  return false;
+}
 
-// Flex
+export const getValueFromStyleSet = (styleSet: StyleSet) => (key: string | number): string | number => {
+  let value: string | number | null = null;
 
-// Grid
+  // Return null if set is empty
+  if (styleSet.set.length < 1) {
+    return key;
+  }
 
-// Box
+  // 1) Check if key is valid.
+  if (typeof key === 'number' && key >= 0) {
+    value = styleSet[key];
+  // 2) Check alias...
+  } else if (
+    typeof key === 'string'
+    && styleSet.alias
+    && styleSet.alias[key]
+    && typeof styleSet.alias[key] === 'number'
+    && styleSet.alias[key] >= 0
+  ) {
+    value = styleSet.set[styleSet.alias[key]];
+  // 3) Check default...
+  } else if (typeof styleSet.default === 'number' && styleSet.default >= 0) {
+    value = styleSet.set[styleSet.default];
+  // 4) Get first item in the set..
+  } else {
+    value = styleSet.set[0];
+  }
 
-// Breakpoints
+  // Check if computed value is valid.
+  if (!(typeof value === 'string' || typeof value === 'number')) {
+    return key;
+  }
 
-// useContext
+  // Transform value before retuning..
+  return (typeof styleSet.transform === 'function')
+    ? styleSet.transform(value)
+    : value+'';
+}
 
-const mapThemeToProps = () => {
+export const getValueFromStyleSuperSet = (styleSuperSet: StyleSuperSet) => (name: string) => (key: string | number) => {
+  if (isStyleSet(styleSuperSet[name])) {
+    return getValueFromStyleSet(styleSuperSet[name])(key);
+  }
+  return null;
+}
 
+export const StyleSystem = theme => {
+  // Getters
+  const getFontFamily    = getValueFromStyleSet(theme.fontFamilies);
+  const getFontSize      = getValueFromStyleSet(theme.fontSizes);
+  const getFontWeight    = getValueFromStyleSet(theme.fontWeights);
+  const getLetterSpacing = getValueFromStyleSet(theme.letterSpacings);
+  const getLineHeight    = getValueFromStyleSet(theme.lineHeights);
+  const getColor         = getValueFromStyleSuperSet(theme.colors);
+
+  return {
+    getFont,
+    getFontFamily,
+    getFontSize,
+    getFontWeight,
+    getLetterSpacing,
+    getLineHeight,
+    getColor,
+  };
 }
