@@ -85,11 +85,26 @@ const atoms = Object.freeze({
   },
 });
 
-// Molecules
-// Compose Type Molecule
+// Molecules or compositions:
+// These follow the same type as atomic theme
+// They use atomic getters though.
+
+// Molecule differ because they are named by convention
+
+// molecules set -> name -> properties -> css
 const molecules = {
+  gradients: {
+    set: [
+
+    ]
+  },
+  borders: {
+
+  },
+  shadows: {
+
+  },{
   typography: {
-    set: {
       heading: [
         {
           family: 0,

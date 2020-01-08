@@ -1,6 +1,5 @@
 // 1) Maintain consistency and scalibility.
 // 2) Create responsivity yet maintaining.
-
 const DEBUG_MODE = false;
 
 interface StyleSet {
@@ -14,6 +13,31 @@ interface StyleSet {
 
 interface StyleSuperSet {
   readonly [name: string]: StyleSet;
+}
+
+interface ThemeAtoms {
+  fontFamilies: StyleSet;
+  fontSizes: StyleSet;
+  fontWeights: StyleSet;
+  letterSpacings: StyleSet;
+  lineHeights: StyleSet;
+  colors: StyleSuperSet;
+  spaces: StyleSet;
+  radii: StyleSet;
+  borderStyles: StyleSet;
+  borderWidths: StyleSet;
+  breakpoints: StyleSet;
+  zIndices: StyleSet;
+  sizes: StyleSet;
+}
+
+interface ThemeMolecules {
+
+}
+
+interface Theme {
+  atoms: ThemeAtoms;
+  molecules: ThemeMolecules;
 }
 
 export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
@@ -76,18 +100,32 @@ export const getValueFromStyleSuperSet = (styleSuperSet: StyleSuperSet) => (name
   return null;
 }
 
-export const StyleSystem = theme => {
+export const ThemeAtomicSystem = atoms => {
   // Getters
   const getters = {
-    getFontFamily:  getValueFromStyleSet(theme.fontFamilies),
-    getFontSize:  getValueFromStyleSet(theme.fontSizes),
-    getFontWeight:  getValueFromStyleSet(theme.fontWeights),
-    getLetterSpacing:  getValueFromStyleSet(theme.letterSpacings),
-    getLineHeight:  getValueFromStyleSet(theme.lineHeights),
-    getColor:  getValueFromStyleSuperSet(theme.colors),
+    fontFamily:  getValueFromStyleSet(atoms.fontFamilies),
+    fontSize:  getValueFromStyleSet(atoms.fontSizes),
+    fontWeight:  getValueFromStyleSet(atoms.fontWeights),
+    letterSpacing:  getValueFromStyleSet(atoms.letterSpacings),
+    lineHeight:  getValueFromStyleSet(atoms.lineHeights),
+    color:  getValueFromStyleSuperSet(atoms.colors),
+    space: getValueFromStyleSet(atoms.spaces),
+    radii: getValueFromStyleSet(atoms.radii),
+    borderWidth: getValueFromStyleSet(atoms.borderWidths),
+    zIndices:  getValueFromStyleSet(atoms.zIndices),
   }
 
   return {
     getters,
   };
 }
+
+export const ThemeMolecularSystem = maps => molecules => {
+
+}
+
+const helpers = {
+
+}
+
+// Props Helpers
