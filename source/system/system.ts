@@ -19,7 +19,7 @@ interface StyleSuperSet {
 export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
 
 export const isStyleSet = (styleSet: StyleSet): styleSet is StyleSet => {
-  if (
+  return (
     styleSet
     && typeof styleSet.set !== 'object'
     && Array.isArray(styleSet.set) === true
@@ -27,18 +27,15 @@ export const isStyleSet = (styleSet: StyleSet): styleSet is StyleSet => {
          typeof styleSet.default === 'number'
       || typeof styleSet.default === 'string'
     )
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
-export const getValueFromStyleSet = (styleSet: StyleSet) => (key: string | number): string | number => {
+export const getValueFromStyleSet = (styleSet: StyleSet) => (key: string | number): string | null => {
   let value: string | number | null = null;
 
   // Return null if set is empty
   if (styleSet.set.length < 1) {
-    return key;
+    return null;
   }
 
   // 1) Check if key is valid.
@@ -63,7 +60,7 @@ export const getValueFromStyleSet = (styleSet: StyleSet) => (key: string | numbe
 
   // Check if computed value is valid.
   if (!(typeof value === 'string' || typeof value === 'number')) {
-    return key;
+    return null;
   }
 
   // Transform value before retuning..
@@ -81,20 +78,16 @@ export const getValueFromStyleSuperSet = (styleSuperSet: StyleSuperSet) => (name
 
 export const StyleSystem = theme => {
   // Getters
-  const getFontFamily    = getValueFromStyleSet(theme.fontFamilies);
-  const getFontSize      = getValueFromStyleSet(theme.fontSizes);
-  const getFontWeight    = getValueFromStyleSet(theme.fontWeights);
-  const getLetterSpacing = getValueFromStyleSet(theme.letterSpacings);
-  const getLineHeight    = getValueFromStyleSet(theme.lineHeights);
-  const getColor         = getValueFromStyleSuperSet(theme.colors);
+  const getters = {
+    getFontFamily:  getValueFromStyleSet(theme.fontFamilies),
+    getFontSize:  getValueFromStyleSet(theme.fontSizes),
+    getFontWeight:  getValueFromStyleSet(theme.fontWeights),
+    getLetterSpacing:  getValueFromStyleSet(theme.letterSpacings),
+    getLineHeight:  getValueFromStyleSet(theme.lineHeights),
+    getColor:  getValueFromStyleSuperSet(theme.colors),
+  }
 
   return {
-    getFont,
-    getFontFamily,
-    getFontSize,
-    getFontWeight,
-    getLetterSpacing,
-    getLineHeight,
-    getColor,
+    getters,
   };
 }
