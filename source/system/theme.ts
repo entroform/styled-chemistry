@@ -1,11 +1,9 @@
 import { hsl } from 'polished';
+import {
+  IElements, IElementSet, ICompounds, IMixtures, ITheme,
+} from './types';
 
-const config = {
-  baseFontSize: 12,
-  baseLineHeight: 1.55,
-};
-
-const elements = Object.freeze({
+const elements: IElements = Object.freeze({
   fontFamilies: {
     set: [
       `"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif`,
@@ -84,8 +82,7 @@ const elements = Object.freeze({
   },
 });
 
-// compounds set -> name -> properties -> css
-const compounds = {
+const compounds: ICompounds = {
   gradients: {
     sunset: {
       set: [
@@ -94,43 +91,38 @@ const compounds = {
     }
   },
   borders: {
-    set: {
-      sunset: ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
-    },
+    set: [
+      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+    ],
   },
   shadows: {
-    set: {
-      sunset: ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
-    }
+    set: [
+      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+    ],
   },
 };
 
-const mixtures = {
+const mixtures: IMixtures = {
   typography: {
     heading: {
       set: [
-        (elements, compounds) => ({
-          fontFamily: elements.fontFamily(0),
+        ({ fontFamily }) => ({
+          fontFamily: fontFamily(0),
         }),
       ],
+    },
+    body: {
+      set: [
+        ({ fontFamily }) => ({
+          fontFamily: fontFamily(0),
+        }),
+      ]
     },
   },
 };
 
-const theme = {
+export const theme: ITheme = {
   elements,
   compounds,
   mixtures,
 }
-
-// buttons
-// variants
-
-// hover
-// active
-// focus
-
-// sizes
-
-// outline
-// not-outline

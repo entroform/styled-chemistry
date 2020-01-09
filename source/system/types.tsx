@@ -1,13 +1,13 @@
-export interface ISet<T> {
-  readonly set: [T];
+export interface ISet<V> {
+  readonly set: V[];
   readonly default?: number;
   readonly alias?: {
     [alias: string]: number;
   }
 }
 
-export interface ISuperSet<T> {
-  readonly [name: string]: T;
+export interface ISuperSet<V> {
+  readonly [name: string]: ISet<V>;
 }
 
 // Elements
@@ -19,7 +19,7 @@ export interface IElementSet extends ISet<IElementValue> {
   readonly transform?: IElementTransformFunction;
 }
 
-export type IElementSuperSet = ISuperSet<IElementSet>;
+export type IElementSuperSet = ISuperSet<IElementValue>;
 
 export type IElementGetterFunctionKey = string | number;
 
@@ -66,7 +66,7 @@ export type ICompoundValueFunction = (elementGetters: IElementGetterFunctions) =
 
 export type ICompoundSet = ISet<ICompoundValueFunction>;
 
-export type ICompoundSuperSet = ISuperSet<ICompoundSet>;
+export type ICompoundSuperSet = ISuperSet<ICompoundValueFunction>;
 
 export type ICompoundGetterFunction = (name: string) => string;
 
@@ -82,7 +82,7 @@ export interface ICompoundGetterFunctions {
 
 // Mixtures
 export interface IMixtureValue {
-  [cssProperty: string]: string | number | null;
+  readonly [cssProperty: string]: string | number | null;
 }
 
 export type IMixtureValueFunction = (
@@ -90,18 +90,27 @@ export type IMixtureValueFunction = (
   compoundGetters: ICompoundGetterFunctions,
 ) => IMixtureValue;
 
-export interface IMixtureGetterFunctions {
+export type IMixtureSet = ISet<IMixtureValueFunction>;
 
-}
+export type IMixtureSuperSet = ISuperSet<IMixtureValueFunction>;
+
+export type IMixtureGetterFunction = (name: string) => IMixtureValue;
+
+export type IMixtureSuperGetterFunction = (parent: string) => IMixtureGetterFunction;
 
 export interface IMixtures {
-  
+  readonly [name: string]: IMixtureSuperSet | IMixtureSet;
 }
 
-export interface IMixtureSet {
-  readonly set: [IMixtureValue];
-  readonly default?: number;
-  readonly alias?: {
-    [alias: string]: number;
-  }
+export interface IMixtureGetterFunctions {
+  [name: string]: IMixtureGetterFunctions | IMixtureGetterFunction;
+}
+
+// Putting it together now:
+// ITheme
+
+export interface ITheme {
+  readonly elements: IElements;
+  readonly compounds: ICompounds;
+  readonly mixtures: IMixtures; 
 }

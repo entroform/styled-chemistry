@@ -1,13 +1,20 @@
 import React, { createContext } from 'react';
 
-const ThemeContext = createContext(null);
+export const ThemeContext = createContext(null);
 
 const ThemeProvider = theme => {
-  return ({ children }) => {
+  const context = createContext(null);
+
+  const provider = ({ children }) => {
     <ThemeContext.Provider value={theme}>
       {children}
     </ThemeContext.Provider>
   }
+
+  return [
+    context,
+    provider,
+  ];
 }
 
 export default ThemeProvider;
