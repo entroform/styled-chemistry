@@ -1,66 +1,107 @@
-// Scale
-
-// AtomicInventory
-
-//
-
-export interface AtomicScale<T> {
-  readonly default: number;
+export interface ISet<T> {
   readonly set: [T];
-  readonly alias?: { [key: string]: number };
+  readonly default?: number;
+  readonly alias?: {
+    [alias: string]: number;
+  }
 }
 
-export interface TypographicMolecularScale<T> {
+export interface ISuperSet<T> {
+  readonly [name: string]: T;
 }
 
+// Elements
+export type IElementValue = string | number | null;
 
+export type IElementTransformFunction = (value: IElementValue) => string;
 
-export interface AtomicFonts {
-  readonly families: AtomicScale<string>;
-  readonly sizes: AtomicScale<number | string>;
-  readonly weights: AtomicScale<number | string>;
-  readonly letterSpacings: AtomicScale<number | string>;
-  readonly lineHeights: AtomicScale<number | string>;
+export interface IElementSet extends ISet<IElementValue> {
+  readonly transform?: IElementTransformFunction;
 }
 
-export interface AtomicColors {
-  readonly [color: string]: AtomicScale<string>;
+export type IElementSuperSet = ISuperSet<IElementSet>;
+
+export type IElementGetterFunctionKey = string | number;
+
+export type IElementGetterFunction = (key: IElementGetterFunctionKey) => string | null;
+
+export type IElementSuperGetterFunction = (name: string) => IElementGetterFunction;
+
+export interface IElements {
+  readonly borderWidths: IElementSet;
+  readonly breakpoints: IElementSet;
+  readonly colors: IElementSuperSet;
+  readonly fontFamilies: IElementSet;
+  readonly fontSizes: IElementSet;
+  readonly fontWeights: IElementSet;
+  readonly letterSpacings: IElementSet;
+  readonly lineHeights: IElementSet;
+  readonly radii: IElementSet;
+  readonly sizes: IElementSet;
+  readonly spaces: IElementSet;
+  readonly times: IElementSet;
+  readonly timingFunctions: IElementSet;
+  readonly zIndices: IElementSet;
 }
 
-export type AtomicSpaces = AtomicElement<number | string>;
-export type AtomicHeights = AtomicElement<number | string>;
-export type AtomicWidths = AtomicElement<number | string>;
-
-interface Atoms {
-  readonly fonts: AtomicFonts;
-  readonly colors: AtomicColors;
-  readonly spaces: AtomicSpaces;
-  readonly 
-  readonly heights?: AtomicHeights;
-  readonly widths?: AtomicWidths;
+export interface IElementGetterFunctions {
+  readonly borderWidth: IElementGetterFunction;
+  readonly breakpoint: IElementGetterFunction;
+  readonly color: IElementSuperGetterFunction;
+  readonly fontFamily: IElementGetterFunction;
+  readonly fontSize: IElementGetterFunction;
+  readonly fontWeight: IElementGetterFunction;
+  readonly letterSpacing: IElementGetterFunction;
+  readonly lineHeight: IElementGetterFunction;
+  readonly radius: IElementGetterFunction;
+  readonly size: IElementGetterFunction;
+  readonly space: IElementGetterFunction;
+  readonly time: IElementGetterFunction;
+  readonly timingFunction: IElementGetterFunction;
+  readonly zIndex: IElementGetterFunction;
 }
 
-export interface TypographicMolecule {
-  readonly family: number | string;
-  readonly weight: number | string;
-  readonly size: number | string;
-  readonly letterSpacing: number | string;
-  readonly lineHeight: number | string;
+// Compounds
+export type ICompoundValueFunction = (elementGetters: IElementGetterFunctions) => string;
+
+export type ICompoundSet = ISet<ICompoundValueFunction>;
+
+export type ICompoundSuperSet = ISuperSet<ICompoundSet>;
+
+export type ICompoundGetterFunction = (name: string) => string;
+
+export type ICompoundSuperGetterFunction = (parent: string) => ICompoundGetterFunction;
+
+export interface ICompounds {
+  readonly [name: string]: ICompoundSuperSet | ICompoundSet;
 }
 
-export interface SpaceProps {
-  readonly mt: number | string;
-  readonly mb: number | string;
-  readonly ml: number | string;
-  readonly mr: number | string;
-  readonly mx: number | string;
-  readonly my: number | string;
+export interface ICompoundGetterFunctions {
+  readonly [name: string]: ICompoundSuperGetterFunction | ICompoundGetterFunction;
 }
 
+// Mixtures
+export interface IMixtureValue {
+  [cssProperty: string]: string | number | null;
+}
 
+export type IMixtureValueFunction = (
+  elementGetters: IElementGetterFunctions,
+  compoundGetters: ICompoundGetterFunctions,
+) => IMixtureValue;
 
-// 'background-color': 'colors'
-// 'bg': {
-  'background-propery'
-    scale: 'colors'
-    extraStyle:
+export interface IMixtureGetterFunctions {
+
+}
+
+export interface IMixtures {
+  
+}
+
+export interface IMixtureSet {
+  readonly set: [IMixtureValue];
+  readonly default?: number;
+  readonly alias?: {
+    [alias: string]: number;
+  }
+}

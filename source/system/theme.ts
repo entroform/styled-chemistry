@@ -7,33 +7,36 @@ const config = {
 
 const elements = Object.freeze({
   fontFamilies: {
-    default: 0,
     set: [
       `"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif`,
     ],
+    default: 0,
     alias: {
       'sans-serif': 0,
     },
   },
   fontSizes: {
-    set: [10, 12, 14, 16, 18],
-    default: 0,
+    set: [0, 10, 12, 14, 16, 18, 24, 32],
+    default: 4,
     alias: {
-      small: 0,
-      medium: 2,
+      xs: 1,
+      s: 3,
+      m: 4,
     },
   },
   fontWeights: {
     set: [200, 400, 500, 700],
     default: 1,
+    alias: {},
   },
   letterSpacings: {
-    set: [0, 0.1],
+    set: [0, 0.1, 0.2],
     default: 0,
+    alias: {},
   },
   lineHeights: {
+    set: [0, 1, 1.2, 1.4, 2],
     default: 1.5,
-    set: [0, 1, 1.2, 1.4, 2]
   },
   colors: {
     white: {
@@ -61,78 +64,63 @@ const elements = Object.freeze({
     default: 0,
     alias: {},
   },
-  borderStyles: {
-    set: [],
-    default: 0,
-    alias: {},
-  },
   borderWidths: {
     set: [0, 4, 8, 12, 20, 24],
-    default: 0,
-    alias: {},
   },
-  breakpoints: {
-    breakpoints: [],
-    default: 0,
+  sizes: {
+    set: [0, 4, 8, 12, 20, 24],
   },
   zIndices: {
     set: [0, 1],
   },
-  sizes: {
-    set: [0, 4, 8, 12, 20, 24],
-    default: 0,
-    alias: {},
+  breakpoints: {
+    set: [],
+  },
+  timingFunctions: {
+    set: [],
+  },
+  times: {
+    set: [100, 200],
   },
 });
 
-// Molecules or compositions:
-// These follow the same type as atomic theme
-// They use atomic getters though.
-
-// Molecule differ because they are named by convention
-
-// molecules set -> name -> properties -> css
+// compounds set -> name -> properties -> css
 const compounds = {
   gradients: {
-    set: [
-
-    ]
+    sunset: {
+      set: [
+        ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+      ],
+    }
   },
   borders: {
-
+    set: {
+      sunset: ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+    },
   },
   shadows: {
+    set: {
+      sunset: ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+    }
+  },
+};
 
-  },{
+const mixtures = {
   typography: {
-      heading: [
-        {
-          family: 0,
-          weight: 2,
-          letterSpacing: 0,
-        },
-      ],
-      body: [
-        {
-          family: 0,
-          weight: 2,
-        },
+    heading: {
+      set: [
+        (elements, compounds) => ({
+          fontFamily: elements.fontFamily(0),
+        }),
       ],
     },
   },
-}
-const boderStyles = {
-
-}
-
-const molecules = {
-
-}
+};
 
 const theme = {
-  atoms,
-  typography,
-  molecules,
+  elements,
+  compounds,
+  mixtures,
 }
 
 // buttons

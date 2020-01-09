@@ -1,133 +1,93 @@
-// 1) Maintain consistency and scalibility.
-// 2) Create responsivity yet maintaining.
-const DEBUG_MODE = false;
-
-interface ElementSet {
-  readonly set: [string | number];
-  readonly default: number;
-  readonly alias?: {
-    [name: string]: number;
-  };
-  readonly transform?: (value: string | number) => string;
-}
-
-interface ElementSuperSet {
-  readonly [name: string]: ElementSet;
-}
-
-interface ThemeElements {
-  fontFamilies: ElementSet;
-  fontSizes: ElementSet;
-  fontWeights: ElementSet;
-  letterSpacings: ElementSet;
-  lineHeights: ElementSet;
-  colors: ElementSuperSet;
-  spaces: ElementSet;
-  radii: ElementSet;
-  borderStyles: ElementSet;
-  borderWidths: ElementSet;
-  breakpoints: ElementSet;
-  zIndices: ElementSet;
-  sizes: ElementSet;
-}
-
-interface ThemeCompounds {
-  [setName: string]: {
-    [name: string]: string;
-  }
-}
-
-interface Theme {
-  elements: ThemeElements;
-  compounds: ThemeCompounds;
-}
+import {
+  IElementValue,
+  IElementSet,
+  IElementGetter,
+  IElementsObject,
+  IElementGetters,
+  IElementSuperSet,
+  IElementSuperGetter,
+  IElementGetterKey,
+} from './types';
 
 export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
 
-export const isElementSet = (styleSet: ElementSet): styleSet is ElementSet => {
+export const isNumberOrString = n => (isNumber(n) || typeof n === 'string');
+
+export const isElementSet = (elementSet: IElementSet): elementSet is IElementSet => {
   return (
-    styleSet
-    && typeof styleSet.set !== 'object'
-    && Array.isArray(styleSet.set) === true
-    && (
-         typeof styleSet.default === 'number'
-      || typeof styleSet.default === 'string'
-    )
+    elementSet
+    && typeof elementSet.set !== 'object'
+    && Array.isArray(elementSet.set) === true
   );
 }
 
-export const getValueFromElementSet = (styleSet: ElementSet) => (key: string | number): string | null => {
-  let value: string | number | null = null;
+export const createElementGetterFromSet = (element: IElementSet): IElementGetter => key => {
+  let value: IElementValue = null;
 
   // Return null if set is empty
-  if (styleSet.set.length < 1) {
+  if (element.set.length < 1) {
     return null;
   }
 
-  // 1) Check if key is valid.
-  if (typeof key === 'number' && key >= 0) {
-    value = styleSet[key];
-  // 2) Check alias...
+  // 1) If key is valid return value.
+  if (isNumber(key) && key >= 0) {
+    value = element[key];
+  // 2) Check if there is an alias with key.
   } else if (
     typeof key === 'string'
-    && styleSet.alias
-    && styleSet.alias[key]
-    && typeof styleSet.alias[key] === 'number'
-    && styleSet.alias[key] >= 0
+    && element.alias
+    && element.alias[key]
+    && isNumber(element.alias[key])
+    && element.alias[key] >= 0
   ) {
-    value = styleSet.set[styleSet.alias[key]];
-  // 3) Check default...
-  } else if (typeof styleSet.default === 'number' && styleSet.default >= 0) {
-    value = styleSet.set[styleSet.default];
-  // 4) Get first item in the set..
-  } else {
-    value = styleSet.set[0];
+    value = element.set[element.alias[key]];
+  } else if (typeof key === 'undefined') {
+    // 3) Check if default is set.
+    if (isNumber(element.default) && element.default >= 0) {
+      value = element.set[element.default];
+    // 4) Get first item in the set..
+    } else {
+      value = element.set[0];
+    }  
   }
 
   // Check if computed value is valid.
-  if (!(typeof value === 'string' || typeof value === 'number')) {
+  if (!(typeof value === 'string' || isNumber(value))) {
     return null;
   }
 
   // Transform value before retuning..
-  return (typeof styleSet.transform === 'function')
-    ? styleSet.transform(value)
+  return (typeof element.transform === 'function')
+    ? element.transform(value)
     : value+'';
 }
 
-export const getValueFromElementSuperSet = (styleSuperSet: ElementSuperSet) => (name: string) => (key: string | number) => {
-  if (isElementSet(styleSuperSet[name])) {
-    return getValueFromElementSet(styleSuperSet[name])(key);
+export const createElementGetterFromSuperSet = (elementSuperSet: IElementSuperSet): IElementSuperGetter => {
+  return (name: string): IElementGetter => key => {
+    return createElementGetterFromSet(elementSuperSet[name])(key);
   }
-  return null;
 }
 
-export const ThemeAtomicSystem = atoms => {
-  // Getters
-  const getters = {
-    fontFamily:  getValueFromElementSet(atoms.fontFamilies),
-    fontSize:  getValueFromElementSet(atoms.fontSizes),
-    fontWeight:  getValueFromElementSet(atoms.fontWeights),
-    letterSpacing:  getValueFromElementSet(atoms.letterSpacings),
-    lineHeight:  getValueFromElementSet(atoms.lineHeights),
-    color:  getValueFromElementSuperSet(atoms.colors),
-    space: getValueFromElementSet(atoms.spaces),
-    radii: getValueFromElementSet(atoms.radii),
-    borderWidth: getValueFromElementSet(atoms.borderWidths),
-    zIndices:  getValueFromElementSet(atoms.zIndices),
-  }
-
+export const createGettersFromElements = (elements: IElementsObject): IElementGetters => {
   return {
-    getters,
+    borderWidth:    createElementGetterFromSet(elements.borderWidths),
+    breakpoint:     createElementGetterFromSet(elements.breakpoints),
+    color:          createElementGetterFromSuperSet(elements.colors),
+    fontFamily:     createElementGetterFromSet(elements.fontFamilies),
+    fontSize:       createElementGetterFromSet(elements.fontSizes),
+    fontWeight:     createElementGetterFromSet(elements.fontWeights),
+    letterSpacing:  createElementGetterFromSet(elements.letterSpacings),
+    lineHeight:     createElementGetterFromSet(elements.lineHeights),
+    radius:         createElementGetterFromSet(elements.radii),
+    size:           createElementGetterFromSet(elements.sizes),
+    space:          createElementGetterFromSet(elements.spaces),
+    time:           createElementGetterFromSet(elements.times),
+    timingFunction: createElementGetterFromSet(elements.timingFunctions),
+    zIndex:         createElementGetterFromSet(elements.zIndices),
   };
 }
 
-export const ThemeMolecularSystem = maps => molecules => {
 
+export const Compound = () => {
+  
 }
-
-const helpers = {
-
-}
-
-// Props Helpers
