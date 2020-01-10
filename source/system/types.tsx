@@ -122,3 +122,9 @@ export interface ITheme {
   readonly compounds: ICompounds;
   readonly mixtures: IMixtures; 
 }
+
+export interface IThemeGetters {
+  readonly elements: IElementGetterFunctions;
+  readonly compounds: ICompoundGetterFunctions;
+  readonly mixtures: IMixtureGetterFunctions;
+}
