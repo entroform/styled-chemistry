@@ -1,13 +1,13 @@
 import {
   IElementValue,
   IElementSet,
-  IElementGetter,
-  IElementsObject,
-  IElementGetters,
+  IElementGetterFunction,
+  IElements,
+  IElementGetterFunctions,
   IElementSuperSet,
-  IElementSuperGetter,
-  IElementGetterKey,
-  ICompoundObject,
+  IElementSuperGetterFunction,
+  IElementGetterFunctionKey,
+  ICompounds,
 } from './types';
 
 export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
@@ -22,7 +22,7 @@ export const isSet = <T>(set: any): set is T => {
   );
 }
 
-export const createElementGetterFromSet = (element: IElementSet): IElementGetter => key => {
+export const createElementGetterFunctionFromSet = (element: IElementSet): IElementGetterFunction => key => {
   let value: IElementValue = null;
 
   // Return null if set is empty
@@ -63,27 +63,39 @@ export const createElementGetterFromSet = (element: IElementSet): IElementGetter
     : value+'';
 }
 
-export const createElementGetterFromSuperSet = (elementSuperSet: IElementSuperSet): IElementSuperGetter => {
-  return (name: string): IElementGetter => key => {
-    return createElementGetterFromSet(elementSuperSet[name])(key);
+export const createElementGetterFunctionFromSuperSet = (elementSuperSet: IElementSuperSet): IElementSuperGetterFunction => {
+  return (name: string): IElementGetterFunction => key => {
+    return createElementGetterFunctionFromSet(elementSuperSet[name])(key);
   }
 }
 
-export const createGettersFromElements = (elements: IElementsObject): IElementGetters => {
+export const createGettersFromElements = (elements: IElements): IElementGetterFunctions => {
   return {
-    borderWidth:    createElementGetterFromSet(elements.borderWidths),
-    breakpoint:     createElementGetterFromSet(elements.breakpoints),
-    color:          createElementGetterFromSuperSet(elements.colors),
-    fontFamily:     createElementGetterFromSet(elements.fontFamilies),
-    fontSize:       createElementGetterFromSet(elements.fontSizes),
-    fontWeight:     createElementGetterFromSet(elements.fontWeights),
-    letterSpacing:  createElementGetterFromSet(elements.letterSpacings),
-    lineHeight:     createElementGetterFromSet(elements.lineHeights),
-    radius:         createElementGetterFromSet(elements.radii),
-    size:           createElementGetterFromSet(elements.sizes),
-    space:          createElementGetterFromSet(elements.spaces),
-    time:           createElementGetterFromSet(elements.times),
-    timingFunction: createElementGetterFromSet(elements.timingFunctions),
-    zIndex:         createElementGetterFromSet(elements.zIndices),
+    borderWidth:    createElementGetterFunctionFromSet(elements.borderWidths),
+    breakpoint:     createElementGetterFunctionFromSet(elements.breakpoints),
+    color:          createElementGetterFunctionFromSuperSet(elements.colors),
+    fontFamily:     createElementGetterFunctionFromSet(elements.fontFamilies),
+    fontSize:       createElementGetterFunctionFromSet(elements.fontSizes),
+    fontWeight:     createElementGetterFunctionFromSet(elements.fontWeights),
+    letterSpacing:  createElementGetterFunctionFromSet(elements.letterSpacings),
+    lineHeight:     createElementGetterFunctionFromSet(elements.lineHeights),
+    radius:         createElementGetterFunctionFromSet(elements.radii),
+    size:           createElementGetterFunctionFromSet(elements.sizes),
+    space:          createElementGetterFunctionFromSet(elements.spaces),
+    time:           createElementGetterFunctionFromSet(elements.times),
+    timingFunction: createElementGetterFunctionFromSet(elements.timingFunctions),
+    zIndex:         createElementGetterFunctionFromSet(elements.zIndices),
   };
+}
+
+const map = [
+  {
+    propName: ['m', 'margin-x'],
+    transform: (elementGetters, compoundGetters, ) =>
+    cssProperty: 'letter-spacing',
+  }
+]
+
+export const mapPropsToCssObject = (props) => {
+
 }

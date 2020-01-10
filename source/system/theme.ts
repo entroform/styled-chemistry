@@ -1,6 +1,10 @@
 import { hsl } from 'polished';
 import {
-  IElements, IElementSet, ICompounds, IMixtures, ITheme,
+  IElements,
+  IElementSet,
+  ICompounds,
+  IMixtures,
+  ITheme,
 } from './types';
 
 const elements: IElements = Object.freeze({

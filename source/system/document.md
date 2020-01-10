@@ -51,15 +51,18 @@ Each of these will have defaults.
 - breakpoints
 
 ## props-function
-colors: color, backgroundColor, borderColor, alpha(uses color lib to change)
-spaces: margin, padding,  grid-gap, grid-column-gap, grid-row-gap
-sizes: width, minWidth, maxWidth, height, minHeight, maxHeight
-position: zIndices, top, left, right, bottom, position type:
+color: color, backgroundColor, borderColor
+space: margin, padding, grid-gap, grid-column-gap, grid-row-gap
+size: width, minWidth, maxWidth, height, minHeight, maxHeight
+position: zIndex, position, top, bottom, left, right
 
 gradients: gradient
 shadow: BoxShadow, TextShadow
 border: style
 text: align, style, appearance, decoration etc.. size family, lineheight, spacing, weight font: ^typography
+
+tac, tal, tar
+
 > color alpha modifier
 type:
 
