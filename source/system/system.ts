@@ -8,94 +8,131 @@ import {
   IElementSuperGetterFunction,
   IElementGetterFunctionKey,
   ICompounds,
+  ICompoundGetterFunction,
 } from './types';
 
-export const isNumber = (n: any): n is number => typeof n === 'number' && !isNaN(n);
+export const isNumber = (n: any): n is number => (typeof n === 'number' && !isNaN(n));
 
 export const isNumberOrString = n => (isNumber(n) || typeof n === 'string');
 
-export const isSet = <T>(set: any): set is T => {
-  return (
-    set
-    && typeof set.set !== 'object'
-    && Array.isArray(set.set) === true
-  );
-}
+export const isValidSetIndex = (n: any): n is number => (isNumber(n) && n >= 0);
 
-export const createElementGetterFunctionFromSet = (element: IElementSet): IElementGetterFunction => key => {
+export const isSet = <T>(set: any): set is T => (
+  set && typeof set.set !== 'object' && Array.isArray(set.set) === true
+);
+
+
+// Elements
+
+export const createGetterFunctionFromElementSet = (element: IElementSet): IElementGetterFunction => key => {
+  // Return null if set is empty.
+  if (element.set.length < 1) return null;
+
   let value: IElementValue = null;
 
-  // Return null if set is empty
-  if (element.set.length < 1) {
-    return null;
-  }
-
-  // 1) If key is valid return value.
-  if (isNumber(key) && key >= 0) {
+  // Set value to element of set if key is valid.
+  if (isValidSetIndex(key)) {
     value = element[key];
-  // 2) Check if there is an alias with key.
+  // Otherwise, check if there is a valid alias.
   } else if (
     typeof key === 'string'
     && element.alias
     && element.alias[key]
-    && isNumber(element.alias[key])
-    && element.alias[key] >= 0
+    && isValidSetIndex(element.alias[key])
   ) {
     value = element.set[element.alias[key]];
+  // If key is undefined, set value to default or first element in set.
   } else if (typeof key === 'undefined') {
-    // 3) Check if default is set.
-    if (isNumber(element.default) && element.default >= 0) {
-      value = element.set[element.default];
-    // 4) Get first item in the set..
-    } else {
-      value = element.set[0];
-    }  
+    // If default is set, set default element, if not set first element in set.
+    value = isValidSetIndex(element.default)
+      ? element.set[element.default]
+      : element.set[0];
   }
 
-  // Check if computed value is valid.
-  if (!(typeof value === 'string' || isNumber(value))) {
+  // If the final value is not valid return null.
+  if (typeof value === 'string' || isNumber(value)) {
+    return (typeof element.transform === 'function')
+      ? element.transform(value)
+      : value+'';
+  } else {
     return null;
   }
-
-  // Transform value before retuning..
-  return (typeof element.transform === 'function')
-    ? element.transform(value)
-    : value+'';
 }
 
-export const createElementGetterFunctionFromSuperSet = (elementSuperSet: IElementSuperSet): IElementSuperGetterFunction => {
-  return (name: string): IElementGetterFunction => key => {
-    return createElementGetterFunctionFromSet(elementSuperSet[name])(key);
+export const createGetterFunctionFromElementSuperSet =
+  (elementSuperSet: IElementSuperSet): IElementSuperGetterFunction =>
+  (name: string): IElementGetterFunction =>
+  key => {
+    return createGetterFunctionFromElementSet(elementSuperSet[name])(key);
   }
-}
 
-export const createGettersFromElements = (elements: IElements): IElementGetterFunctions => {
+export const createGetterFunctionsFromElements = (elements: IElements): IElementGetterFunctions => {
   return {
-    borderWidth:    createElementGetterFunctionFromSet(elements.borderWidths),
-    breakpoint:     createElementGetterFunctionFromSet(elements.breakpoints),
-    color:          createElementGetterFunctionFromSuperSet(elements.colors),
-    fontFamily:     createElementGetterFunctionFromSet(elements.fontFamilies),
-    fontSize:       createElementGetterFunctionFromSet(elements.fontSizes),
-    fontWeight:     createElementGetterFunctionFromSet(elements.fontWeights),
-    letterSpacing:  createElementGetterFunctionFromSet(elements.letterSpacings),
-    lineHeight:     createElementGetterFunctionFromSet(elements.lineHeights),
-    radius:         createElementGetterFunctionFromSet(elements.radii),
-    size:           createElementGetterFunctionFromSet(elements.sizes),
-    space:          createElementGetterFunctionFromSet(elements.spaces),
-    time:           createElementGetterFunctionFromSet(elements.times),
-    timingFunction: createElementGetterFunctionFromSet(elements.timingFunctions),
-    zIndex:         createElementGetterFunctionFromSet(elements.zIndices),
+    borderWidth:    createGetterFunctionFromElementSet(elements.borderWidths),
+    breakpoint:     createGetterFunctionFromElementSet(elements.breakpoints),
+    color:          createGetterFunctionFromElementSuperSet(elements.colors),
+    fontFamily:     createGetterFunctionFromElementSet(elements.fontFamilies),
+    fontSize:       createGetterFunctionFromElementSet(elements.fontSizes),
+    fontWeight:     createGetterFunctionFromElementSet(elements.fontWeights),
+    letterSpacing:  createGetterFunctionFromElementSet(elements.letterSpacings),
+    lineHeight:     createGetterFunctionFromElementSet(elements.lineHeights),
+    radius:         createGetterFunctionFromElementSet(elements.radii),
+    size:           createGetterFunctionFromElementSet(elements.sizes),
+    space:          createGetterFunctionFromElementSet(elements.spaces),
+    time:           createGetterFunctionFromElementSet(elements.times),
+    timingFunction: createGetterFunctionFromElementSet(elements.timingFunctions),
+    zIndex:         createGetterFunctionFromElementSet(elements.zIndices),
   };
 }
 
-const map = [
-  {
-    propName: ['m', 'margin-x'],
-    transform: (elementGetters, compoundGetters, ) =>
-    cssProperty: 'letter-spacing',
+// Compounds
+export const createGetterFunctionFromCompoundSet =
+  (elementGetters: IElementGetterFunctions) =>
+  (compound: ICompound): ICompoundGetterFunction => 
+  key => {
+    // Return null if set is empty.
+    if (compound.set.length < 1) return null;
+
+    let value = null;
+
+    // Set value to element of set if key is valid.
+    if (isValidSetIndex(key)) {
+      value = compound[key];
+    // Otherwise, check if there is a valid alias.
+    } else if (
+      typeof key === 'string'
+      && compound.alias
+      && compound.alias[key]
+      && isValidSetIndex(compound.alias[key])
+    ) {
+      value = compound.set[compound.alias[key]];
+    // If key is undefined, set value to default or first element in set.
+    } else if (typeof key === 'undefined') {
+      // If default is set, set default element, if not set first element in set.
+      value = isValidSetIndex(compound.default)
+        ? compound.set[compound.default]
+        : compound.set[0];
+    }
+
+    // If the final value is not valid return null.
+    return (typeof value === 'function') ? value(elementGetters) : null;
   }
-]
 
-export const mapPropsToCssObject = (props) => {
+export const createGetterFunctionFromCompoundSuperSet =
+  (compoundSuperSet) =>
+  (name: string) => createGetterFunctionFromCompoundSet(compoundSuperSet[name])
 
+export const createGetterFunctionsFromCompounds = (compounds: ICompounds) => {
+  const result = {};
+  Object.keys(compounds).forEach(key => {
+    const compound = compounds[key];
+
+    if (Array.isArray(compound.set)) {
+      result[key] = createGetterFunctionFromCompoundSet(compound);
+    } else {
+      result[key] = createGetterFunctionFromCompoundSuperSet(compound);
+    }
+  });
+
+  return result;
 }

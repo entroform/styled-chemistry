@@ -23,7 +23,7 @@ export type IElementSuperSet = ISuperSet<IElementValue>;
 
 export type IElementGetterFunctionKey = string | number;
 
-export type IElementGetterFunction = (key: IElementGetterFunctionKey) => string | null;
+export type IElementGetterFunction = (key: IElementGetterFunctionKey) => IElementValue;
 
 export type IElementSuperGetterFunction = (name: string) => IElementGetterFunction;
 
@@ -62,18 +62,26 @@ export interface IElementGetterFunctions {
 }
 
 // Compounds
-export type ICompoundValueFunction = (elementGetters: IElementGetterFunctions) => string;
+export type ICompoundCompiledValue = string | null;
+export type ICompoundValueFunction = (elementGetters: IElementGetterFunctions) => ICompoundCompiledValue;
 
 export type ICompoundSet = ISet<ICompoundValueFunction>;
 
 export type ICompoundSuperSet = ISuperSet<ICompoundValueFunction>;
 
-export type ICompoundGetterFunction = (name: string) => string;
+export type ICompoundGetterFunction = (key: string) => string;
 
-export type ICompoundSuperGetterFunction = (parent: string) => ICompoundGetterFunction;
+export type ICompoundSuperGetterFunction = (name: string) => ICompoundGetterFunction;
 
 export interface ICompounds {
   readonly [name: string]: ICompoundSuperSet | ICompoundSet;
+}
+
+export type ICompoundCompiledSet = ISet<ICompoundCompiledValue>;
+export type ICompoundCompiledSuperSet = ISuperSet<ICompoundCompiledValue>;
+
+export interface ICompoundsCompiled {
+  readonly [name: string]: ICompoundCompiledSuperSet | ICompoundCompiledSet;
 }
 
 export interface ICompoundGetterFunctions {
@@ -94,9 +102,9 @@ export type IMixtureSet = ISet<IMixtureValueFunction>;
 
 export type IMixtureSuperSet = ISuperSet<IMixtureValueFunction>;
 
-export type IMixtureGetterFunction = (name: string) => IMixtureValue;
+export type IMixtureGetterFunction = (key: string) => IMixtureValue;
 
-export type IMixtureSuperGetterFunction = (parent: string) => IMixtureGetterFunction;
+export type IMixtureSuperGetterFunction = (name: string) => IMixtureGetterFunction;
 
 export interface IMixtures {
   readonly [name: string]: IMixtureSuperSet | IMixtureSet;
