@@ -1,4 +1,4 @@
-# 💅 style-system
+# style-system
 
 `npm run start`
 
