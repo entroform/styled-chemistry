@@ -1,4 +1,4 @@
-# style-system
+# ⚗️ style-chemistry
 
 `npm run start`
 
