@@ -3,25 +3,21 @@ import React, {
   createContext,
   useContext,
 } from 'react';
-
+import { ThemeProvider } from 'styled-components';
 import { ITheme } from './interfaces/theme';
 
-export const Context = createContext(null);
+export const StyleChemistryContext = createContext(null);
 
-interface ThemeProviderProps {
+export interface ThemeProviderProps {
   theme: ITheme;
 }
 
-export const ThemeProvider: FC<ThemeProviderProps> = ({ children, theme }) => {
-  return (
-    <Context.Provider value={theme}>
+export const StyleChemistryProvider: FC<ThemeProviderProps> = ({ children, theme }) => (
+  <StyleChemistryContext.Provider value={theme}>
+    <ThemeProvider theme={theme}>
       {children}
-    </Context.Provider>
-  );
-}
+    </ThemeProvider>
+  </StyleChemistryContext.Provider>
+);
 
-
-export const getTheme = () => {
-  const theme = useContext(Context);
-  return theme;
-}
+export const getTheme = () => useContext(StyleChemistryContext);

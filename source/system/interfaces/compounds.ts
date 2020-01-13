@@ -6,8 +6,6 @@ import {
   IElementGetterFunctions,
 } from './elements';
 
-// Compounds
-
 export type ICompoundValue = (elementGetters: IElementGetterFunctions) => string | number | null;
 
 export type ICompoundSet = ISet<ICompoundValue>;

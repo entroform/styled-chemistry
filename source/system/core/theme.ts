@@ -1,7 +1,13 @@
 
-import { createGetterFunctionsFromElements } from './elements';
-import { createGetterFunctionsFromCompounds } from './compounds';
-import { createGetterFunctionsFromMixtures } from './mixtures';
+import {
+  createGetterFunctionsFromElements,
+} from './elements';
+import {
+  createGetterFunctionsFromCompounds,
+} from './compounds';
+import {
+  createGetterFunctionsFromMixtures,
+} from './mixtures';
 import {
   IElements,
   IElementGetterFunctions,

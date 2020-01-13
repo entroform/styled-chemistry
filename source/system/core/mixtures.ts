@@ -1,22 +1,16 @@
 import {
   IElementGetterFunctions,
-  IElementGetterFunction,
 } from '../interfaces/elements';
 import {
-  ICompoundSet,
-  ICompoundGetterFunction,
-  ICompoundSuperGetterFunction,
-  ICompoundSuperSet,
-  ICompounds,
   ICompoundGetterFunctions,
 } from '../interfaces/compounds';
 import {
+  IMixtureGetterFunction,
+  IMixtureGetterFunctions,
   IMixtures,
   IMixtureSet,
-  IMixtureSuperSet,
-  IMixtureGetterFunction,
   IMixtureSuperGetterFunction,
-  IMixtureGetterFunctions,
+  IMixtureSuperSet,
 } from '../interfaces/mixtures';
 import {
   isValidSetIndex,
@@ -62,7 +56,9 @@ export const createMixtureGetterFunctionFromSuperSet =
 (elementGetters: IElementGetterFunctions) =>
 (compoundGetters: ICompoundGetterFunctions) =>
 (mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetterFunction  =>
-(name: string): IMixtureGetterFunction => createMixtureGetterFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
+(name: string): IMixtureGetterFunction => (
+  createMixtureGetterFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
+)
 
 export const createGetterFunctionsFromMixtures =
 (elementGetters: IElementGetterFunctions) =>

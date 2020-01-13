@@ -1,12 +1,12 @@
 import {
-  IElementGetterFunctions, IElementGetterFunction,
+  IElementGetterFunctions,
 } from '../interfaces/elements';
 import {
-  ICompoundSet,
   ICompoundGetterFunction,
+  ICompounds,
+  ICompoundSet,
   ICompoundSuperGetterFunction,
   ICompoundSuperSet,
-  ICompounds,
 } from '../interfaces/compounds';
 import {
   isValidSetIndex,
@@ -50,7 +50,9 @@ export const createCompoundGetterFunctionFromSet =
 export const createCompoundGetterFunctionFromSuperSet =
   (elementGetters: IElementGetterFunctions) =>
   (compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetterFunction  =>
-  (name: string): ICompoundGetterFunction => createCompoundGetterFunctionFromSet(elementGetters)(compoundSuperSet[name])
+  (name: string): ICompoundGetterFunction => (
+    createCompoundGetterFunctionFromSet(elementGetters)(compoundSuperSet[name])
+  )
 
 export const createGetterFunctionsFromCompounds =
 (elementGetters: IElementGetterFunctions) =>

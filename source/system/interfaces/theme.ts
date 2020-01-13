@@ -1,13 +1,10 @@
 import {
-  IElements,
   IElementGetterFunctions,
 } from './elements';
 import {
-  ICompounds,
   ICompoundGetterFunctions,
 } from './compounds';
 import {
-  IMixtures,
   IMixtureGetterFunctions,
 } from './mixtures';
 

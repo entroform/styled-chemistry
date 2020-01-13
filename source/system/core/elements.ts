@@ -40,7 +40,6 @@ export const createElementGetterFunctionFromSet =
       : element.set[0];
   }
 
-  // If the final value is not valid return null.
   if (typeof value === 'string' || isNumber(value)) {
     return (typeof element.transform === 'function')
       ? stringNumberToString(element.transform(value))

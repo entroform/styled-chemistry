@@ -7,32 +7,27 @@ import {
 } from './system/test/theme';
 
 import {
-  ThemeProvider,
+  StyleChemistryProvider,
 } from './system/provider';
 
-console.log(theme.mixtures.typography('heading')();
-
-const HAHA = styled.div`
-  font-size: ${theme.elements.fontSize(3)}px;
-  ${theme.mixtures.typography('heading')()}
+const StyledTextComponent = styled.div`
+  background-image: ${props => props.theme.compounds.gradients('sunset')()};
+  color: ${props => props.theme.elements.color('red')()};
+  font-size: ${props => props.theme.elements.fontSize('large') + 'px'};
 `;
 
-const TestComponent = () => {
-  return (
-    <>
-      <div>Hello World</div>
-      <HAHA>AFJEOAFJ</HAHA>
-    </>
-  );
-}
+const TestComponent = () => (
+  <>
+    <div>Hello World</div>
+    <StyledTextComponent>AFJEOAFJ</StyledTextComponent>
+  </>
+);
 
-const App = () => {
-  return (
-    <ThemeProvider theme={theme}>
-      <TestComponent />
-    </ThemeProvider>
-  );
-}
+const App = () => (
+  <StyleChemistryProvider theme={theme}>
+    <TestComponent />
+  </StyleChemistryProvider>
+);
 
 ReactDOM.render(
   <App />,

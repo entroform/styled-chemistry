@@ -3,8 +3,6 @@ import {
   ISuperSet,
 } from './set';
 
-// Elements
-
 export type IElementValue = string | number | null;
 
 export type IElementTransformFunction = (value: IElementValue) => IElementValue;

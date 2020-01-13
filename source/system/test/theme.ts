@@ -22,12 +22,13 @@ const elements: IElements = Object.freeze({
     },
   },
   fontSizes: {
-    set: [0, 10, 12, 14, 16, 18, 24, 32],
+    set: [0, 10, 12, 14, 16, 18, 24, 452],
     default: 4,
     alias: {
-      xs: 1,
-      s: 3,
-      m: 4,
+      'x-small': 1,
+      small: 3,
+      medium: 4,
+      large: 7,
     },
   },
   fontWeights: {
@@ -58,6 +59,16 @@ const elements: IElements = Object.freeze({
       ],
       default: 0,
       alias: {},
+    },
+    red: {
+      set: [
+        hsl(340, 1, 0.5),
+      ],
+    },
+    blue: {
+      set: [
+        hsl(240, 1, 0.5),
+      ],
     },
   },
   spaces: {
@@ -94,18 +105,18 @@ const compounds: ICompounds = Object.freeze({
   gradients: {
     sunset: {
       set: [
-        ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+        ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)})`,
       ],
     }
   },
   borders: {
     set: [
-      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)})`,
     ],
   },
   shadows: {
     set: [
-      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
+      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)})`,
     ],
   },
 });
