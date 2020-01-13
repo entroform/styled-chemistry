@@ -3,70 +3,60 @@ import {
   IElementGetterFunctions,
   IElements,
   IElementSet,
+  IElementSetArrayItem,
   IElementSuperGetterFunction,
   IElementSuperSet,
-  IElementValue,
 } from '../interfaces/elements';
 import {
-  isNumber,
-  isValidSetIndex,
-  stringNumberToString,
+  isStringOrNumber,
+  isValidArrayIndex,
 } from '../utilities';
 
-export const createElementGetterFunctionFromSet =
-(element: IElementSet): IElementGetterFunction =>
-(key: string | number): string | null => {
-  // Return null if set is empty.
-  if (element.set.length < 1) return null;
+const createGetterFunctionFromSet =
+(elementSet: IElementSet): IElementGetterFunction =>
+(key?: string | number): IElementSetArrayItem => {
+  if (elementSet.set.length < 1) return null;
 
-  let value: IElementValue = null;
+  let value: IElementSetArrayItem = null;
 
-  // Set value to element of set if key is valid.
-  if (isValidSetIndex(key)) {
-    value = element.set[key];
-  // Otherwise, check if there is a valid alias.
+  if (isValidArrayIndex(key)) {
+    value = elementSet.set[key];
   } else if (
     typeof key === 'string'
-    && element.alias
-    && element.alias[key]
-    && isValidSetIndex(element.alias[key])
+    && typeof elementSet.alias === 'object'
+    && isValidArrayIndex(elementSet.alias[key])
   ) {
-    value = element.set[element.alias[key]];
-  // If key is undefined, set value to default or first element in set.
+    value = elementSet.set[elementSet.alias[key]];
   } else if (typeof key === 'undefined') {
-    // If default is set, set default element, if not set first element in set.
-    value = isValidSetIndex(element.default)
-      ? element.set[element.default]
-      : element.set[0];
+    value = isValidArrayIndex(elementSet.default)
+      ? elementSet.set[elementSet.default]
+      : elementSet.set[0];
   }
 
-  if (typeof value === 'string' || isNumber(value)) {
-    return (typeof element.transform === 'function')
-      ? stringNumberToString(element.transform(value))
-      : stringNumberToString(value);
-  }
-
-  return null;
+  return (isStringOrNumber(value)) ? value : null;
 }
 
-export const createElementGetterFunctionFromSuperSet =
+const createGetterFunctionFromSuperSet =
 (elementSuperSet: IElementSuperSet): IElementSuperGetterFunction =>
-(name: string): IElementGetterFunction => createElementGetterFunctionFromSet(elementSuperSet[name]);
+(name: string): IElementGetterFunction => (
+  createGetterFunctionFromSet(elementSuperSet[name])
+);
 
 export const createGetterFunctionsFromElements =
 (elements: IElements): IElementGetterFunctions => ({
-  borderWidth:    createElementGetterFunctionFromSet(elements.borderWidths),
-  breakpoint:     createElementGetterFunctionFromSet(elements.breakpoints),
-  color:          createElementGetterFunctionFromSuperSet(elements.colors),
-  fontFamily:     createElementGetterFunctionFromSet(elements.fontFamilies),
-  fontSize:       createElementGetterFunctionFromSet(elements.fontSizes),
-  fontWeight:     createElementGetterFunctionFromSet(elements.fontWeights),
-  letterSpacing:  createElementGetterFunctionFromSet(elements.letterSpacings),
-  lineHeight:     createElementGetterFunctionFromSet(elements.lineHeights),
-  radius:         createElementGetterFunctionFromSet(elements.radii),
-  size:           createElementGetterFunctionFromSet(elements.sizes),
-  space:          createElementGetterFunctionFromSet(elements.spaces),
-  time:           createElementGetterFunctionFromSet(elements.times),
-  timingFunction: createElementGetterFunctionFromSet(elements.timingFunctions),
-  zIndex:         createElementGetterFunctionFromSet(elements.zIndices),
+  borderWidth:    createGetterFunctionFromSet(elements.borderWidths),
+  breakpoint:     createGetterFunctionFromSet(elements.breakpoints),
+  color:          createGetterFunctionFromSuperSet(elements.colors),
+  fontFamily:     createGetterFunctionFromSet(elements.fontFamilies),
+  fontSize:       createGetterFunctionFromSet(elements.fontSizes),
+  fontWeight:     createGetterFunctionFromSet(elements.fontWeights),
+  image:          createGetterFunctionFromSet(elements.images),
+  letterSpacing:  createGetterFunctionFromSet(elements.letterSpacings),
+  lineHeight:     createGetterFunctionFromSet(elements.lineHeights),
+  radius:         createGetterFunctionFromSet(elements.radii),
+  size:           createGetterFunctionFromSet(elements.sizes),
+  space:          createGetterFunctionFromSet(elements.spaces),
+  time:           createGetterFunctionFromSet(elements.times),
+  timingFunction: createGetterFunctionFromSet(elements.timingFunctions),
+  zIndex:         createGetterFunctionFromSet(elements.zIndices),
 });

@@ -9,19 +9,16 @@ import {
   ICompoundGetterFunctions,
 } from './compounds';
 
-// Mixtures
 export type IMixtureValue =
-  (
-    elementGetters: IElementGetterFunctions,
-    compoundGetters: ICompoundGetterFunctions,
-  ) => string ;
+(
+  elementGetters: IElementGetterFunctions,
+  compoundGetters: ICompoundGetterFunctions,
+) => string | number | null;
 
 export type IMixtureSet = ISet<IMixtureValue>;
-
 export type IMixtureSuperSet = ISuperSet<IMixtureValue>;
 
-export type IMixtureGetterFunction = (key: string) => string | null;
-
+export type IMixtureGetterFunction = (key?: string | number | null) => string | number | null;
 export type IMixtureSuperGetterFunction = (name: string) => IMixtureGetterFunction;
 
 export interface IMixtures {

@@ -3,18 +3,16 @@ import {
   ISuperSet,
 } from './set';
 
-export type IElementValue = string | number | null;
+export type IElementSetArrayItem = string | number | null;
 
-export type IElementTransformFunction = (value: IElementValue) => IElementValue;
+export type IElementTransformFunction = (value: IElementSetArrayItem) => IElementSetArrayItem;
 
-export interface IElementSet extends ISet<IElementValue> {
-  readonly transform?: IElementTransformFunction;
+export interface IElementSet extends ISet<IElementSetArrayItem> {
+  readonly transform?: (value: IElementSetArrayItem) => IElementSetArrayItem;
 }
+export type IElementSuperSet = ISuperSet<IElementSetArrayItem>;
 
-export type IElementSuperSet = ISuperSet<IElementValue>;
-
-export type IElementGetterFunction = (key: string | number) => string | null;
-
+export type IElementGetterFunction = (key?: string | number) => IElementSetArrayItem;
 export type IElementSuperGetterFunction = (name: string) => IElementGetterFunction;
 
 export interface IElements {
@@ -24,6 +22,7 @@ export interface IElements {
   readonly fontFamilies: IElementSet;
   readonly fontSizes: IElementSet;
   readonly fontWeights: IElementSet;
+  readonly images: IElementSet;
   readonly letterSpacings: IElementSet;
   readonly lineHeights: IElementSet;
   readonly radii: IElementSet;
@@ -41,6 +40,7 @@ export interface IElementGetterFunctions {
   readonly fontFamily: IElementGetterFunction;
   readonly fontSize: IElementGetterFunction;
   readonly fontWeight: IElementGetterFunction;
+  readonly image: IElementGetterFunction;
   readonly letterSpacing: IElementGetterFunction;
   readonly lineHeight: IElementGetterFunction;
   readonly radius: IElementGetterFunction;

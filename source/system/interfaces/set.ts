@@ -1,11 +1,11 @@
-export interface ISet<V> {
-  readonly set: V[];
+export interface ISet<T> {
+  readonly set: T[];
   readonly default?: number;
   readonly alias?: {
     [alias: string]: number;
   }
 }
 
-export interface ISuperSet<V> {
-  readonly [name: string]: ISet<V>;
+export interface ISuperSet<T> {
+  readonly [name: string]: ISet<T>;
 }

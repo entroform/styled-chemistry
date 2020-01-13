@@ -9,50 +9,46 @@ import {
   ICompoundSuperSet,
 } from '../interfaces/compounds';
 import {
-  isValidSetIndex,
-  stringNumberToString,
+  isStringOrNumber,
+  isValidArrayIndex,
 } from '../utilities';
 
-export const createCompoundGetterFunctionFromSet =
+const createGetterFunctionFromSet =
 (elementGetters: IElementGetterFunctions) =>
-(compound: ICompoundSet): ICompoundGetterFunction => 
-(key: string | number | null): string | null => {
-  // Return null if set is empty.
-  if (compound.set.length < 1) return null;
+(compoundSet: ICompoundSet): ICompoundGetterFunction => 
+(key?: string | number | null): string | number | null => {
+  if (compoundSet.set.length < 1) return null;
 
   let value: Function | null = null;
 
-  // Set value to element of set if key is valid.
-  if (isValidSetIndex(key)) {
-    value = compound[key];
-  // Otherwise, check if there is a valid alias.
+  if (isValidArrayIndex(key)) {
+    value = compoundSet[key];
   } else if (
     typeof key === 'string'
-    && compound.alias
-    && compound.alias[key]
-    && isValidSetIndex(compound.alias[key])
+    && typeof compoundSet.alias === 'object'
+    && isValidArrayIndex(compoundSet.alias[key])
   ) {
-    value = compound.set[compound.alias[key]];
-  // If key is undefined, set value to default or first element in set.
+    value = compoundSet.set[compoundSet.alias[key]];
   } else if (typeof key === 'undefined') {
-    // If default is set, set default element, if not set first element in set.
-    value = isValidSetIndex(compound.default)
-      ? compound.set[compound.default]
-      : compound.set[0];
+    value = isValidArrayIndex(compoundSet.default)
+      ? compoundSet.set[compoundSet.default]
+      : compoundSet.set[0];
   }
 
-  // If the final value is not valid return null.
-  return (typeof value === 'function')
-    ? stringNumberToString(value(elementGetters))
-    : null;
+  if (typeof value === 'function') {
+    const result = value(elementGetters);
+    return (isStringOrNumber(result)) ? result : null;
+  }
+
+  return null;
 }
 
-export const createCompoundGetterFunctionFromSuperSet =
-  (elementGetters: IElementGetterFunctions) =>
-  (compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetterFunction  =>
-  (name: string): ICompoundGetterFunction => (
-    createCompoundGetterFunctionFromSet(elementGetters)(compoundSuperSet[name])
-  )
+const createCompoundGetterFunctionFromSuperSet =
+(elementGetters: IElementGetterFunctions) =>
+(compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetterFunction  =>
+(name: string): ICompoundGetterFunction => (
+  createGetterFunctionFromSet(elementGetters)(compoundSuperSet[name])
+)
 
 export const createGetterFunctionsFromCompounds =
 (elementGetters: IElementGetterFunctions) =>
@@ -63,7 +59,7 @@ export const createGetterFunctionsFromCompounds =
     const compound = compounds[key];
 
     if (Array.isArray(compound.set)) {
-      result[key] = createCompoundGetterFunctionFromSet(elementGetters)(compound as ICompoundSet);
+      result[key] = createGetterFunctionFromSet(elementGetters)(compound as ICompoundSet);
     } else {
       result[key] = createCompoundGetterFunctionFromSuperSet(elementGetters)(compound as ICompoundSuperSet);
     }

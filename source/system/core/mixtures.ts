@@ -13,51 +13,48 @@ import {
   IMixtureSuperSet,
 } from '../interfaces/mixtures';
 import {
-  isValidSetIndex,
-  stringNumberToString,
+  isStringOrNumber,
+  isValidArrayIndex,
 } from '../utilities';
 
-export const createMixtureGetterFunctionFromSet =
+
+const createGetterFunctionFromSet =
 (elementGetters: IElementGetterFunctions) =>
 (compoundGetters: ICompoundGetterFunctions) =>
-(mixture: IMixtureSet): IMixtureGetterFunction =>
-(key: string | number | null): string | null => {
-  // Return null if set is empty.
-  if (mixture.set.length < 1) return null;
+(compoundSet: IMixtureSet): IMixtureGetterFunction => 
+(key?: string | number | null): string | number | null => {
+  if (compoundSet.set.length < 1) return null;
 
   let value: Function | null = null;
 
-  // Set value to element of set if key is valid.
-  if (isValidSetIndex(key)) {
-    value = mixture[key];
-  // Otherwise, check if there is a valid alias.
+  if (isValidArrayIndex(key)) {
+    value = compoundSet[key];
   } else if (
     typeof key === 'string'
-    && mixture.alias
-    && mixture.alias[key]
-    && isValidSetIndex(mixture.alias[key])
+    && typeof compoundSet.alias === 'object'
+    && isValidArrayIndex(compoundSet.alias[key])
   ) {
-    value = mixture.set[mixture.alias[key]];
-  // If key is undefined, set value to default or first element in set.
+    value = compoundSet.set[compoundSet.alias[key]];
   } else if (typeof key === 'undefined') {
-    // If default is set, set default element, if not set first element in set.
-    value = isValidSetIndex(mixture.default)
-      ? mixture.set[mixture.default]
-      : mixture.set[0];
+    value = isValidArrayIndex(compoundSet.default)
+      ? compoundSet.set[compoundSet.default]
+      : compoundSet.set[0];
   }
 
-  // If the final value is not valid return null.
-  return (typeof value === 'function')
-    ? stringNumberToString(value(elementGetters, compoundGetters))
-    : null;
+  if (typeof value === 'function') {
+    const result = value(elementGetters)(compoundGetters);
+    return (isStringOrNumber(result)) ? result : null;
+  }
+
+  return null;
 }
 
-export const createMixtureGetterFunctionFromSuperSet =
+export const createGetterFunctionFromSuperSet =
 (elementGetters: IElementGetterFunctions) =>
 (compoundGetters: ICompoundGetterFunctions) =>
 (mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetterFunction  =>
 (name: string): IMixtureGetterFunction => (
-  createMixtureGetterFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
+  createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
 )
 
 export const createGetterFunctionsFromMixtures =
@@ -70,9 +67,9 @@ export const createGetterFunctionsFromMixtures =
     const mixture = mixtures[key];
 
     if (Array.isArray(mixture.set)) {
-      result[key] = createMixtureGetterFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet);
+      result[key] = createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet);
     } else {
-      result[key] = createMixtureGetterFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
+      result[key] = createGetterFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
     }
   });
 
