@@ -34,6 +34,11 @@ export const createTheme = (elements: IElements) => {
         elements: elementGetters,
         compounds: compoundGetters,
         mixtures: mixtureGetters,
+        original: {
+          elements,
+          compounds,
+          mixtures,
+        },
       };
     }
   }

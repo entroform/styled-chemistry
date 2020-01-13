@@ -1,10 +1,14 @@
 import React, {
-  FC,
   createContext,
+  FC,
   useContext,
 } from 'react';
-import { ThemeProvider } from 'styled-components';
-import { ITheme } from './interfaces/theme';
+import {
+  ThemeProvider,
+} from 'styled-components';
+import {
+  ITheme,
+} from './interfaces/theme';
 
 export const StyleChemistryContext = createContext(null);
 

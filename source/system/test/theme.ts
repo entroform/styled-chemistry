@@ -71,6 +71,9 @@ const elements: IElements = Object.freeze({
       ],
     },
   },
+  images: {
+    set: [],
+  },
   spaces: {
     set: [0, 2, 4, 8, 12, 14, 16],
     default: 0,
