@@ -1,13 +1,17 @@
-export type CssScalar = Function | string | number | null;
+// Utilities
 
-export interface CssObject {
-  [property: string]: CssObject | CssScalar;
-}
+export const isNumber = (n: any): n is number => (typeof n === 'number' && !isNaN(n));
 
-const cleanCssObject = (obj: CssObject) => {
+export const isNumberOrString = n => (isNumber(n) || typeof n === 'string');
 
-}
+export const isValidSetIndex = (n: any): n is number => (isNumber(n) && n >= 0);
 
-const composeCssObjects = (obj1, obj2) => {
+export const isSet = <T>(set: any): set is T => (
+  set && typeof set.set !== 'object' && Array.isArray(set.set) === true
+);
 
+export const stringNumberToString = (n: string | number | null): string | null => {
+  return (typeof n === 'number')
+    ? n.toString()
+    : n;
 }

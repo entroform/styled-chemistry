@@ -1,11 +1,15 @@
 import { hsl } from 'polished';
 import {
+  ICompounds,
   IElements,
   IElementSet,
-  ICompounds,
   IMixtures,
   ITheme,
-} from './types';
+} from '../interfaces';
+
+import {
+  createTheme,
+} from '../core/theme';
 
 const elements: IElements = Object.freeze({
   fontFamilies: {
@@ -86,7 +90,7 @@ const elements: IElements = Object.freeze({
   },
 });
 
-const compounds: ICompounds = {
+const compounds: ICompounds = Object.freeze({
   gradients: {
     sunset: {
       set: [
@@ -104,29 +108,27 @@ const compounds: ICompounds = {
       ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)}`,
     ],
   },
-};
+});
 
-const mixtures: IMixtures = {
+const mixtures: IMixtures = Object.freeze({
   typography: {
     heading: {
       set: [
-        ({ fontFamily }) => ({
-          fontFamily: fontFamily(0),
-        }),
+        ({ fontFamily, fontSize }) => `
+          font-size: ${fontSize(6)}px;
+          font-family: ${fontFamily(0)};
+        `,
       ],
     },
     body: {
       set: [
-        ({ fontFamily }) => ({
-          fontFamily: fontFamily(0),
-        }),
+        ({ fontFamily, fontSize }) => `
+          font-size: ${fontSize(6)}px;
+          font-family: ${fontFamily(0)};
+        `,
       ]
     },
   },
-};
+});
 
-export const theme: ITheme = {
-  elements,
-  compounds,
-  mixtures,
-}
+export const theme: ITheme = createTheme(elements)(compounds)(mixtures);

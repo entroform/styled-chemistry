@@ -1,20 +1,27 @@
-import React, { createContext } from 'react';
+import React, {
+  FC,
+  createContext,
+  useContext,
+} from 'react';
 
-export const ThemeContext = createContext(null);
+import { ITheme } from './interfaces/theme';
 
-const ThemeProvider = theme => {
-  const context = createContext(null);
+export const Context = createContext(null);
 
-  const provider = ({ children }) => {
-    <ThemeContext.Provider value={theme}>
-      {children}
-    </ThemeContext.Provider>
-  }
-
-  return [
-    context,
-    provider,
-  ];
+interface ThemeProviderProps {
+  theme: ITheme;
 }
 
-export default ThemeProvider;
+export const ThemeProvider: FC<ThemeProviderProps> = ({ children, theme }) => {
+  return (
+    <Context.Provider value={theme}>
+      {children}
+    </Context.Provider>
+  );
+}
+
+
+export const getTheme = () => {
+  const theme = useContext(Context);
+  return theme;
+}
