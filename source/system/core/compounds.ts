@@ -55,10 +55,12 @@ export const createGetterFunctionsFromCompounds =
 (compounds: ICompounds) => {
   const result = {};
 
-  Object.keys(compounds).forEach(key => {
-    const compound = compounds[key];
+  Object
+  .keys(compounds)
+  .forEach(key => {
+    const compoundSet = compounds[key];
 
-    if (Array.isArray(compound.set)) {
+    if (Ise(compound.set)) {
       result[key] = createGetterFunctionFromSet(elementGetters)(compound as ICompoundSet);
     } else {
       result[key] = createCompoundGetterFunctionFromSuperSet(elementGetters)(compound as ICompoundSuperSet);
