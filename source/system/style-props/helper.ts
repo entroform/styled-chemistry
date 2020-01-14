@@ -5,48 +5,169 @@ import {
   IElementGetterFunction,
   ICompoundGetterFunction,
   IMixtureGetterFunction,
+  IElementSuperGetterFunction,
+  IMixtureSuperGetterFunction,
+  ICompoundSuperGetterFunction,
 } from '../interfaces';
 
-import React, { useContext } from 'react';
 import {
-  StyleChemistryContext
-} from '../provider';
+  isStringOrNumber,
+  arrayIsSet,
+} from '../utilities';
 
-interface PropToStyleMapElement {
-  propName: string;
-  getter: IElementGetterFunction | ICompoundGetterFunction | IMixtureGetterFunction;
-  styleProperties: string[];
+// Example Input
+// 1.
+// <div color={['red', 0]} />
+// 2.
+// <div
+//   breakpoints={['xs', 's', 'm']}
+//   color={[['red', 0], 'red', 0]}
+// />
+// 3.
+// <div
+//   breakpoints={['xs', 's']}
+//   color={[['red', 0]]}
+// />
+
+// superSet: array
+// set: string | number
+
+type ISetGetterFunction = IElementGetterFunction | ICompoundGetterFunction | IMixtureGetterFunction;
+type ISuperSetGetterFunction = IElementSuperGetterFunction | ICompoundSuperGetterFunction | IMixtureSuperGetterFunction;
+
+interface IPropToStyle {
+  styleProperties?: string[];
 }
 
-interface PropToStyleMap {
-  (theme: ITheme): PropToStyleMapElement[];
+interface IPropToStyleWithSuperSetGetterFunction extends IPropToStyle {
+  getter: ISuperSetGetterFunction;
+  isSuperSet: true;
 }
 
-const map: PropToStyleMap = theme => [
-  {
-    propName: 'm',
-    getter: theme.elements.fontSize,
+interface IPropToStyleWithSetGetterFunction extends IPropToStyle {
+  getter: ISetGetterFunction;
+  isSuperSet?: false;
+}
+
+type IPropToStyleSetting = IPropToStyleWithSuperSetGetterFunction | IPropToStyleWithSetGetterFunction;
+
+interface IPropsToStylesMapObject {
+  [propName: string]: IPropToStyleSetting;
+}
+
+interface IPropsToStylesMap {
+  (theme: ITheme): IPropsToStylesMapObject;
+}
+
+interface IPropsToStyleMapConfig {
+  enableBreakpointMapping: boolean;
+  mediaRule: (a: string) => string;
+}
+
+const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
+  enableBreakpointMapping: true,
+  mediaRule: a => `@media only screen and (minWidth=${a})`
+}
+
+const propsToStyleSpaceMap: IPropsToStylesMap = theme => ({
+  m: {
+    getter: theme.elements.space,
     styleProperties: ['margin'],
+    isSuperSet: false,
   },
-  {
-    propName: 'my',
-    getter: theme.elements.fontSize,
+  mx: {
+    getter: theme.elements.space,
+    styleProperties: ['margin-left', 'margin-right'],
+    isSuperSet: false,
+  },
+  my: {
+    getter: theme.elements.space,
     styleProperties: ['margin-top', 'margin-bottom'],
+    isSuperSet: false,
   },
-];
+  ml: {
+    getter: theme.elements.space,
+    styleProperties: ['margin-left'],
+    isSuperSet: false,
+  },
+  mr: {
+    getter: theme.elements.space,
+    styleProperties: ['margin-right'],
+    isSuperSet: false,
+  },
+});
 
-const mapProps =
+const mapPropsToStyles =
 (theme: ITheme) =>
-(map: PropToStyleMap) =>
-(props) => {
-  map(theme).forEach(mapValue => {
-    if (props[mapValue.propName]) {
-      const value = props[mapValue.propName];
-      if (Array.isArray(value)) {
+(config: IPropsToStyleMapConfig) =>
+(map: IPropsToStylesMap) =>
+(props: any) => {
+  const mapObject = map(theme);
 
+  let breakpointsAreAvailable: boolean = arrayIsSet<string | number>(props.breakpoints);
+
+  let resolvedBreakpoints: (string | number)[] | null = null;
+
+  // If enable breakpoints mapping: resolve breakpoints.
+  if (config.enableBreakpointMapping && breakpointsAreAvailable) {
+    // Resolve each breakpoints value.
+    resolvedBreakpoints = props.breakpoints
+      .map(val => theme.elements.breakpoint(val) ?? val)
+      .sort();
+  }
+
+  // Loop through map object.
+  Object
+  .keys(mapObject)
+  .forEach(propName => {
+    // Check if prop is set.
+    if (typeof props[propName] !== 'undefined') {
+      // Get value from prop in the map.
+      const mapSetting = mapObject[propName];
+      const value = props[propName];
+      
+      if (config.enableBreakpointMapping && breakpointsAreAvailable) {
+
+      } else {
+        let result;
+        if (mapSetting.isSuperSet) {
+          if (Array.isArray(value) && value.length == 2) {
+            result = mapSetting.getter(value[0])(value[1]);
+          } else if (typeof value === 'string') {
+            result = mapSetting.getter(value)();
+          }
+        } else {
+          if (typeof value === 'string') {
+            result = mapSetting.getter(value)();
+          }
+          result = mapSetting.getter(value);
+        }
       }
     }
-  })
+  });
+  // Compose into styles string.
+}
+
+const mapPropToStyle =
+(mapSetting: IPropToStyleSetting) =>
+(value: (string | number)[] | string | number | null) => {
+  let result = '';
+
+  if (mapSetting.isSuperSet) {
+    if (Array.isArray(value) && value.length == 2) {
+      result = mapSetting.getter(value[0])(value[1]);
+    } else if (typeof value === 'string') {
+      result = mapSetting.getter(value)();
+    }
+  } else {
+    result = isStringOrNumber(value)
+      ? mapSetting.getter(value)
+      : mapSetting.getter();
+  }
+}
+
+function mapStylePropertiesToValue(styleProperties: string[], value: string | number): string {
+  return styleProperties.map(property => `${property}: ${value};`).join(`\n`);
 }
 
 // prop values

@@ -5,7 +5,6 @@ import {
 import {
   ICompounds,
   IElements,
-  IElementSet,
   IMixtures,
   ITheme,
 } from '../interfaces';
@@ -144,7 +143,7 @@ const mixtures: IMixtures = Object.freeze({
     heading: {
       set: [
         ({ fontFamily, fontSize }) => `
-          font-size: ${fontSize(6)}px;
+          font-size: ${fontSize(6)};
           font-family: ${fontFamily(0)};
         `,
       ],

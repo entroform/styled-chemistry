@@ -24,16 +24,8 @@ const map = {
 const stylePropsConstructor = map => props => {
   const style = ``;
 
-  
-
   Object.keys(map).forEach(key => {
     if (props[key]) {
-
-      // If array:
-      if (Array.isArray(props[key])) {
-        props[key]
-      }
-
       props[key].cssProperties.map(property => `${property}: ${}`)
     }
   });

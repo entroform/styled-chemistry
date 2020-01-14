@@ -11,7 +11,7 @@ export type ICompoundSetArrayItem = (elementGetters: IElementGetterFunctions) =>
 export type ICompoundSet = ISet<ICompoundSetArrayItem>;
 export type ICompoundSuperSet = ISuperSet<ICompoundSetArrayItem>;
 
-export type ICompoundGetterFunction = (key: string | number) => string | number | null;
+export type ICompoundGetterFunction = (key?: string | number) => string | number | null;
 export type ICompoundSuperGetterFunction = (name: string) => ICompoundGetterFunction;
 
 export interface ICompounds {
