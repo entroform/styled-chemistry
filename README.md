@@ -1,8 +1,10 @@
 # ⚗️ styled-chemistry
 
+## Elements, Compounds, and Mixtures
+
 `npm run start`
 
-## Inspirated by:
+## Inspired By:
 
 - https://radix.modulz.app/docs/theme/
 - https://github.com/jzarnett
