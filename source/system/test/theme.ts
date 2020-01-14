@@ -1,4 +1,7 @@
-import { hsl } from 'polished';
+import {
+  hsl,
+  rem,
+} from 'polished';
 import {
   ICompounds,
   IElements,
@@ -22,7 +25,11 @@ const elements: IElements = Object.freeze({
     },
   },
   fontSizes: {
-    set: [0, 10, 12, 14, 16, 18, 24, 452],
+    set: [
+      rem(0),  rem(10), rem(12),
+      rem(14), rem(16), rem(18),
+      rem(24), rem(32), rem(38),
+    ],
     default: 4,
     alias: {
       'x-small': 1,
@@ -126,6 +133,14 @@ const compounds: ICompounds = Object.freeze({
 
 const mixtures: IMixtures = Object.freeze({
   typography: {
+    normalized: {
+      set: [
+        ({ fontFamily, fontSize }) => `
+          font-family: ${fontFamily('sans-serif')};
+          font-size: ${fontSize('medium')};
+        `
+      ],
+    },
     heading: {
       set: [
         ({ fontFamily, fontSize }) => `

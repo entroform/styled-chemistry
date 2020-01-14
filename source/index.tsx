@@ -13,7 +13,7 @@ import {
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};
   color: ${props => props.theme.elements.color('red')()};
-  font-size: ${props => props.theme.elements.fontSize('large') + 'px'};
+  font-size: ${props => props.theme.elements.fontSize('large')};
 `;
 
 const TestComponent = () => (

@@ -1,17 +1,14 @@
 import {
-  IElementGetterFunctions,
-} from '../interfaces/elements';
-import {
   ICompoundGetterFunctions,
-} from '../interfaces/compounds';
-import {
+  IElementGetterFunctions,
   IMixtureGetterFunction,
   IMixtureGetterFunctions,
   IMixtures,
   IMixtureSet,
   IMixtureSuperGetterFunction,
   IMixtureSuperSet,
-} from '../interfaces/mixtures';
+} from '../interfaces';
+
 import {
   isSet,
   isStringOrNumber,

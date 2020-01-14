@@ -6,7 +6,8 @@ import {
   IElementSetArrayItem,
   IElementSuperGetterFunction,
   IElementSuperSet,
-} from '../interfaces/elements';
+} from '../interfaces';
+
 import {
   isStringOrNumber,
   isValidArrayIndex,

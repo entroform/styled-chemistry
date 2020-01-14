@@ -1,4 +1,3 @@
-
 import {
   createGetterFunctionsFromElements,
 } from './elements';
@@ -8,21 +7,16 @@ import {
 import {
   createGetterFunctionsFromMixtures,
 } from './mixtures';
+
 import {
-  IElements,
-  IElementGetterFunctions,
-} from '../interfaces/elements';
-import {
-  ICompounds,
   ICompoundGetterFunctions,
-} from '../interfaces/compounds';
-import {
-  IMixtures,
+  ICompounds,
+  IElementGetterFunctions,
+  IElements,
   IMixtureGetterFunctions,
-} from '../interfaces/mixtures';
-import {
+  IMixtures,
   ITheme,
-} from '../interfaces/theme';
+} from '../interfaces';
 
 export const createTheme = (elements: IElements) => {
   const elementGetters: IElementGetterFunctions = createGetterFunctionsFromElements(elements);

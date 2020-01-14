@@ -1,7 +1,3 @@
-import React, { useContext } from 'react';
-import {
-  StyleChemistryContext
-} from '../provider';
 import {
   ITheme,
 } from '../interfaces/theme';
@@ -10,6 +6,11 @@ import {
   ICompoundGetterFunction,
   IMixtureGetterFunction,
 } from '../interfaces';
+
+import React, { useContext } from 'react';
+import {
+  StyleChemistryContext
+} from '../provider';
 
 interface PropToStyleMapElement {
   propName: string;

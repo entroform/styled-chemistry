@@ -1,13 +1,12 @@
 import {
-  IElementGetterFunctions,
-} from '../interfaces/elements';
-import {
   ICompoundGetterFunction,
   ICompounds,
   ICompoundSet,
   ICompoundSuperGetterFunction,
   ICompoundSuperSet,
-} from '../interfaces/compounds';
+  IElementGetterFunctions,
+} from '../interfaces';
+
 import {
   isSet,
   isStringOrNumber,
