@@ -1,4 +1,4 @@
-# ⚗️ style-chemistry
+# ⚗️ styled-chemistry
 
 `npm run start`
 
