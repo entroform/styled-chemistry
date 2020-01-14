@@ -2,7 +2,7 @@
 
 `npm run start`
 
-## Inspirations
+## Inspirated by:
 
 - https://radix.modulz.app/docs/theme/
 - https://github.com/jzarnett
