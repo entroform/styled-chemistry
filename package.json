@@ -1,5 +1,5 @@
 {
-  "name": "style-system",
+  "name": "style-chemistry",
   "version": "1.0.0",
   "description": "",
   "homepage": "https://github.com/nekobird/style-system#readme",
@@ -17,15 +17,15 @@
     "start": "parcel ./source/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "parcel-bundler": "^1.12.4",
-    "sass": "^1.24.4",
-    "typescript": "^3.7.4"
-  },
   "dependencies": {
     "polished": "^3.4.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "styled-components": "^4.4.1"
+    "styled-components": "^5.0.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.24.4",
+    "typescript": "^3.7.4"
   }
 }

@@ -11,6 +11,13 @@ import {
   IMixtures,
 } from './mixtures';
 
+
+export interface IThemeGetters {
+  readonly elements: IElementGetterFunctions;
+  readonly compounds: ICompoundGetterFunctions;
+  readonly mixtures: IMixtureGetterFunctions;
+}
+
 export interface IThemeOriginal {
   readonly elements: IElements;
   readonly compounds: ICompounds;

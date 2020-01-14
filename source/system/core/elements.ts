@@ -22,7 +22,7 @@ const createGetterFunctionFromSet =
   if (isValidArrayIndex(key)) {
     value = elementSet.set[key];
   } else if (
-    typeof key === 'string'
+       typeof key === 'string'
     && typeof elementSet.alias === 'object'
     && isValidArrayIndex(elementSet.alias[key])
   ) {

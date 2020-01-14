@@ -13,10 +13,10 @@ import {
   IMixtureSuperSet,
 } from '../interfaces/mixtures';
 import {
+  isSet,
   isStringOrNumber,
   isValidArrayIndex,
 } from '../utilities';
-
 
 const createGetterFunctionFromSet =
 (elementGetters: IElementGetterFunctions) =>
@@ -52,7 +52,7 @@ const createGetterFunctionFromSet =
 export const createGetterFunctionFromSuperSet =
 (elementGetters: IElementGetterFunctions) =>
 (compoundGetters: ICompoundGetterFunctions) =>
-(mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetterFunction  =>
+(mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetterFunction =>
 (name: string): IMixtureGetterFunction => (
   createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
 )
@@ -62,16 +62,13 @@ export const createGetterFunctionsFromMixtures =
 (compoundGetters: ICompoundGetterFunctions) =>
 (mixtures: IMixtures): IMixtureGetterFunctions => {
   const result = {};
-
-  Object.keys(mixtures).forEach(key => {
-    const mixture = mixtures[key];
-
-    if (Array.isArray(mixture.set)) {
-      result[key] = createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet);
-    } else {
-      result[key] = createGetterFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
-    }
+  Object
+    .keys(mixtures)
+    .forEach(name => {
+    const mixture = mixtures[name];
+    result[name] = isSet(mixture)
+      ? createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet)
+      : createGetterFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
   });
-
   return result;
 }

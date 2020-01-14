@@ -9,6 +9,7 @@ import {
   ICompoundSuperSet,
 } from '../interfaces/compounds';
 import {
+  isSet,
   isStringOrNumber,
   isValidArrayIndex,
 } from '../utilities';
@@ -45,7 +46,7 @@ const createGetterFunctionFromSet =
 
 const createCompoundGetterFunctionFromSuperSet =
 (elementGetters: IElementGetterFunctions) =>
-(compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetterFunction  =>
+(compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetterFunction =>
 (name: string): ICompoundGetterFunction => (
   createGetterFunctionFromSet(elementGetters)(compoundSuperSet[name])
 )
@@ -54,18 +55,13 @@ export const createGetterFunctionsFromCompounds =
 (elementGetters: IElementGetterFunctions) =>
 (compounds: ICompounds) => {
   const result = {};
-
   Object
   .keys(compounds)
-  .forEach(key => {
-    const compoundSet = compounds[key];
-
-    if (Ise(compound.set)) {
-      result[key] = createGetterFunctionFromSet(elementGetters)(compound as ICompoundSet);
-    } else {
-      result[key] = createCompoundGetterFunctionFromSuperSet(elementGetters)(compound as ICompoundSuperSet);
-    }
+  .forEach(name => {
+    const compound = compounds[name];
+    result[name] = isSet(compound)
+      ? createGetterFunctionFromSet(elementGetters)(compound as ICompoundSet)
+      : createCompoundGetterFunctionFromSuperSet(elementGetters)(compound as ICompoundSuperSet);
   });
-
   return result;
 }
