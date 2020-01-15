@@ -1,4 +1,3 @@
-
 const breakpointsResolver = props => {
   const { breakpoint } = props.theme.elements;
   if (props.breakpoints) {

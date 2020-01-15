@@ -32,6 +32,9 @@ import {
 // superSet: array
 // set: string | number
 
+type IGetterFunctionValue = string | number | null;
+type ISuperGetterFunctionValueArray = [string, string | number | null];
+
 type ISetGetterFunction = IElementGetterFunction | ICompoundGetterFunction | IMixtureGetterFunction;
 type ISuperSetGetterFunction = IElementSuperGetterFunction | ICompoundSuperGetterFunction | IMixtureSuperGetterFunction;
 
@@ -129,40 +132,40 @@ const mapPropsToStyles =
       if (config.enableBreakpointMapping && breakpointsAreAvailable) {
 
       } else {
-        let result;
-        if (mapSetting.isSuperSet) {
-          if (Array.isArray(value) && value.length == 2) {
-            result = mapSetting.getter(value[0])(value[1]);
-          } else if (typeof value === 'string') {
-            result = mapSetting.getter(value)();
-          }
-        } else {
-          if (typeof value === 'string') {
-            result = mapSetting.getter(value)();
-          }
-          result = mapSetting.getter(value);
-        }
+        const result = mapPropToStyle(mapSetting)(value);
       }
     }
   });
   // Compose into styles string.
 }
 
-const mapPropToStyle =
-(mapSetting: IPropToStyleSetting) =>
-(value: (string | number)[] | string | number | null) => {
-  let result = '';
+function mapPropToStyle(mapSetting: IPropToStyleSetting) {
+  return (value: (string | number)[] | string | number | null) => {
+    let result: string | number | null = null;
 
-  if (mapSetting.isSuperSet) {
-    if (Array.isArray(value) && value.length == 2) {
-      result = mapSetting.getter(value[0])(value[1]);
-    } else if (typeof value === 'string') {
-      result = mapSetting.getter(value)();
+    if (mapSetting.isSuperSet) {
+      if (
+        Array.isArray(value)
+        && value.length == 2
+        && typeof value[0] === 'string'
+      ) {
+        result = isStringOrNumber(value[1])
+          ? mapSetting.getter(value[0])(value[1])
+          : mapSetting.getter(value[0])();
+      } else if (typeof value === 'string') {
+        result = mapSetting.getter(value)();
+      }
+    } else {
+      result = isStringOrNumber(value)
+        ? mapSetting.getter(value)
+        : mapSetting.getter();
     }
-  } else {
-    result = isStringOrNumber(value)
-      ? mapSetting.getter(value)
-      : mapSetting.getter();
+
+    if (isStringOrNumber(value) && result === null) {
+      return value;
+    }
+    
+    return result;
   }
 }
 
