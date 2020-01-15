@@ -5,6 +5,7 @@ import {
   IMixtureGetFunctions,
   IMixtures,
   IMixtureSet,
+  IMixtureSetArrayItem,
   IMixtureSuperGetFunction,
   IMixtureSuperSet,
 } from '../interfaces';
@@ -16,13 +17,15 @@ import {
 } from '../utilities';
 
 const createGetFunctionFromSet =
-(elementGetters: IElementGetFunctions) =>
-(compoundGetters: ICompoundGetFunctions) =>
+(elementGet: IElementGetFunctions) =>
+(compoundGet: ICompoundGetFunctions) =>
 (compoundSet: IMixtureSet): IMixtureGetFunction => 
 (key?: string | number | null): string | number | null => {
-  if (compoundSet.set.length < 1) return null;
+  if (compoundSet.set.length < 1) {
+    return null;
+  }
 
-  let value: Function | null = null;
+  let value: IMixtureSetArrayItem | null = null;
 
   if (isValidArrayIndex(key)) {
     value = compoundSet[key];
@@ -39,7 +42,7 @@ const createGetFunctionFromSet =
   }
 
   if (typeof value === 'function') {
-    const result = value(elementGetters)(compoundGetters);
+    const result = value(elementGet, compoundGet);
     return (isStringOrNumber(result)) ? result : null;
   }
 
@@ -47,24 +50,24 @@ const createGetFunctionFromSet =
 }
 
 export const createGetFunctionFromSuperSet =
-(elementGetters: IElementGetFunctions) =>
-(compoundGetters: ICompoundGetFunctions) =>
+(elementGet: IElementGetFunctions) =>
+(compoundGet: ICompoundGetFunctions) =>
 (mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetFunction =>
 (name: string): IMixtureGetFunction => (
-  createGetFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
+  createGetFunctionFromSet(elementGet)(compoundGet)(mixtureSuperSet[name])
 );
 
 export const createGetFunctionsFromMixtures =
-(elementGetters: IElementGetFunctions) =>
-(compoundGetters: ICompoundGetFunctions) =>
+(elementGet: IElementGetFunctions) =>
+(compoundGet: ICompoundGetFunctions) =>
 (mixtures: IMixtures): IMixtureGetFunctions => (
   Object
     .keys(mixtures)
     .reduce((accumulator, name) => {
       const mixture = mixtures[name];
       accumulator[name] = isSet<IMixtureSet>(mixture)
-        ? createGetFunctionFromSet(elementGetters)(compoundGetters)(mixture)
-        : createGetFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture);
+        ? createGetFunctionFromSet(elementGet)(compoundGet)(mixture)
+        : createGetFunctionFromSuperSet(elementGet)(compoundGet)(mixture);
       return accumulator;
     }, {})
 );

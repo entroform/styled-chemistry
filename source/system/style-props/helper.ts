@@ -1,13 +1,11 @@
 import {
-  ITheme,
-} from '../interfaces/theme';
-import {
-  IElementGetFunction,
   ICompoundGetFunction,
-  IMixtureGetFunction,
-  IElementSuperGetFunction,
-  IMixtureSuperGetFunction,
   ICompoundSuperGetFunction,
+  IElementGetFunction,
+  IElementSuperGetFunction,
+  IMixtureGetFunction,
+  IMixtureSuperGetFunction,
+  ITheme,
 } from '../interfaces';
 
 import {
@@ -32,9 +30,6 @@ import {
 // superSet: array
 // set: string | number
 
-type IGetFunctionValue = string | number | null;
-type ISuperGetFunctionValueArray = [string, string | number | null];
-
 type ISetGetFunction = IElementGetFunction | ICompoundGetFunction | IMixtureGetFunction;
 type ISuperSetGetFunction = IElementSuperGetFunction | ICompoundSuperGetFunction | IMixtureSuperGetFunction;
 
@@ -54,12 +49,12 @@ interface IPropToStyleWithSetGetFunction extends IPropToStyle {
 
 type IPropToStyleSetting = IPropToStyleWithSuperSetGetFunction | IPropToStyleWithSetGetFunction;
 
-interface IPropsToStylesMapObject {
+interface IPropsToStyleMapObject {
   [propName: string]: IPropToStyleSetting;
 }
 
-interface IPropsToStylesMap {
-  (theme: ITheme): IPropsToStylesMapObject;
+interface IPropsToStyleMap {
+  (theme: ITheme): IPropsToStyleMapObject;
 }
 
 interface IPropsToStyleMapConfig {
@@ -69,10 +64,10 @@ interface IPropsToStyleMapConfig {
 
 const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
-  mediaRule: a => `@media only screen and (minWidth=${a})`
-}
+  mediaRule: a => `@media only screen and (minWidth=${a})`,
+};
 
-const propsToStyleSpaceMap: IPropsToStylesMap = theme => ({
+const propsToStyleSpaceMap: IPropsToStyleMap = theme => ({
   m: {
     getter: theme.elements.space,
     styleProperties: ['margin'],
@@ -103,7 +98,7 @@ const propsToStyleSpaceMap: IPropsToStylesMap = theme => ({
 const mapPropsToStyles =
 (theme: ITheme) =>
 (config: IPropsToStyleMapConfig) =>
-(map: IPropsToStylesMap) =>
+(map: IPropsToStyleMap) =>
 (props: any) => {
   const mapObject = map(theme);
 
@@ -139,40 +134,61 @@ const mapPropsToStyles =
   // Compose into styles string.
 }
 
-function mapPropToStyle(mapSetting: IPropToStyleSetting) {
-  return (value: (string | number)[] | string | number | null) => {
-    let result: string | number | null = null;
+// Handl Leaf nodes.
 
-    if (mapSetting.isSuperSet) {
-      if (
-        Array.isArray(value)
-        && value.length == 2
-        && typeof value[0] === 'string'
-      ) {
-        result = isStringOrNumber(value[1])
-          ? mapSetting.getter(value[0])(value[1])
-          : mapSetting.getter(value[0])();
-      } else if (typeof value === 'string') {
-        result = mapSetting.getter(value)();
-      }
-    } else {
-      result = isStringOrNumber(value)
-        ? mapSetting.getter(value)
-        : mapSetting.getter();
-    }
+type IGetFunctionValue = string | number | null;
+type ISuperGetFunctionValueArray = [string, IGetFunctionValue];
 
-    if (isStringOrNumber(value) && result === null) {
-      return value;
-    }
-    
-    return result;
+// Three inputs types for PropToStyleWithBreakpoints
+// [[string, string | number]]
+// [string | number, [string, string | number]]
+// string | number
+const mapPropToStyleWithBreakpoints = (breakpoints: string[]) =>
+(mapSetting: IPropToStyleSetting) =>
+(value: ISuperGetFunctionValueArray[] | IGetFunctionValue[] | IGetFunctionValue): string[] => {
+  if (isStringOrNumber(value)) {
+
+  } else if (arrayIsSet(value)) {
+  
   }
+
+  return [];
 }
 
-function mapStylePropertiesToValue(styleProperties: string[], value: string | number): string {
-  return styleProperties.map(property => `${property}: ${value};`).join(`\n`);
+// Two input types:
+// [string, string | number]
+// string | number
+const mapPropToStyle = (mapSetting: IPropToStyleSetting) =>
+(value: (string | number)[] | string | number | null) => {
+  let result: string | number | null = null;
+
+  if (mapSetting.isSuperSet) {
+    if (
+      Array.isArray(value)
+      && value.length == 2
+      && typeof value[0] === 'string'
+    ) {
+      result = isStringOrNumber(value[1])
+        ? mapSetting.getter(value[0])(value[1])
+        : mapSetting.getter(value[0])();
+    } else if (typeof value === 'string') {
+      result = mapSetting.getter(value)();
+    }
+  } else {
+    result = isStringOrNumber(value)
+      ? mapSetting.getter(value)
+      : mapSetting.getter();
+  }
+
+  if (isStringOrNumber(value) && result === null) {
+    return value;
+  }
+  
+  return result;
 }
 
-// prop values
-// map to style properties
-// map to breakpoints
+const mapStylePropertiesToValue =
+(styleProperties: string[]) =>
+(value: string | number): string => (
+  styleProperties.map(property => `${property}: ${value};`).join(`\n`)
+);

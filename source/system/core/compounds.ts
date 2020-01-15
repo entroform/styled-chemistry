@@ -16,7 +16,7 @@ import {
 } from '../utilities';
 
 const createGetFunctionFromSet =
-(elementGetters: IElementGetFunctions) =>
+(elementGet: IElementGetFunctions) =>
 (compoundSet: ICompoundSet): ICompoundGetFunction => 
 (key?: string | number | null): string | number | null => {
   if (compoundSet.set.length < 1) {
@@ -40,7 +40,7 @@ const createGetFunctionFromSet =
   }
 
   if (typeof value === 'function') {
-    const result = value(elementGetters);
+    const result = value(elementGet);
     return (isStringOrNumber(result)) ? result : null;
   }
 
@@ -48,22 +48,22 @@ const createGetFunctionFromSet =
 }
 
 const createCompoundGetFunctionFromSuperSet =
-(elementGetters: IElementGetFunctions) =>
+(elementGet: IElementGetFunctions) =>
 (compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetFunction =>
 (name: string): ICompoundGetFunction => (
-  createGetFunctionFromSet(elementGetters)(compoundSuperSet[name])
+  createGetFunctionFromSet(elementGet)(compoundSuperSet[name])
 );
 
 export const createGetFunctionsFromCompounds =
-(elementGetters: IElementGetFunctions) =>
+(elementGet: IElementGetFunctions) =>
 (compounds: ICompounds): ICompoundGetFunctions => (
   Object
     .keys(compounds)
     .reduce((accumulator, name) => {
       const compound = compounds[name];
       accumulator[name] = isSet<ICompoundSet>(compound)
-        ? createGetFunctionFromSet(elementGetters)(compound)
-        : createCompoundGetFunctionFromSuperSet(elementGetters)(compound);
+        ? createGetFunctionFromSet(elementGet)(compound)
+        : createCompoundGetFunctionFromSuperSet(elementGet)(compound);
       return accumulator;
     }, {})
 );

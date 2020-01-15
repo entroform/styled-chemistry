@@ -12,7 +12,7 @@ import {
 } from './mixtures';
 
 
-export interface IThemeGes {
+export interface IThemeGetFunctions {
   readonly elements: IElementGetFunctions;
   readonly compounds: ICompoundGetFunctions;
   readonly mixtures: IMixtureGetFunctions;

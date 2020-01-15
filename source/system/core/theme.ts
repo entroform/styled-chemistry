@@ -19,15 +19,15 @@ import {
 } from '../interfaces';
 
 export const createTheme = (elements: IElements) => {
-  const elementGetters: IElementGetFunctions = createGetFunctionsFromElements(elements);
+  const elementGet: IElementGetFunctions = createGetFunctionsFromElements(elements);
   return (compounds: ICompounds = {}) => {
-    const compoundGetters: ICompoundGetFunctions = createGetFunctionsFromCompounds(elementGetters)(compounds);
+    const compoundGet: ICompoundGetFunctions = createGetFunctionsFromCompounds(elementGet)(compounds);
     return (mixtures: IMixtures = {}): ITheme => {
-      const mixtureGetters: IMixtureGetFunctions = createGetFunctionsFromMixtures(elementGetters)(compoundGetters)(mixtures);
+      const mixtureGet: IMixtureGetFunctions = createGetFunctionsFromMixtures(elementGet)(compoundGet)(mixtures);
       return {
-        elements:  elementGetters,
-        compounds: compoundGetters,
-        mixtures:  mixtureGetters,
+        elements:  elementGet,
+        compounds: compoundGet,
+        mixtures:  mixtureGet,
         original: {
           elements,
           compounds,

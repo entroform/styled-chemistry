@@ -11,13 +11,13 @@ import {
   ITheme,
 } from './interfaces/theme';
 
-export interface ThemeProviderProps {
+export interface IThemeProviderProps {
   theme: ITheme;
 }
 
 export const StyleChemistryContext = createContext(null);
 
-export const StyleChemistryProvider: FC<ThemeProviderProps> = ({ children, theme }) => (
+export const StyleChemistryProvider: FC<IThemeProviderProps> = ({ children, theme }) => (
   <StyleChemistryContext.Provider value={theme}>
     <ThemeProvider theme={theme}>
       {children}
