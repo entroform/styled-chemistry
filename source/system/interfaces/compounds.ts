@@ -6,12 +6,14 @@ import {
   IElementGetFunctions,
 } from './elements';
 
-export type ICompoundSetArrayItem = (elementGets: IElementGetFunctions) => string | number | null;
+export type ICompoundGetFunctionResult = string | null;
+
+export type ICompoundSetArrayItem = (elementGets: IElementGetFunctions) => ICompoundGetFunctionResult;
 
 export type ICompoundSet = ISet<ICompoundSetArrayItem>;
 export type ICompoundSuperSet = ISuperSet<ICompoundSetArrayItem>;
 
-export type ICompoundGetFunction = (key?: string | number) => string | number | null;
+export type ICompoundGetFunction = (key?: string | number) => ICompoundGetFunctionResult;
 export type ICompoundSuperGetFunction = (name: string) => ICompoundGetFunction;
 
 export interface ICompounds {

@@ -2,6 +2,7 @@ import {
   ICompoundGetFunctions,
   IElementGetFunctions,
   IMixtureGetFunction,
+  IMixtureGetFunctionResult,
   IMixtureGetFunctions,
   IMixtures,
   IMixtureSet,
@@ -15,13 +16,14 @@ import {
   isSet,
   isStringOrNumber,
   isValidArrayIndex,
+  toString,
 } from '../utilities';
 
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundGet: ICompoundGetFunctions) =>
 (compoundSet: IMixtureSet): IMixtureGetFunction => 
-(key?: string | number): string | number | null => {
+(key?: string | number): IMixtureGetFunctionResult => {
   if (!arrayIsSet(compoundSet.set)) return null;
 
   let value: IMixtureSetArrayItem | null = null;
@@ -29,7 +31,7 @@ const createGetFunctionFromSet =
   if (isValidArrayIndex(key)) {
     value = compoundSet[key];
   } else if (
-    typeof key === 'string'
+       typeof key === 'string'
     && typeof compoundSet.alias === 'object'
     && isValidArrayIndex(compoundSet.alias[key])
   ) {
@@ -42,7 +44,7 @@ const createGetFunctionFromSet =
 
   if (typeof value === 'function') {
     const result = value(elementGet, compoundGet);
-    return (isStringOrNumber(result)) ? result : null;
+    return (isStringOrNumber(result)) ? toString(result) : null;
   }
 
   return null;

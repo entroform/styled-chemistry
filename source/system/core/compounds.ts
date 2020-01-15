@@ -1,5 +1,6 @@
 import {
   ICompoundGetFunction,
+  ICompoundGetFunctionResult,
   ICompoundGetFunctions,
   ICompounds,
   ICompoundSet,
@@ -14,12 +15,13 @@ import {
   isSet,
   isStringOrNumber,
   isValidArrayIndex,
+  toString,
 } from '../utilities';
 
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundSet: ICompoundSet): ICompoundGetFunction => 
-(key?: string | number): string | number | null => {
+(key?: string | number): ICompoundGetFunctionResult => {
   if (!arrayIsSet(compoundSet.set)) return null;
 
   let value: ICompoundSetArrayItem | null = null;
@@ -40,7 +42,7 @@ const createGetFunctionFromSet =
 
   if (typeof value === 'function') {
     const result = value(elementGet);
-    return (isStringOrNumber(result)) ? result : null;
+    return (isStringOrNumber(result)) ? toString(result) : null;
   }
 
   return null;

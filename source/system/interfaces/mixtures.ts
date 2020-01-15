@@ -9,15 +9,17 @@ import {
   ICompoundGetFunctions,
 } from './compounds';
 
+export type IMixtureGetFunctionResult = string | null;
+
 export type IMixtureSetArrayItem = (
   elementGetFunctions: IElementGetFunctions,
   compoundGetFunctions: ICompoundGetFunctions,
-) => string | number | null;
+) => IMixtureGetFunctionResult;
 
 export type IMixtureSet = ISet<IMixtureSetArrayItem>;
 export type IMixtureSuperSet = ISuperSet<IMixtureSetArrayItem>;
 
-export type IMixtureGetFunction = (key?: string | number) => string | number | null;
+export type IMixtureGetFunction = (key?: string | number) => IMixtureGetFunctionResult;
 export type IMixtureSuperGetFunction = (name: string) => IMixtureGetFunction;
 
 export interface IMixtures {

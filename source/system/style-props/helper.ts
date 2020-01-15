@@ -9,18 +9,22 @@ import {
 } from '../interfaces';
 
 import {
-  isStringOrNumber,
   arrayIsSet,
+  isStringOrNumber,
+  toString,
 } from '../utilities';
 
 // Example Input
+
 // 1.
 // <div color={['red', 0]} />
+
 // 2.
 // <div
 //   breakpoints={['xs', 's', 'm']}
 //   color={[['red', 0], 'red', 0]}
 // />
+
 // 3.
 // <div
 //   breakpoints={['xs', 's']}
@@ -37,17 +41,17 @@ interface IPropToStyle {
   styleProperties?: string[];
 }
 
-interface IPropToStyleWithSuperSetGetFunction extends IPropToStyle {
-  getter: ISuperSetGetFunction;
+interface IPropToStyleSettingWithSuperSetGetFunction extends IPropToStyle {
+  get: ISuperSetGetFunction;
   isSuperSet: true;
 }
 
-interface IPropToStyleWithSetGetFunction extends IPropToStyle {
-  getter: ISetGetFunction;
+interface IPropToStyleSettingWithSetGetFunction extends IPropToStyle {
+  get: ISetGetFunction;
   isSuperSet?: false;
 }
 
-type IPropToStyleSetting = IPropToStyleWithSuperSetGetFunction | IPropToStyleWithSetGetFunction;
+type IPropToStyleSetting = IPropToStyleSettingWithSuperSetGetFunction | IPropToStyleSettingWithSetGetFunction;
 
 interface IPropsToStyleMapObject {
   [propName: string]: IPropToStyleSetting;
@@ -69,32 +73,126 @@ const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
 
 const propsToStyleSpaceMap: IPropsToStyleMap = theme => ({
   m: {
-    getter: theme.elements.space,
+    get: theme.elements.space,
     styleProperties: ['margin'],
     isSuperSet: false,
   },
   mx: {
-    getter: theme.elements.space,
+    get: theme.elements.space,
     styleProperties: ['margin-left', 'margin-right'],
     isSuperSet: false,
   },
   my: {
-    getter: theme.elements.space,
+    get: theme.elements.space,
     styleProperties: ['margin-top', 'margin-bottom'],
     isSuperSet: false,
   },
   ml: {
-    getter: theme.elements.space,
+    get: theme.elements.space,
     styleProperties: ['margin-left'],
     isSuperSet: false,
   },
   mr: {
-    getter: theme.elements.space,
+    get: theme.elements.space,
     styleProperties: ['margin-right'],
     isSuperSet: false,
   },
 });
 
+// Handl Leaf nodes.
+
+type ISetGetFunctionValue = string | number | null;
+type ISuperSetGetFunctionValue = [string, ISetGetFunctionValue];
+
+// Helpers
+
+const isSuperSetFunctionValueArray = (value: any): value is ISuperSetGetFunctionValue => (
+  Array.isArray(value)
+  && value.length === 2
+  && typeof value[0] === 'string'
+  && (
+    typeof value[1] === 'string'
+    || typeof value[1] === 'number'
+    || value[1] === null
+  )
+);
+
+const mapStylePropertiesToValue =
+(styleProperties: string[]) =>
+(value: string | number | null): string | null => (
+  isStringOrNumber(value)
+    ? styleProperties.map(property => `${property}: ${value};`).join(`\n`)
+    : null
+);
+
+const computePropValueWithSuperSetGetFunction =
+(get: ISuperSetGetFunction) =>
+(value: unknown): string | null => {
+  let result: string | number | null = null;
+
+  if (isSuperSetFunctionValueArray(value)) {
+    result = isStringOrNumber(value[1])
+      ? get(value[0])(value[1])
+      : get(value[0])();
+  } else if (typeof value === 'string') {
+    result = get(value)();
+  }
+
+  return (result !== null) ? toString(result) : null;
+}
+
+const computePropValueWithSetGetFunction =
+(get: ISetGetFunction) =>
+(value: unknown): string | null => {
+  const result = isStringOrNumber(value) ? get(value) : get();
+  return (result !== null) ? toString(result) : null;
+}
+
+// Two input types for mapPropToStyleWithBreakpoints
+// superSet
+// - [string | null, [string, string | number | null]]
+// - string | null
+// set
+// - [string | number, string | number]
+// - string | number
+// Should return an array with arrays of computed styles.
+
+// Two input types for mapPropToStyle
+// superSet
+// - [string, string | number]
+// - string
+// set
+// - string | number
+// Should return an array of computed styles.
+const mapPropToStyleWithBreakpoints =
+(mapSetting: IPropToStyleSetting) => {
+  const compute = mapSetting.isSuperSet
+    ? computePropValueWithSuperSetGetFunction(mapSetting.get)
+    : computePropValueWithSetGetFunction(mapSetting.get);
+  return (value: (ISuperSetGetFunctionValue | string | null)[]): (string | null)[] => {
+    let result = value.map(a => compute(a));
+    // Map style properties to result values.
+    if (mapSetting.styleProperties) {
+      const mapStyleProperties = mapStylePropertiesToValue(mapSetting.styleProperties);
+      result = result.map(mapStyleProperties);
+    }
+    return result;
+  }
+}
+
+// Two input types:
+// [string, string | number]
+// string | number
+// Should return an array of computed styles.
+const mapPropToStyle =
+(mapSetting: IPropToStyleSetting) => {
+  const compute = mapSetting.isSuperSet
+    ? computePropValueWithSuperSetGetFunction(mapSetting.get)
+    : computePropValueWithSetGetFunction(mapSetting.get);
+  return (value: (string | number)[] | string | number | null) => compute(value);
+}
+
+// It all comes down to this:
 const mapPropsToStyles =
 (theme: ITheme) =>
 (config: IPropsToStyleMapConfig) =>
@@ -116,81 +214,23 @@ const mapPropsToStyles =
 
   // Loop through map object.
   Object
-  .keys(mapObject)
-  .forEach(propName => {
-    // Check if prop is set.
-    if (typeof props[propName] !== 'undefined') {
-      // Get value from prop in the map.
-      const mapSetting = mapObject[propName];
-      const value = props[propName];
-      
-      if (config.enableBreakpointMapping && breakpointsAreAvailable) {
+    .keys(mapObject)
+    .forEach(propName => {
+      // Check if prop is set.
+      if (typeof props[propName] !== 'undefined') {
+        // Get value from prop in the map.
+        const mapSetting = mapObject[propName];
+        const value = props[propName];
 
-      } else {
-        const result = mapPropToStyle(mapSetting)(value);
+        if (
+          config.enableBreakpointMapping
+          && breakpointsAreAvailable
+        ) {
+          // 
+        } else {
+          const result = mapPropToStyle(mapSetting)(value);
+        }
       }
-    }
-  });
+    });
   // Compose into styles string.
 }
-
-// Handl Leaf nodes.
-
-type IGetFunctionValue = string | number | null;
-type ISuperGetFunctionValueArray = [string, IGetFunctionValue];
-
-// Three inputs types for PropToStyleWithBreakpoints
-// [[string, string | number]]
-// [string | number, [string, string | number]]
-// string | number
-const mapPropToStyleWithBreakpoints = (breakpoints: string[]) =>
-(mapSetting: IPropToStyleSetting) =>
-(value: ISuperGetFunctionValueArray[] | IGetFunctionValue[] | IGetFunctionValue): string[] => {
-  if (isStringOrNumber(value)) {
-
-  } else if (arrayIsSet(value)) {
-  
-  }
-
-  return [];
-}
-
-// Two input types:
-// [string, string | number]
-// string | number
-const mapPropToStyle = (mapSetting: IPropToStyleSetting) =>
-(value: (string | number)[] | string | number | null) => {
-  let result: string | number | null = null;
-
-  if (mapSetting.isSuperSet) {
-    if (
-      Array.isArray(value)
-      && value.length == 2
-      && typeof value[0] === 'string'
-    ) {
-      result = isStringOrNumber(value[1])
-        ? mapSetting.getter(value[0])(value[1])
-        : mapSetting.getter(value[0])();
-    } else if (typeof value === 'string') {
-      result = mapSetting.getter(value)();
-    }
-  } else {
-    result = isStringOrNumber(value)
-      ? mapSetting.getter(value)
-      : mapSetting.getter();
-  }
-
-  if (isStringOrNumber(value) && result === null) {
-    return value;
-  }
-  
-  return result;
-}
-
-const mapStylePropertiesToValue =
-(styleProperties: string[]) =>
-(value: string | number): string => (
-  styleProperties
-    .map(property => `${property}: ${value};`)
-    .join(`\n`)
-);
