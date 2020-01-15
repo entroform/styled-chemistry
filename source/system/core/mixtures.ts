@@ -52,20 +52,19 @@ export const createGetFunctionFromSuperSet =
 (mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetFunction =>
 (name: string): IMixtureGetFunction => (
   createGetFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
-)
+);
 
 export const createGetFunctionsFromMixtures =
 (elementGetters: IElementGetFunctions) =>
 (compoundGetters: ICompoundGetFunctions) =>
-(mixtures: IMixtures): IMixtureGetFunctions => {
-  const result = {};
+(mixtures: IMixtures): IMixtureGetFunctions => (
   Object
     .keys(mixtures)
-    .forEach(name => {
-    const mixture = mixtures[name];
-    result[name] = isSet(mixture)
-      ? createGetFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet)
-      : createGetFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
-  });
-  return result;
-}
+    .reduce((accumulator, name) => {
+      const mixture = mixtures[name];
+      accumulator[name] = isSet<IMixtureSet>(mixture)
+        ? createGetFunctionFromSet(elementGetters)(compoundGetters)(mixture)
+        : createGetFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture);
+      return accumulator;
+    }, {})
+);
