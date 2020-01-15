@@ -11,6 +11,7 @@ import {
 } from '../interfaces';
 
 import {
+  arrayIsSet,
   isSet,
   isStringOrNumber,
   isValidArrayIndex,
@@ -20,10 +21,8 @@ const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundGet: ICompoundGetFunctions) =>
 (compoundSet: IMixtureSet): IMixtureGetFunction => 
-(key?: string | number | null): string | number | null => {
-  if (compoundSet.set.length < 1) {
-    return null;
-  }
+(key?: string | number): string | number | null => {
+  if (!arrayIsSet(compoundSet.set)) return null;
 
   let value: IMixtureSetArrayItem | null = null;
 
@@ -49,7 +48,7 @@ const createGetFunctionFromSet =
   return null;
 }
 
-export const createGetFunctionFromSuperSet =
+const createGetFunctionFromSuperSet =
 (elementGet: IElementGetFunctions) =>
 (compoundGet: ICompoundGetFunctions) =>
 (mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetFunction =>

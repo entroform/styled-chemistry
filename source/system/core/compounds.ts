@@ -10,6 +10,7 @@ import {
 } from '../interfaces';
 
 import {
+  arrayIsSet,
   isSet,
   isStringOrNumber,
   isValidArrayIndex,
@@ -18,10 +19,8 @@ import {
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundSet: ICompoundSet): ICompoundGetFunction => 
-(key?: string | number | null): string | number | null => {
-  if (compoundSet.set.length < 1) {
-    return null;
-  }
+(key?: string | number): string | number | null => {
+  if (!arrayIsSet(compoundSet.set)) return null;
 
   let value: ICompoundSetArrayItem | null = null;
 

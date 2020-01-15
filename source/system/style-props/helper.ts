@@ -190,5 +190,7 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) =>
 const mapStylePropertiesToValue =
 (styleProperties: string[]) =>
 (value: string | number): string => (
-  styleProperties.map(property => `${property}: ${value};`).join(`\n`)
+  styleProperties
+    .map(property => `${property}: ${value};`)
+    .join(`\n`)
 );

@@ -9,6 +9,7 @@ import {
 } from '../interfaces';
 
 import {
+  arrayIsSet,
   isStringOrNumber,
   isValidArrayIndex,
 } from '../utilities';
@@ -16,9 +17,7 @@ import {
 const createGetFunctionFromSet =
 (elementSet: IElementSet): IElementGetFunction =>
 (key?: string | number): IElementSetArrayItem => {
-  if (elementSet.set.length < 1) {
-    return null;
-  }
+  if (!arrayIsSet(elementSet.set)) return null;
 
   let value: IElementSetArrayItem = null;
 
