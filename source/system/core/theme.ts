@@ -1,29 +1,29 @@
 import {
-  createGetterFunctionsFromElements,
+  createGetFunctionsFromElements,
 } from './elements';
 import {
-  createGetterFunctionsFromCompounds,
+  createGetFunctionsFromCompounds,
 } from './compounds';
 import {
-  createGetterFunctionsFromMixtures,
+  createGetFunctionsFromMixtures,
 } from './mixtures';
 
 import {
-  ICompoundGetterFunctions,
+  ICompoundGetFunctions,
   ICompounds,
-  IElementGetterFunctions,
+  IElementGetFunctions,
   IElements,
-  IMixtureGetterFunctions,
+  IMixtureGetFunctions,
   IMixtures,
   ITheme,
 } from '../interfaces';
 
 export const createTheme = (elements: IElements) => {
-  const elementGetters: IElementGetterFunctions = createGetterFunctionsFromElements(elements);
+  const elementGetters: IElementGetFunctions = createGetFunctionsFromElements(elements);
   return (compounds: ICompounds = {}) => {
-    const compoundGetters: ICompoundGetterFunctions = createGetterFunctionsFromCompounds(elementGetters)(compounds);
+    const compoundGetters: ICompoundGetFunctions = createGetFunctionsFromCompounds(elementGetters)(compounds);
     return (mixtures: IMixtures = {}): ITheme => {
-      const mixtureGetters: IMixtureGetterFunctions = createGetterFunctionsFromMixtures(elementGetters)(compoundGetters)(mixtures);
+      const mixtureGetters: IMixtureGetFunctions = createGetFunctionsFromMixtures(elementGetters)(compoundGetters)(mixtures);
       return {
         elements: elementGetters,
         compounds: compoundGetters,

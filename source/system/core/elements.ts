@@ -1,10 +1,10 @@
 import {
-  IElementGetterFunction,
-  IElementGetterFunctions,
+  IElementGetFunction,
+  IElementGetFunctions,
   IElements,
   IElementSet,
   IElementSetArrayItem,
-  IElementSuperGetterFunction,
+  IElementSuperGetFunction,
   IElementSuperSet,
 } from '../interfaces';
 
@@ -13,8 +13,8 @@ import {
   isValidArrayIndex,
 } from '../utilities';
 
-const createGetterFunctionFromSet =
-(elementSet: IElementSet): IElementGetterFunction =>
+const createGetFunctionFromSet =
+(elementSet: IElementSet): IElementGetFunction =>
 (key?: string | number): IElementSetArrayItem => {
   if (elementSet.set.length < 1) return null;
 
@@ -37,27 +37,27 @@ const createGetterFunctionFromSet =
   return (isStringOrNumber(value)) ? value : null;
 }
 
-const createGetterFunctionFromSuperSet =
-(elementSuperSet: IElementSuperSet): IElementSuperGetterFunction =>
-(name: string): IElementGetterFunction => (
-  createGetterFunctionFromSet(elementSuperSet[name])
+const createGetFunctionFromSuperSet =
+(elementSuperSet: IElementSuperSet): IElementSuperGetFunction =>
+(name: string): IElementGetFunction => (
+  createGetFunctionFromSet(elementSuperSet[name])
 );
 
-export const createGetterFunctionsFromElements =
-(elements: IElements): IElementGetterFunctions => ({
-  borderWidth:    createGetterFunctionFromSet(elements.borderWidths),
-  breakpoint:     createGetterFunctionFromSet(elements.breakpoints),
-  color:          createGetterFunctionFromSuperSet(elements.colors),
-  fontFamily:     createGetterFunctionFromSet(elements.fontFamilies),
-  fontSize:       createGetterFunctionFromSet(elements.fontSizes),
-  fontWeight:     createGetterFunctionFromSet(elements.fontWeights),
-  image:          createGetterFunctionFromSet(elements.images),
-  letterSpacing:  createGetterFunctionFromSet(elements.letterSpacings),
-  lineHeight:     createGetterFunctionFromSet(elements.lineHeights),
-  radius:         createGetterFunctionFromSet(elements.radii),
-  size:           createGetterFunctionFromSet(elements.sizes),
-  space:          createGetterFunctionFromSet(elements.spaces),
-  time:           createGetterFunctionFromSet(elements.times),
-  timingFunction: createGetterFunctionFromSet(elements.timingFunctions),
-  zIndex:         createGetterFunctionFromSet(elements.zIndices),
+export const createGetFunctionsFromElements =
+(elements: IElements): IElementGetFunctions => ({
+  borderWidth:    createGetFunctionFromSet(elements.borderWidths),
+  breakpoint:     createGetFunctionFromSet(elements.breakpoints),
+  color:          createGetFunctionFromSuperSet(elements.colors),
+  fontFamily:     createGetFunctionFromSet(elements.fontFamilies),
+  fontSize:       createGetFunctionFromSet(elements.fontSizes),
+  fontWeight:     createGetFunctionFromSet(elements.fontWeights),
+  image:          createGetFunctionFromSet(elements.images),
+  letterSpacing:  createGetFunctionFromSet(elements.letterSpacings),
+  lineHeight:     createGetFunctionFromSet(elements.lineHeights),
+  radius:         createGetFunctionFromSet(elements.radii),
+  size:           createGetFunctionFromSet(elements.sizes),
+  space:          createGetFunctionFromSet(elements.spaces),
+  time:           createGetFunctionFromSet(elements.times),
+  timingFunction: createGetFunctionFromSet(elements.timingFunctions),
+  zIndex:         createGetFunctionFromSet(elements.zIndices),
 });

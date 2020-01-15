@@ -3,28 +3,28 @@ import {
   ISuperSet,
 } from './set';
 import {
-  IElementGetterFunctions,
+  IElementGetFunctions,
 } from './elements';
 import {
-  ICompoundGetterFunctions,
+  ICompoundGetFunctions,
 } from './compounds';
 
 export type IMixtureValue =
 (
-  elementGetters: IElementGetterFunctions,
-  compoundGetters: ICompoundGetterFunctions,
+  elementGes: IElementGetFunctions,
+  compoundGes: ICompoundGetFunctions,
 ) => string | number | null;
 
 export type IMixtureSet = ISet<IMixtureValue>;
 export type IMixtureSuperSet = ISuperSet<IMixtureValue>;
 
-export type IMixtureGetterFunction = (key?: string | number | null) => string | number | null;
-export type IMixtureSuperGetterFunction = (name: string) => IMixtureGetterFunction;
+export type IMixtureGetFunction = (key?: string | number | null) => string | number | null;
+export type IMixtureSuperGetFunction = (name: string) => IMixtureGetFunction;
 
 export interface IMixtures {
   readonly [name: string]: IMixtureSuperSet | IMixtureSet;
 }
 
-export interface IMixtureGetterFunctions {
-  [name: string]: IMixtureGetterFunctions | IMixtureGetterFunction;
+export interface IMixtureGetFunctions {
+  [name: string]: IMixtureGetFunctions | IMixtureGetFunction;
 }

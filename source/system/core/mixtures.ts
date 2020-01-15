@@ -1,11 +1,11 @@
 import {
-  ICompoundGetterFunctions,
-  IElementGetterFunctions,
-  IMixtureGetterFunction,
-  IMixtureGetterFunctions,
+  ICompoundGetFunctions,
+  IElementGetFunctions,
+  IMixtureGetFunction,
+  IMixtureGetFunctions,
   IMixtures,
   IMixtureSet,
-  IMixtureSuperGetterFunction,
+  IMixtureSuperGetFunction,
   IMixtureSuperSet,
 } from '../interfaces';
 
@@ -15,10 +15,10 @@ import {
   isValidArrayIndex,
 } from '../utilities';
 
-const createGetterFunctionFromSet =
-(elementGetters: IElementGetterFunctions) =>
-(compoundGetters: ICompoundGetterFunctions) =>
-(compoundSet: IMixtureSet): IMixtureGetterFunction => 
+const createGetFunctionFromSet =
+(elementGetters: IElementGetFunctions) =>
+(compoundGetters: ICompoundGetFunctions) =>
+(compoundSet: IMixtureSet): IMixtureGetFunction => 
 (key?: string | number | null): string | number | null => {
   if (compoundSet.set.length < 1) return null;
 
@@ -46,26 +46,26 @@ const createGetterFunctionFromSet =
   return null;
 }
 
-export const createGetterFunctionFromSuperSet =
-(elementGetters: IElementGetterFunctions) =>
-(compoundGetters: ICompoundGetterFunctions) =>
-(mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetterFunction =>
-(name: string): IMixtureGetterFunction => (
-  createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
+export const createGetFunctionFromSuperSet =
+(elementGetters: IElementGetFunctions) =>
+(compoundGetters: ICompoundGetFunctions) =>
+(mixtureSuperSet: IMixtureSuperSet): IMixtureSuperGetFunction =>
+(name: string): IMixtureGetFunction => (
+  createGetFunctionFromSet(elementGetters)(compoundGetters)(mixtureSuperSet[name])
 )
 
-export const createGetterFunctionsFromMixtures =
-(elementGetters: IElementGetterFunctions) =>
-(compoundGetters: ICompoundGetterFunctions) =>
-(mixtures: IMixtures): IMixtureGetterFunctions => {
+export const createGetFunctionsFromMixtures =
+(elementGetters: IElementGetFunctions) =>
+(compoundGetters: ICompoundGetFunctions) =>
+(mixtures: IMixtures): IMixtureGetFunctions => {
   const result = {};
   Object
     .keys(mixtures)
     .forEach(name => {
     const mixture = mixtures[name];
     result[name] = isSet(mixture)
-      ? createGetterFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet)
-      : createGetterFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
+      ? createGetFunctionFromSet(elementGetters)(compoundGetters)(mixture as IMixtureSet)
+      : createGetFunctionFromSuperSet(elementGetters)(compoundGetters)(mixture as IMixtureSuperSet);
   });
   return result;
 }

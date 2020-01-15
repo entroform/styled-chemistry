@@ -1,10 +1,10 @@
 import {
-  ICompoundGetterFunction,
+  ICompoundGetFunction,
   ICompounds,
   ICompoundSet,
-  ICompoundSuperGetterFunction,
+  ICompoundSuperGetFunction,
   ICompoundSuperSet,
-  IElementGetterFunctions,
+  IElementGetFunctions,
 } from '../interfaces';
 
 import {
@@ -13,9 +13,9 @@ import {
   isValidArrayIndex,
 } from '../utilities';
 
-const createGetterFunctionFromSet =
-(elementGetters: IElementGetterFunctions) =>
-(compoundSet: ICompoundSet): ICompoundGetterFunction => 
+const createGetFunctionFromSet =
+(elementGetters: IElementGetFunctions) =>
+(compoundSet: ICompoundSet): ICompoundGetFunction => 
 (key?: string | number | null): string | number | null => {
   if (compoundSet.set.length < 1) return null;
 
@@ -43,15 +43,15 @@ const createGetterFunctionFromSet =
   return null;
 }
 
-const createCompoundGetterFunctionFromSuperSet =
-(elementGetters: IElementGetterFunctions) =>
-(compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetterFunction =>
-(name: string): ICompoundGetterFunction => (
-  createGetterFunctionFromSet(elementGetters)(compoundSuperSet[name])
+const createCompoundGetFunctionFromSuperSet =
+(elementGetters: IElementGetFunctions) =>
+(compoundSuperSet: ICompoundSuperSet): ICompoundSuperGetFunction =>
+(name: string): ICompoundGetFunction => (
+  createGetFunctionFromSet(elementGetters)(compoundSuperSet[name])
 )
 
-export const createGetterFunctionsFromCompounds =
-(elementGetters: IElementGetterFunctions) =>
+export const createGetFunctionsFromCompounds =
+(elementGetters: IElementGetFunctions) =>
 (compounds: ICompounds) => {
   const result = {};
   Object
@@ -59,8 +59,8 @@ export const createGetterFunctionsFromCompounds =
   .forEach(name => {
     const compound = compounds[name];
     result[name] = isSet(compound)
-      ? createGetterFunctionFromSet(elementGetters)(compound as ICompoundSet)
-      : createCompoundGetterFunctionFromSuperSet(elementGetters)(compound as ICompoundSuperSet);
+      ? createGetFunctionFromSet(elementGetters)(compound as ICompoundSet)
+      : createCompoundGetFunctionFromSuperSet(elementGetters)(compound as ICompoundSuperSet);
   });
   return result;
 }

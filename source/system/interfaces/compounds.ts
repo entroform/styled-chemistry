@@ -3,21 +3,21 @@ import {
   ISuperSet,
 } from './set';
 import {
-  IElementGetterFunctions,
+  IElementGetFunctions,
 } from './elements';
 
-export type ICompoundSetArrayItem = (elementGetters: IElementGetterFunctions) => string | number | null;
+export type ICompoundSetArrayItem = (elementGets: IElementGetFunctions) => string | number | null;
 
 export type ICompoundSet = ISet<ICompoundSetArrayItem>;
 export type ICompoundSuperSet = ISuperSet<ICompoundSetArrayItem>;
 
-export type ICompoundGetterFunction = (key?: string | number) => string | number | null;
-export type ICompoundSuperGetterFunction = (name: string) => ICompoundGetterFunction;
+export type ICompoundGetFunction = (key?: string | number) => string | number | null;
+export type ICompoundSuperGetFunction = (name: string) => ICompoundGetFunction;
 
 export interface ICompounds {
   readonly [name: string]: ICompoundSuperSet | ICompoundSet;
 }
 
-export interface ICompoundGetterFunctions {
-  readonly [name: string]: ICompoundSuperGetterFunction | ICompoundGetterFunction;
+export interface ICompoundGetFunctions {
+  readonly [name: string]: ICompoundSuperGetFunction | ICompoundGetFunction;
 }

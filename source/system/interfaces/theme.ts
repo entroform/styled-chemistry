@@ -1,21 +1,21 @@
 import {
-  IElementGetterFunctions,
+  IElementGetFunctions,
   IElements,
 } from './elements';
 import {
-  ICompoundGetterFunctions,
+  ICompoundGetFunctions,
   ICompounds,
 } from './compounds';
 import {
-  IMixtureGetterFunctions,
+  IMixtureGetFunctions,
   IMixtures,
 } from './mixtures';
 
 
-export interface IThemeGetters {
-  readonly elements: IElementGetterFunctions;
-  readonly compounds: ICompoundGetterFunctions;
-  readonly mixtures: IMixtureGetterFunctions;
+export interface IThemeGes {
+  readonly elements: IElementGetFunctions;
+  readonly compounds: ICompoundGetFunctions;
+  readonly mixtures: IMixtureGetFunctions;
 }
 
 export interface IThemeOriginal {
@@ -25,8 +25,8 @@ export interface IThemeOriginal {
 }
 
 export interface ITheme {
-  readonly elements: IElementGetterFunctions;
-  readonly compounds: ICompoundGetterFunctions;
-  readonly mixtures: IMixtureGetterFunctions;
+  readonly elements: IElementGetFunctions;
+  readonly compounds: ICompoundGetFunctions;
+  readonly mixtures: IMixtureGetFunctions;
   readonly original: IThemeOriginal;
 }

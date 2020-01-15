@@ -2,12 +2,12 @@ import {
   ITheme,
 } from '../interfaces/theme';
 import {
-  IElementGetterFunction,
-  ICompoundGetterFunction,
-  IMixtureGetterFunction,
-  IElementSuperGetterFunction,
-  IMixtureSuperGetterFunction,
-  ICompoundSuperGetterFunction,
+  IElementGetFunction,
+  ICompoundGetFunction,
+  IMixtureGetFunction,
+  IElementSuperGetFunction,
+  IMixtureSuperGetFunction,
+  ICompoundSuperGetFunction,
 } from '../interfaces';
 
 import {
@@ -32,27 +32,27 @@ import {
 // superSet: array
 // set: string | number
 
-type IGetterFunctionValue = string | number | null;
-type ISuperGetterFunctionValueArray = [string, string | number | null];
+type IGetFunctionValue = string | number | null;
+type ISuperGetFunctionValueArray = [string, string | number | null];
 
-type ISetGetterFunction = IElementGetterFunction | ICompoundGetterFunction | IMixtureGetterFunction;
-type ISuperSetGetterFunction = IElementSuperGetterFunction | ICompoundSuperGetterFunction | IMixtureSuperGetterFunction;
+type ISetGetFunction = IElementGetFunction | ICompoundGetFunction | IMixtureGetFunction;
+type ISuperSetGetFunction = IElementSuperGetFunction | ICompoundSuperGetFunction | IMixtureSuperGetFunction;
 
 interface IPropToStyle {
   styleProperties?: string[];
 }
 
-interface IPropToStyleWithSuperSetGetterFunction extends IPropToStyle {
-  getter: ISuperSetGetterFunction;
+interface IPropToStyleWithSuperSetGetFunction extends IPropToStyle {
+  getter: ISuperSetGetFunction;
   isSuperSet: true;
 }
 
-interface IPropToStyleWithSetGetterFunction extends IPropToStyle {
-  getter: ISetGetterFunction;
+interface IPropToStyleWithSetGetFunction extends IPropToStyle {
+  getter: ISetGetFunction;
   isSuperSet?: false;
 }
 
-type IPropToStyleSetting = IPropToStyleWithSuperSetGetterFunction | IPropToStyleWithSetGetterFunction;
+type IPropToStyleSetting = IPropToStyleWithSuperSetGetFunction | IPropToStyleWithSetGetFunction;
 
 interface IPropsToStylesMapObject {
   [propName: string]: IPropToStyleSetting;

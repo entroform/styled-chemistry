@@ -12,8 +12,8 @@ export interface IElementSet extends ISet<IElementSetArrayItem> {
 }
 export type IElementSuperSet = ISuperSet<IElementSetArrayItem>;
 
-export type IElementGetterFunction = (key?: string | number) => IElementSetArrayItem;
-export type IElementSuperGetterFunction = (name: string) => IElementGetterFunction;
+export type IElementGetFunction = (key?: string | number) => IElementSetArrayItem;
+export type IElementSuperGetFunction = (name: string) => IElementGetFunction;
 
 export interface IElements {
   readonly borderWidths: IElementSet;
@@ -33,20 +33,20 @@ export interface IElements {
   readonly zIndices: IElementSet;
 }
 
-export interface IElementGetterFunctions {
-  readonly borderWidth: IElementGetterFunction;
-  readonly breakpoint: IElementGetterFunction;
-  readonly color: IElementSuperGetterFunction;
-  readonly fontFamily: IElementGetterFunction;
-  readonly fontSize: IElementGetterFunction;
-  readonly fontWeight: IElementGetterFunction;
-  readonly image: IElementGetterFunction;
-  readonly letterSpacing: IElementGetterFunction;
-  readonly lineHeight: IElementGetterFunction;
-  readonly radius: IElementGetterFunction;
-  readonly size: IElementGetterFunction;
-  readonly space: IElementGetterFunction;
-  readonly time: IElementGetterFunction;
-  readonly timingFunction: IElementGetterFunction;
-  readonly zIndex: IElementGetterFunction;
+export interface IElementGetFunctions {
+  readonly borderWidth: IElementGetFunction;
+  readonly breakpoint: IElementGetFunction;
+  readonly color: IElementSuperGetFunction;
+  readonly fontFamily: IElementGetFunction;
+  readonly fontSize: IElementGetFunction;
+  readonly fontWeight: IElementGetFunction;
+  readonly image: IElementGetFunction;
+  readonly letterSpacing: IElementGetFunction;
+  readonly lineHeight: IElementGetFunction;
+  readonly radius: IElementGetFunction;
+  readonly size: IElementGetFunction;
+  readonly space: IElementGetFunction;
+  readonly time: IElementGetFunction;
+  readonly timingFunction: IElementGetFunction;
+  readonly zIndex: IElementGetFunction;
 }
