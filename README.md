@@ -1,6 +1,6 @@
 # ⚗️ styled-chemistry
 
-## Elements, Compounds, and Mixtures
+## Elements, Compounds, and Mixtures ➝ Theme
 
 `npm run start`
 
