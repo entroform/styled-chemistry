@@ -71,34 +71,6 @@ const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
   mediaRule: a => `@media only screen and (minWidth=${a})`,
 };
 
-const propsToStyleSpaceMap: IPropsToStyleMap = theme => ({
-  m: {
-    get: theme.elements.space,
-    styleProperties: ['margin'],
-    isSuperSet: false,
-  },
-  mx: {
-    get: theme.elements.space,
-    styleProperties: ['margin-left', 'margin-right'],
-    isSuperSet: false,
-  },
-  my: {
-    get: theme.elements.space,
-    styleProperties: ['margin-top', 'margin-bottom'],
-    isSuperSet: false,
-  },
-  ml: {
-    get: theme.elements.space,
-    styleProperties: ['margin-left'],
-    isSuperSet: false,
-  },
-  mr: {
-    get: theme.elements.space,
-    styleProperties: ['margin-right'],
-    isSuperSet: false,
-  },
-});
-
 // Handl Leaf nodes.
 
 type ISetGetFunctionValue = string | number | null;
@@ -193,7 +165,7 @@ const mapPropToStyle =
 }
 
 // It all comes down to this:
-const mapPropsToStyles =
+export const mapPropsToStyles =
 (theme: ITheme) =>
 (config: IPropsToStyleMapConfig) =>
 (map: IPropsToStyleMap) =>
@@ -202,35 +174,46 @@ const mapPropsToStyles =
 
   let breakpointsAreAvailable: boolean = arrayIsSet<string | number>(props.breakpoints);
 
-  let resolvedBreakpoints: (string | number)[] | null = null;
-
   // If enable breakpoints mapping: resolve breakpoints.
-  if (config.enableBreakpointMapping && breakpointsAreAvailable) {
-    // Resolve each breakpoints value.
-    resolvedBreakpoints = props.breakpoints
-      .map(val => theme.elements.breakpoint(val) ?? val)
+  if (
+    config.enableBreakpointMapping
+    && breakpointsAreAvailable
+  ) {
+    const resolvedBreakpoints: (string | number)[] = props.breakpoints
+      .map(b => theme.elements.breakpoint(b) ?? b)
       .sort();
-  }
 
-  // Loop through map object.
-  Object
-    .keys(mapObject)
-    .forEach(propName => {
-      // Check if prop is set.
-      if (typeof props[propName] !== 'undefined') {
-        // Get value from prop in the map.
-        const mapSetting = mapObject[propName];
-        const value = props[propName];
-
-        if (
-          config.enableBreakpointMapping
-          && breakpointsAreAvailable
-        ) {
-          // 
-        } else {
-          const result = mapPropToStyle(mapSetting)(value);
+    const styleValues = Object
+      .keys(mapObject)
+      .reduce((result, propName) => {
+        if (typeof props[propName] !== 'undefined') {
+          result.push(mapPropToStyleWithBreakpoints(mapObject[propName])(props[propName]));
         }
+        return result;
+      }, [] as (string | null)[][]);
+    
+    // Combine and reduce breakpoints and styleValues.
+    let result = ``;
+    resolvedBreakpoints.forEach((breakpoint, index) => {
+      if (isStringOrNumber(breakpoint)) {
+        result += `
+          ${config.mediaRule(toString(breakpoint))} {
+            ${styleValues.map(style => style[index]).join(`\n`)}
+          }
+        `
       }
     });
-  // Compose into styles string.
+    return result;
+  } else {
+    // Loop through map object.
+    return Object
+      .keys(mapObject)
+      .reduce((result, propName) => {
+        if (typeof props[propName] !== 'undefined') {
+          result.push(mapPropToStyle(mapObject[propName])(props[propName]));
+        }
+        return result;
+      }, [] as (string | null)[])
+      .join(`\n`);
+  }
 }

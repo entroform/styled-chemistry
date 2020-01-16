@@ -1,31 +1,27 @@
-const breakpointsResolver = props => {
-  const { breakpoint } = props.theme.elements;
-  if (props.breakpoints) {
-    breakpoint('')
-  }
-}
-
-const map = {
+const propsToStyleSpaceMap: IPropsToStyleMap = theme => ({
+  m: {
+    get: theme.elements.space,
+    styleProperties: ['margin'],
+    isSuperSet: false,
+  },
   mx: {
-    getter: 'space',
-    cssProperties: ['margin-left', 'margin-right'],
+    get: theme.elements.space,
+    styleProperties: ['margin-left', 'margin-right'],
+    isSuperSet: false,
   },
   my: {
-    getter: 'space',
-    cssProperties: ['margin-top', 'margin-bottom'],
+    get: theme.elements.space,
+    styleProperties: ['margin-top', 'margin-bottom'],
+    isSuperSet: false,
   },
-  mb: {
-    getter: 'space',
-    cssProperties: ['margin-bottom'],
+  ml: {
+    get: theme.elements.space,
+    styleProperties: ['margin-left'],
+    isSuperSet: false,
   },
-};
-
-const stylePropsConstructor = map => props => {
-  const style = ``;
-
-  Object.keys(map).forEach(key => {
-    if (props[key]) {
-      props[key].cssProperties.map(property => `${property}: ${}`)
-    }
-  });
-}
+  mr: {
+    get: theme.elements.space,
+    styleProperties: ['margin-right'],
+    isSuperSet: false,
+  },
+});
