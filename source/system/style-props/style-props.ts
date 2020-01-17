@@ -1,12 +1,15 @@
 import {
-  ICompoundGetFunction,
-  ICompoundSuperGetFunction,
-  IElementGetFunction,
-  IElementSuperGetFunction,
-  IMixtureGetFunction,
-  IMixtureSuperGetFunction,
   ITheme,
 } from '../interfaces';
+
+import {
+  IPropsToStyleMapConfig,
+  IPropToStyleSetting,
+  ISuperSetGetFunctionValue,
+  ISuperSetGetFunction,
+  ISetGetFunction,
+  IPropsToStyleMap,
+} from './interfaces';
 
 import {
   arrayIsSet,
@@ -34,38 +37,6 @@ import {
 // superSet: array
 // set: string | number
 
-type ISetGetFunction = IElementGetFunction | ICompoundGetFunction | IMixtureGetFunction;
-type ISuperSetGetFunction = IElementSuperGetFunction | ICompoundSuperGetFunction | IMixtureSuperGetFunction;
-
-interface IPropToStyle {
-  styleProperties?: string[];
-}
-
-interface IPropToStyleSettingWithSuperSetGetFunction extends IPropToStyle {
-  get: ISuperSetGetFunction;
-  isSuperSet: true;
-}
-
-interface IPropToStyleSettingWithSetGetFunction extends IPropToStyle {
-  get: ISetGetFunction;
-  isSuperSet?: false;
-}
-
-type IPropToStyleSetting = IPropToStyleSettingWithSuperSetGetFunction | IPropToStyleSettingWithSetGetFunction;
-
-interface IPropsToStyleMapObject {
-  [propName: string]: IPropToStyleSetting;
-}
-
-interface IPropsToStyleMap {
-  (theme: ITheme): IPropsToStyleMapObject;
-}
-
-interface IPropsToStyleMapConfig {
-  enableBreakpointMapping: boolean;
-  mediaRule: (a: string) => string;
-}
-
 export const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
   mediaRule: a => `@media only screen and (min-width: ${a})`,
@@ -73,8 +44,6 @@ export const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
 
 // Handl Leaf nodes.
 
-type ISetGetFunctionValue = string | number | null;
-type ISuperSetGetFunctionValue = [string, ISetGetFunctionValue];
 
 // Helpers
 
@@ -180,7 +149,7 @@ export const mapPropsToStyles =
 (map: IPropsToStyleMap) =>
 (theme: ITheme) =>
 (props: any) => {
-  const mapObject = map(theme);
+  const mapArray = map(theme);
 
   let breakpointsAreAvailable: boolean = arrayIsSet<string | number>(props.breakpoints);
 
@@ -193,24 +162,25 @@ export const mapPropsToStyles =
       .map(b => theme.elements.breakpoint(b) || b)
       .sort();
 
-    const styleValues = Object
-      .keys(mapObject)
-      .reduce((result, propName) => {
-        if (typeof props[propName] !== 'undefined') {
-          result.push(mapPropToStyleWithBreakpoints(mapObject[propName])(props[propName]));
-        }
+    const styleValues = mapArray
+      .reduce((result, setting) => {
+        setting.propNames.forEach(name => {
+          if (typeof props[name] !== 'undefined') {
+            result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
+          }  
+        });
         return result;
       }, [] as (string | null)[][]);
     
     // Combine and reduce breakpoints and styleValues.
-    let result = ``;
+    let result = styleValues.map(style => style[0]).join(`\n`);
     resolvedBreakpoints.forEach((breakpoint, index) => {
       if (isStringOrNumber(breakpoint)) {
-        const style = styleValues.map(style => style[index]).join(`\n`);
+        const style = styleValues.map(style => style[index + 1]).join(`\n`);
         if (style.trim()) {
           result += `
             ${config.mediaRule(toString(breakpoint))} {
-              ${styleValues.map(style => style[index]).join(`\n`)}
+              ${style}
             }
           `;
         }
@@ -220,12 +190,13 @@ export const mapPropsToStyles =
     return result;
   } else {
     // Loop through map object.
-    return Object
-      .keys(mapObject)
-      .reduce((result, propName) => {
-        if (typeof props[propName] !== 'undefined') {
-          result.push(mapPropToStyle(mapObject[propName])(props[propName]));
-        }
+    return mapArray
+      .reduce((result, setting) => {
+        setting.propNames.forEach(name => {
+          if (typeof props[name] !== 'undefined') {
+            result.push(mapPropToStyle(setting)(props[name]));
+          }  
+        });
         return result;
       }, [] as (string | null)[])
       .join(`\n`);

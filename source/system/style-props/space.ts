@@ -1,34 +1,77 @@
 import {
+  ITheme,
+} from '../interfaces';
+
+import {
+  IPropsToStyleMapArray
+} from './interfaces';
+
+import {
   propsToStyleMapDefaultConfig,
   mapPropsToStyles,
 } from './style-props';
 
-const propsToStyleSpaceMap = theme => ({
-  m: {
+const propsToStyleSpaceMap = (theme: ITheme): IPropsToStyleMapArray => ([
+  {
+    propNames: ['m', 'margin'],
     get: theme.elements.space,
     styleProperties: ['margin'],
     isSuperSet: false,
   },
-  mx: {
+  {
+    propNames: ['mx', 'marginX'],
     get: theme.elements.space,
     styleProperties: ['margin-left', 'margin-right'],
     isSuperSet: false,
   },
-  my: {
+  {
+    propNames: ['my', 'marginY'],
     get: theme.elements.space,
     styleProperties: ['margin-top', 'margin-bottom'],
     isSuperSet: false,
   },
-  ml: {
+  {
+    propNames: ['ml', 'marginLeft'],
     get: theme.elements.space,
     styleProperties: ['margin-left'],
     isSuperSet: false,
   },
-  mr: {
+  {
+    propNames: ['mr', 'marginRight'],
     get: theme.elements.space,
     styleProperties: ['margin-right'],
     isSuperSet: false,
   },
-});
+  {
+    propNames: ['p', 'padding'],
+    get: theme.elements.space,
+    styleProperties: ['padding'],
+    isSuperSet: false,
+  },
+  {
+    propNames: ['px', 'paddingX'],
+    get: theme.elements.space,
+    styleProperties: ['padding-left', 'padding-right'],
+    isSuperSet: false,
+  },
+  {
+    propNames: ['py', 'paddingY'],
+    get: theme.elements.space,
+    styleProperties: ['padding-top', 'padding-bottom'],
+    isSuperSet: false,
+  },
+  {
+    propNames: ['pl', 'paddingLeft'],
+    get: theme.elements.space,
+    styleProperties: ['padding-left'],
+    isSuperSet: false,
+  },
+  {
+    propNames: ['pr', 'paddingRight'],
+    get: theme.elements.space,
+    styleProperties: ['padding-right'],
+    isSuperSet: false,
+  },
+]);
 
 export const space = mapPropsToStyles(propsToStyleMapDefaultConfig)(propsToStyleSpaceMap);

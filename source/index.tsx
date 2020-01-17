@@ -28,6 +28,7 @@ const ExampleComponent = () => (
       breakpoints={[0, 1, 2]}
       m={4}
       ml={['xs', 's', 'l']}
+      p={'l'}
     >
       StarBucks
     </StyledTextComponent>
