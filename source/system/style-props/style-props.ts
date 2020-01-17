@@ -9,6 +9,8 @@ import {
   ISetGetFunction,
   ISuperSetGetFunction,
   ISuperSetGetFunctionValue,
+  IPropToStyleSettingWithSuperSetGetFunction,
+  IPropToStyleSettingWithSetGetFunction,
 } from './interfaces';
 
 import {
@@ -106,9 +108,15 @@ const computePropValueWithSetGetFunction =
 // Should return an array of computed styles.
 const mapPropToStyleWithBreakpoints =
 (mapSetting: IPropToStyleSetting) => {
-  const compute = mapSetting.isSuperSet
-    ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-    : computePropValueWithSetGetFunction(mapSetting.get);
+  let compute = a => a;
+
+  mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
+  if (typeof mapSetting.get === 'function') {
+    compute = (typeof mapSetting.isSuperSet === 'boolean' && mapSetting.isSuperSet === true)
+      ? computePropValueWithSuperSetGetFunction(mapSetting.get)
+      : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
+  }
+
   return (value: (ISuperSetGetFunctionValue | string | null)[]): (string | null)[] => {
     const _value = Array.isArray(value) ? value : [value];
     let result = _value.map(a => compute(a));
@@ -127,9 +135,15 @@ const mapPropToStyleWithBreakpoints =
 // Should return an array of computed styles.
 const mapPropToStyle =
 (mapSetting: IPropToStyleSetting) => {
-  const compute = mapSetting.isSuperSet
-    ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-    : computePropValueWithSetGetFunction(mapSetting.get);
+  let compute = a => a;
+
+  mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
+  if (typeof mapSetting.get === 'function') {
+    compute = mapSetting.isSuperSet
+      ? computePropValueWithSuperSetGetFunction(mapSetting.get)
+      : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
+  }
+
   return (value: (string | number)[] | string | number | null) => {
     let result = compute(value);
 
@@ -185,7 +199,6 @@ export const mapPropsToStyles =
         }
       }
     });
-    console.log(result);
     return result;
   } else {
     // Loop through map object.

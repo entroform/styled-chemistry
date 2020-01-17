@@ -21,16 +21,6 @@ const StyledTextComponent = styled.div`
   ${props => space(props.theme)(props)}
 `;
 
-
-const Heading = () => (
-  <h1>Hi</h1>
-);
-
-const Heading1 = styled(Heading)`
-  ${props => props.theme.mixture.typography.heading(0)}
-  ${props => space(props.theme)(props)}
-`;
-
 const ExampleComponent = () => (
   <>
     <div>Hello World</div>
@@ -42,9 +32,6 @@ const ExampleComponent = () => (
     >
       StarBucks
     </StyledTextComponent>
-
-    <Heading1 mb={'s'}>Hello</Heading1>
-    <Heading1 mb={'m'}>Hello</Heading1>
   </>
 );
 

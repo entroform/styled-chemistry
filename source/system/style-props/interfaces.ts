@@ -16,20 +16,25 @@ export type ISuperSetGetFunction = IElementSuperGetFunction | ICompoundSuperGetF
 
 export interface IPropToStyle {
   propNames: string[];
-  styleProperties?: string[];
 }
 
 export interface IPropToStyleSettingWithSuperSetGetFunction extends IPropToStyle {
   get: ISuperSetGetFunction;
   isSuperSet: true;
+  styleProperties?: string[];
 }
 
 export interface IPropToStyleSettingWithSetGetFunction extends IPropToStyle {
   get: ISetGetFunction;
   isSuperSet?: false;
+  styleProperties?: string[];
 }
 
-export type IPropToStyleSetting = IPropToStyleSettingWithSuperSetGetFunction | IPropToStyleSettingWithSetGetFunction;
+export interface IPropToStyleSettingDirect extends IPropToStyle {
+  styleProperties: string[];
+}
+
+export type IPropToStyleSetting = IPropToStyleSettingWithSuperSetGetFunction | IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingDirect;
 
 export type IPropsToStyleMapArray = IPropToStyleSetting[];
 

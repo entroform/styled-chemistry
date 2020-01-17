@@ -1,75 +1,45 @@
 import {
-  ITheme,
-} from '../interfaces';
-
-import {
-  IPropsToStyleMapArray
-} from './interfaces';
-
-import {
   mapPropsToStyles,
 } from './style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const propsToStyleMap = theme => ([
   {
-    propNames: ['m', 'margin'],
-    get: theme.elements.space,
-    styleProperties: ['margin'],
+    propNames: ['fontFamily'],
+    get: theme.elements.fontFamily,
+    styleProperties: ['font-family'],
     isSuperSet: false,
   },
   {
-    propNames: ['mx', 'marginX'],
-    get: theme.elements.space,
-    styleProperties: ['margin-left', 'margin-right'],
+    propNames: ['fontSize'],
+    get: theme.elements.fontSize,
+    styleProperties: ['font-size'],
     isSuperSet: false,
   },
   {
-    propNames: ['my', 'marginY'],
-    get: theme.elements.space,
-    styleProperties: ['margin-top', 'margin-bottom'],
+    propNames: ['fontWeight'],
+    get: theme.elements.fontWeight,
+    styleProperties: ['font-weight'],
     isSuperSet: false,
   },
   {
-    propNames: ['ml', 'marginLeft'],
-    get: theme.elements.space,
-    styleProperties: ['margin-left'],
+    propNames: ['lineHeight'],
+    get: theme.elements.lineHeight,
+    styleProperties: ['line-height'],
     isSuperSet: false,
   },
   {
-    propNames: ['mr', 'marginRight'],
-    get: theme.elements.space,
-    styleProperties: ['margin-right'],
+    propNames: ['letterSpacing'],
+    get: theme.elements.letterSpacing,
+    styleProperties: ['letter-spacing'],
     isSuperSet: false,
   },
   {
-    propNames: ['p', 'padding'],
-    get: theme.elements.space,
-    styleProperties: ['padding'],
-    isSuperSet: false,
+    propNames: ['textAlign'],
+    styleProperties: ['text-align'],
   },
   {
-    propNames: ['px', 'paddingX'],
-    get: theme.elements.space,
-    styleProperties: ['padding-left', 'padding-right'],
-    isSuperSet: false,
-  },
-  {
-    propNames: ['py', 'paddingY'],
-    get: theme.elements.space,
-    styleProperties: ['padding-top', 'padding-bottom'],
-    isSuperSet: false,
-  },
-  {
-    propNames: ['pl', 'paddingLeft'],
-    get: theme.elements.space,
-    styleProperties: ['padding-left'],
-    isSuperSet: false,
-  },
-  {
-    propNames: ['pr', 'paddingRight'],
-    get: theme.elements.space,
-    styleProperties: ['padding-right'],
-    isSuperSet: false,
+    propNames: ['fontStyle'],
+    styleProperties: ['font-style'],
   },
 ]);
 
