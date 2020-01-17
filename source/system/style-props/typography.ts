@@ -73,4 +73,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const space = mapPropsToStyles()(propsToStyleMap);
+export const typography = mapPropsToStyles()(propsToStyleMap);

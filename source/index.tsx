@@ -21,17 +21,30 @@ const StyledTextComponent = styled.div`
   ${props => space(props.theme)(props)}
 `;
 
+
+const Heading = () => (
+  <h1>Hi</h1>
+);
+
+const Heading1 = styled(Heading)`
+  ${props => props.theme.mixture.typography.heading(0)}
+  ${props => space(props.theme)(props)}
+`;
+
 const ExampleComponent = () => (
   <>
     <div>Hello World</div>
     <StyledTextComponent
-      breakpoints={[0, 1, 2]}
+      breakpoints={[0, '300px', 2]}
       m={4}
-      ml={['xs', 's', 'l']}
+      ml={['xs', '20px', 'l']}
       p={'l'}
     >
       StarBucks
     </StyledTextComponent>
+
+    <Heading1 mb={'s'}>Hello</Heading1>
+    <Heading1 mb={'m'}>Hello</Heading1>
   </>
 );
 

@@ -3,12 +3,12 @@ import {
 } from '../interfaces';
 
 import {
+  IPropsToStyleMap,
   IPropsToStyleMapConfig,
   IPropToStyleSetting,
-  ISuperSetGetFunctionValue,
-  ISuperSetGetFunction,
   ISetGetFunction,
-  IPropsToStyleMap,
+  ISuperSetGetFunction,
+  ISuperSetGetFunctionValue,
 } from './interfaces';
 
 import {
@@ -37,13 +37,12 @@ import {
 // superSet: array
 // set: string | number
 
-export const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
+export const PROPS_TO_STYLE_MAP_DEFAULT_CONFIG: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
   mediaRule: a => `@media only screen and (min-width: ${a})`,
 };
 
 // Handl Leaf nodes.
-
 
 // Helpers
 
@@ -145,7 +144,7 @@ const mapPropToStyle =
 
 // It all comes down to this:
 export const mapPropsToStyles =
-(config: IPropsToStyleMapConfig) =>
+(config: IPropsToStyleMapConfig = PROPS_TO_STYLE_MAP_DEFAULT_CONFIG) =>
 (map: IPropsToStyleMap) =>
 (theme: ITheme) =>
 (props: any) => {

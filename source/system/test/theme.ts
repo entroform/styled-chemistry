@@ -51,6 +51,9 @@ const elements: IElements = Object.freeze({
     set: [0, 1, 1.2, 1.4, 2],
     default: 1.5,
   },
+  opacities: {
+    set: [0.1, 0.5],
+  },
   colors: {
     white: {
       set: [
@@ -132,7 +135,9 @@ const compounds: ICompounds = Object.freeze({
     }
   },
   borders: {
-    set: [],
+    set: [
+      ({ borderWidth, color }) => `border: ${borderWidth(0)} solid ${color('black')()}`
+    ],
   },
   shadows: {
     set: [],

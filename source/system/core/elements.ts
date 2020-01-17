@@ -59,6 +59,7 @@ export const createGetFunctionsFromElements =
   image:          createGetFunctionFromSet(elements.images),
   letterSpacing:  createGetFunctionFromSet(elements.letterSpacings),
   lineHeight:     createGetFunctionFromSet(elements.lineHeights),
+  opacity:        createGetFunctionFromSet(elements.opacities),
   radius:         createGetFunctionFromSet(elements.radii),
   size:           createGetFunctionFromSet(elements.sizes),
   space:          createGetFunctionFromSet(elements.spaces),

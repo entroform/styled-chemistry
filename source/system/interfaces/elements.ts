@@ -25,6 +25,7 @@ export interface IElements {
   readonly images: IElementSet;
   readonly letterSpacings: IElementSet;
   readonly lineHeights: IElementSet;
+  readonly opacities: IElementSet,
   readonly radii: IElementSet;
   readonly sizes: IElementSet;
   readonly spaces: IElementSet;
@@ -43,6 +44,7 @@ export interface IElementGetFunctions {
   readonly image: IElementGetFunction;
   readonly letterSpacing: IElementGetFunction;
   readonly lineHeight: IElementGetFunction;
+  readonly opacity: IElementGetFunction;
   readonly radius: IElementGetFunction;
   readonly size: IElementGetFunction;
   readonly space: IElementGetFunction;
