@@ -25,4 +25,4 @@ export const StyleChemistryProvider: FC<IThemeProviderProps> = ({ children, them
   </StyleChemistryContext.Provider>
 );
 
-export const useTheme = () => useContext(StyleChemistryContext);
+export const useStyleChemistryTheme = () => useContext(StyleChemistryContext);

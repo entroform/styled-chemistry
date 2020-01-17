@@ -8,6 +8,11 @@ export const isStringOrNumber = (n: any): n is string | number => (
   || typeof n === 'string'
 );
 
+export const isStringNumberOrNull = (n: any): n is string | number | null => (
+  isStringOrNumber(n)
+  || n === null
+);
+
 export const isValidArrayIndex = (n: any): n is number => (
   isNumber(n)
   && n >= 0
@@ -20,7 +25,7 @@ export const isSet = <T>(set: any): set is T => (
 );
 
 export const toString = (n: string | number): string => (
-  (typeof n === 'number')
+  typeof n === 'number'
     ? n.toString()
     : n
 );

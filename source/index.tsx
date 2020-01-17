@@ -24,6 +24,7 @@ const StyledTextComponent = styled.div`
 const ExampleComponent = () => (
   <>
     <div>Hello World</div>
+
     <StyledTextComponent
       breakpoints={[0, '300px', 2]}
       m={4}
@@ -43,5 +44,5 @@ const App = () => (
 
 ReactDOM.render(
   <App />,
-  document.getElementById('app')
+  document.getElementById('app'),
 );

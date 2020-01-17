@@ -6,16 +6,17 @@ import {
   IPropsToStyleMap,
   IPropsToStyleMapConfig,
   IPropToStyleSetting,
+  IPropToStyleSettingWithSetGetFunction,
+  IPropToStyleSettingWithSuperSetGetFunction,
   ISetGetFunction,
   ISuperSetGetFunction,
   ISuperSetGetFunctionValue,
-  IPropToStyleSettingWithSuperSetGetFunction,
-  IPropToStyleSettingWithSetGetFunction,
 } from './interfaces';
 
 import {
   arrayIsSet,
   isStringOrNumber,
+  isStringNumberOrNull,
   toString,
 } from '../utilities';
 
@@ -204,13 +205,13 @@ export const mapPropsToStyles =
     // Loop through map object.
     return mapArray
       .reduce((result, setting) => {
-        setting.propNames.forEach(name => {
-          if (typeof props[name] !== 'undefined') {
-            result.push(mapPropToStyle(setting)(props[name]));
-          }  
-        });
-        return result;
-      }, [] as (string | null)[])
+          setting.propNames.forEach(name => {
+            if (typeof props[name] !== 'undefined') {
+              result.push(mapPropToStyle(setting)(props[name]));
+            }  
+          });
+          return result;
+        }, [] as (string | null)[])
       .join(`\n`);
   }
 }

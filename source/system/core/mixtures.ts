@@ -46,9 +46,7 @@ const createGetFunctionFromSet =
 
   if (typeof value === 'function') {
     const result = value(elementGet, compoundGet);
-    return isStringOrNumber(result)
-      ? toString(result)
-      : null;
+    return isStringOrNumber(result) ? toString(result) : null;
   }
 
   return null;

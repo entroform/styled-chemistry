@@ -9,3 +9,5 @@ export interface ISet<T> {
 export interface ISuperSet<T> {
   readonly [name: string]: ISet<T>;
 }
+
+export type IStringNumberOrNull = string | number | null;

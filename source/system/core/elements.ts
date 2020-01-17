@@ -37,9 +37,7 @@ const createGetFunctionFromSet =
       : elementSet.set[0];
   }
 
-  return isStringOrNumber(value)
-    ? value
-    : null;
+  return isStringOrNumber(value) ? value : null;
 }
 
 const createGetFunctionFromSuperSet =
