@@ -17,14 +17,16 @@ import {
 const createGetFunctionFromSet =
 (elementSet: IElementSet): IElementGetFunction =>
 (key?: string | number): IElementSetArrayItem => {
-  if (!arrayIsSet(elementSet.set)) return null;
+  if (!arrayIsSet(elementSet.set)) {
+    return null;
+  }
 
   let value: IElementSetArrayItem = null;
 
   if (isValidArrayIndex(key)) {
     value = elementSet.set[key];
   } else if (
-    typeof key === 'string'
+       typeof key === 'string'
     && typeof elementSet.alias === 'object'
     && isValidArrayIndex(elementSet.alias[key])
   ) {
@@ -35,7 +37,9 @@ const createGetFunctionFromSet =
       : elementSet.set[0];
   }
 
-  return (isStringOrNumber(value)) ? value : null;
+  return isStringOrNumber(value)
+    ? value
+    : null;
 }
 
 const createGetFunctionFromSuperSet =

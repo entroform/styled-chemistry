@@ -22,14 +22,16 @@ const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundSet: ICompoundSet): ICompoundGetFunction => 
 (key?: string | number): ICompoundGetFunctionResult => {
-  if (!arrayIsSet(compoundSet.set)) return null;
+  if (!arrayIsSet(compoundSet.set)) {
+    return null;
+  }
 
   let value: ICompoundSetArrayItem | null = null;
 
   if (isValidArrayIndex(key)) {
-    value = compoundSet[key];
+    value = compoundSet.set[key];
   } else if (
-    typeof key === 'string'
+       typeof key === 'string'
     && typeof compoundSet.alias === 'object'
     && isValidArrayIndex(compoundSet.alias[key])
   ) {
@@ -42,7 +44,9 @@ const createGetFunctionFromSet =
 
   if (typeof value === 'function') {
     const result = value(elementGet);
-    return (isStringOrNumber(result)) ? toString(result) : null;
+    return isStringOrNumber(result)
+      ? toString(result)
+      : null;
   }
 
   return null;

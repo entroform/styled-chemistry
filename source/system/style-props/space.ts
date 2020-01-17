@@ -1,4 +1,9 @@
-const propsToStyleSpaceMap: IPropsToStyleMap = theme => ({
+import {
+  propsToStyleMapDefaultConfig,
+  mapPropsToStyles,
+} from './style-props';
+
+const propsToStyleSpaceMap = theme => ({
   m: {
     get: theme.elements.space,
     styleProperties: ['margin'],
@@ -25,3 +30,5 @@ const propsToStyleSpaceMap: IPropsToStyleMap = theme => ({
     isSuperSet: false,
   },
 });
+
+export const space = mapPropsToStyles(propsToStyleMapDefaultConfig)(propsToStyleSpaceMap);

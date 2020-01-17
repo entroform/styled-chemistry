@@ -22,29 +22,33 @@ import {
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundGet: ICompoundGetFunctions) =>
-(compoundSet: IMixtureSet): IMixtureGetFunction => 
+(mixtureSet: IMixtureSet): IMixtureGetFunction => 
 (key?: string | number): IMixtureGetFunctionResult => {
-  if (!arrayIsSet(compoundSet.set)) return null;
+  if (!arrayIsSet(mixtureSet.set)) {
+    return null;
+  }
 
   let value: IMixtureSetArrayItem | null = null;
 
   if (isValidArrayIndex(key)) {
-    value = compoundSet[key];
+    value = mixtureSet.set[key];
   } else if (
        typeof key === 'string'
-    && typeof compoundSet.alias === 'object'
-    && isValidArrayIndex(compoundSet.alias[key])
+    && typeof mixtureSet.alias === 'object'
+    && isValidArrayIndex(mixtureSet.alias[key])
   ) {
-    value = compoundSet.set[compoundSet.alias[key]];
+    value = mixtureSet.set[mixtureSet.alias[key]];
   } else if (typeof key === 'undefined') {
-    value = isValidArrayIndex(compoundSet.default)
-      ? compoundSet.set[compoundSet.default]
-      : compoundSet.set[0];
+    value = isValidArrayIndex(mixtureSet.default)
+      ? mixtureSet.set[mixtureSet.default]
+      : mixtureSet.set[0];
   }
 
   if (typeof value === 'function') {
     const result = value(elementGet, compoundGet);
-    return (isStringOrNumber(result)) ? toString(result) : null;
+    return isStringOrNumber(result)
+      ? toString(result)
+      : null;
   }
 
   return null;

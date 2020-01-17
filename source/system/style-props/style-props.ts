@@ -66,9 +66,9 @@ interface IPropsToStyleMapConfig {
   mediaRule: (a: string) => string;
 }
 
-const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
+export const propsToStyleMapDefaultConfig: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
-  mediaRule: a => `@media only screen and (minWidth=${a})`,
+  mediaRule: a => `@media only screen and (min-width: ${a})`,
 };
 
 // Handl Leaf nodes.
@@ -83,7 +83,7 @@ const isSuperSetFunctionValueArray = (value: any): value is ISuperSetGetFunction
   && value.length === 2
   && typeof value[0] === 'string'
   && (
-    typeof value[1] === 'string'
+       typeof value[1] === 'string'
     || typeof value[1] === 'number'
     || value[1] === null
   )
@@ -142,7 +142,8 @@ const mapPropToStyleWithBreakpoints =
     ? computePropValueWithSuperSetGetFunction(mapSetting.get)
     : computePropValueWithSetGetFunction(mapSetting.get);
   return (value: (ISuperSetGetFunctionValue | string | null)[]): (string | null)[] => {
-    let result = value.map(a => compute(a));
+    const _value = Array.isArray(value) ? value : [value];
+    let result = _value.map(a => compute(a));
     // Map style properties to result values.
     if (mapSetting.styleProperties) {
       const mapStyleProperties = mapStylePropertiesToValue(mapSetting.styleProperties);
@@ -161,14 +162,23 @@ const mapPropToStyle =
   const compute = mapSetting.isSuperSet
     ? computePropValueWithSuperSetGetFunction(mapSetting.get)
     : computePropValueWithSetGetFunction(mapSetting.get);
-  return (value: (string | number)[] | string | number | null) => compute(value);
+  return (value: (string | number)[] | string | number | null) => {
+    let result = compute(value);
+
+    if (mapSetting.styleProperties) {
+      const mapStyleProperties = mapStylePropertiesToValue(mapSetting.styleProperties);
+      result = mapStyleProperties(result);
+    }
+
+    return result;
+  }
 }
 
 // It all comes down to this:
 export const mapPropsToStyles =
-(theme: ITheme) =>
 (config: IPropsToStyleMapConfig) =>
 (map: IPropsToStyleMap) =>
+(theme: ITheme) =>
 (props: any) => {
   const mapObject = map(theme);
 
@@ -180,7 +190,7 @@ export const mapPropsToStyles =
     && breakpointsAreAvailable
   ) {
     const resolvedBreakpoints: (string | number)[] = props.breakpoints
-      .map(b => theme.elements.breakpoint(b) ?? b)
+      .map(b => theme.elements.breakpoint(b) || b)
       .sort();
 
     const styleValues = Object
@@ -196,13 +206,17 @@ export const mapPropsToStyles =
     let result = ``;
     resolvedBreakpoints.forEach((breakpoint, index) => {
       if (isStringOrNumber(breakpoint)) {
-        result += `
-          ${config.mediaRule(toString(breakpoint))} {
-            ${styleValues.map(style => style[index]).join(`\n`)}
-          }
-        `
+        const style = styleValues.map(style => style[index]).join(`\n`);
+        if (style.trim()) {
+          result += `
+            ${config.mediaRule(toString(breakpoint))} {
+              ${styleValues.map(style => style[index]).join(`\n`)}
+            }
+          `;
+        }
       }
     });
+    console.log(result);
     return result;
   } else {
     // Loop through map object.

@@ -31,10 +31,10 @@ const elements: IElements = Object.freeze({
     ],
     default: 4,
     alias: {
-      'x-small': 1,
-      small: 3,
-      medium: 4,
-      large: 7,
+      xs: 1,
+      s: 3,
+      m: 4,
+      l: 7,
     },
   },
   fontWeights: {
@@ -81,9 +81,18 @@ const elements: IElements = Object.freeze({
     set: [],
   },
   spaces: {
-    set: [0, 2, 4, 8, 12, 14, 16],
+    set: [
+      rem(0), rem(2), rem(4),
+      rem(8), rem(12), rem(14),
+      rem(16), rem(20), rem(40),
+    ],
     default: 0,
-    alias: {},
+    alias: {
+      xs: 2,
+      s: 3,
+      m: 7,
+      l: 8,
+    },
   },
   radii: {
     set: [0, 4, 8, 12, 20, 24],
@@ -100,7 +109,11 @@ const elements: IElements = Object.freeze({
     set: [0, 1],
   },
   breakpoints: {
-    set: [],
+    set: [
+      rem(480),
+      rem(768),
+      rem(960),
+    ],
   },
   timingFunctions: {
     set: [],
@@ -119,14 +132,10 @@ const compounds: ICompounds = Object.freeze({
     }
   },
   borders: {
-    set: [
-      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)})`,
-    ],
+    set: [],
   },
   shadows: {
-    set: [
-      ({ color }) => `linear-gradient(40deg, ${color('red')(0)}, ${color('blue')(0)})`,
-    ],
+    set: [],
   },
 });
 
@@ -136,7 +145,7 @@ const mixtures: IMixtures = Object.freeze({
       set: [
         ({ fontFamily, fontSize }) => `
           font-family: ${fontFamily('sans-serif')};
-          font-size: ${fontSize('medium')};
+          font-size: ${fontSize('m')};
         `
       ],
     },

@@ -10,23 +10,33 @@ import {
   StyleChemistryProvider,
 } from './system/provider';
 
+import {
+  space,
+} from './system/style-props/space';
+
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};
   color: ${props => props.theme.elements.color('red')()};
   font-size: ${props => props.theme.elements.fontSize('large')};
-  ${props => props.theme.mixtures.typography.heading(1)}
+  ${props => space(props.theme)(props)}
 `;
 
-const TestComponent = () => (
+const ExampleComponent = () => (
   <>
     <div>Hello World</div>
-    <StyledTextComponent>AFJEOAFJ</StyledTextComponent>
+    <StyledTextComponent
+      breakpoints={[0, 1, 2]}
+      m={4}
+      ml={['xs', 's', 'l']}
+    >
+      StarBucks
+    </StyledTextComponent>
   </>
 );
 
 const App = () => (
   <StyleChemistryProvider theme={theme}>
-    <TestComponent />
+    <ExampleComponent />
   </StyleChemistryProvider>
 );
 
