@@ -4,15 +4,15 @@ import styled from 'styled-components';
 
 import {
   theme,
-} from './example/theme';
+} from '../source/example/theme';
 
 import {
   StyleChemistryProvider,
-} from './system/core/provider';
+} from '../source/system/core/provider';
 
 import {
   space,
-} from './system/style-props/space';
+} from '../source/system/style-props/space';
 
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};
