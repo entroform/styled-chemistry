@@ -1,6 +1,6 @@
 import {
   mapPropsToStyles,
-} from './style-props';
+} from '../core/style-props';
 
 const propsToStyleMap = theme => ([
   {

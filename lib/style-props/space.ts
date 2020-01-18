@@ -4,11 +4,11 @@ import {
 
 import {
   IPropsToStyleMapArray
-} from './interfaces';
+} from '../interfaces/style-props';
 
 import {
   mapPropsToStyles,
-} from './style-props';
+} from '../core/style-props';
 
 const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   {
@@ -27,6 +27,18 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
     propNames: ['my', 'marginY'],
     get: theme.elements.space,
     styleProperties: ['margin-top', 'margin-bottom'],
+    isSuperSet: false,
+  },
+  {
+    propNames: ['mt', 'marginTop'],
+    get: theme.elements.space,
+    styleProperties: ['margin-top'],
+    isSuperSet: false,
+  },
+  {
+    propNames: ['mb', 'marginBottom'],
+    get: theme.elements.space,
+    styleProperties: ['margin-bottom'],
     isSuperSet: false,
   },
   {

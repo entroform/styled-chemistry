@@ -6,7 +6,7 @@ import {
   IMixtureGetFunction,
   IMixtureSuperGetFunction,
   ITheme,
-} from '../interfaces';
+} from '.';
 
 export type ISetGetFunctionValue = string | number | null;
 export type ISuperSetGetFunctionValue = [string, ISetGetFunctionValue];

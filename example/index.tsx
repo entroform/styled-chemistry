@@ -4,11 +4,11 @@ import styled from 'styled-components';
 
 import {
   theme,
-} from './system/test/theme';
+} from './example/theme';
 
 import {
   StyleChemistryProvider,
-} from './system/provider';
+} from './system/core/provider';
 
 import {
   space,

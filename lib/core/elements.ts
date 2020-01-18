@@ -12,7 +12,7 @@ import {
   arrayIsSet,
   isStringOrNumber,
   isValidArrayIndex,
-} from '../utilities';
+} from './utilities';
 
 const createGetFunctionFromSet =
 (elementSet: IElementSet): IElementGetFunction =>

@@ -11,14 +11,14 @@ import {
   ISetGetFunction,
   ISuperSetGetFunction,
   ISuperSetGetFunctionValue,
-} from './interfaces';
+} from '../interfaces/style-props';
 
 import {
   arrayIsSet,
   isStringOrNumber,
   isStringNumberOrNull,
   toString,
-} from '../utilities';
+} from './utilities';
 
 // Example Input
 

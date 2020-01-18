@@ -4,11 +4,11 @@ import {
 
 import {
   IPropsToStyleMapArray
-} from './interfaces';
+} from '../interfaces/style-props';
 
 import {
   mapPropsToStyles,
-} from './style-props';
+} from '../core/style-props';
 
 const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   {

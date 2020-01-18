@@ -7,11 +7,11 @@ import {
   IElements,
   IMixtures,
   ITheme,
-} from '../interfaces';
+} from '../system/interfaces';
 
 import {
   createTheme,
-} from '../core/theme';
+} from '../system/core/theme';
 
 const elements: IElements = Object.freeze({
   fontFamilies: {

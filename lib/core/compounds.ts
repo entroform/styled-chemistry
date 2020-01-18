@@ -16,7 +16,7 @@ import {
   isStringOrNumber,
   isValidArrayIndex,
   toString,
-} from '../utilities';
+} from './utilities';
 
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>

@@ -9,7 +9,7 @@ import {
 
 import {
   ITheme,
-} from './interfaces/theme';
+} from '../interfaces/theme';
 
 export interface IThemeProviderProps {
   theme: ITheme;
