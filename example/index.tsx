@@ -4,19 +4,19 @@ import styled from 'styled-components';
 
 import {
   theme,
-} from '../source/example/theme';
+} from './theme';
 
 import {
   StyleChemistryProvider,
-} from '../source/system/core/provider';
+} from '../lib/core/provider';
 
 import {
   space,
-} from '../source/system/style-props/space';
+} from '../lib/style-props/space';
 
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};
-  color: ${props => props.theme.elements.color('red')()};
+  color: ${props => props.theme.elements.color('white')()};
   font-size: ${props => props.theme.elements.fontSize('large')};
   ${props => space(props.theme)(props)}
 `;

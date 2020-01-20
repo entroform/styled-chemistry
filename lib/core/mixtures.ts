@@ -16,40 +16,44 @@ import {
   isSet,
   isStringOrNumber,
   isValidArrayIndex,
+  memo,
   toString,
 } from './utilities';
 
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundGet: ICompoundGetFunctions) =>
-(mixtureSet: IMixtureSet): IMixtureGetFunction => 
-(key?: string | number): IMixtureGetFunctionResult => {
-  if (!arrayIsSet(mixtureSet.set)) {
+(mixtureSet: IMixtureSet): IMixtureGetFunction => {
+  const get = (key?: string | number): IMixtureGetFunctionResult => {
+    if (!arrayIsSet(mixtureSet.set)) {
+      return null;
+    }
+
+    let value: IMixtureSetArrayItem | null = null;
+
+    if (isValidArrayIndex(key)) {
+      value = mixtureSet.set[key];
+    } else if (
+        typeof key === 'string'
+      && typeof mixtureSet.alias === 'object'
+      && isValidArrayIndex(mixtureSet.alias[key])
+    ) {
+      value = mixtureSet.set[mixtureSet.alias[key]];
+    } else if (typeof key === 'undefined') {
+      value = isValidArrayIndex(mixtureSet.default)
+        ? mixtureSet.set[mixtureSet.default]
+        : mixtureSet.set[0];
+    }
+
+    if (typeof value === 'function') {
+      const result = value(elementGet, compoundGet);
+      return isStringOrNumber(result) ? toString(result) : null;
+    }
+
     return null;
-  }
+  };
 
-  let value: IMixtureSetArrayItem | null = null;
-
-  if (isValidArrayIndex(key)) {
-    value = mixtureSet.set[key];
-  } else if (
-       typeof key === 'string'
-    && typeof mixtureSet.alias === 'object'
-    && isValidArrayIndex(mixtureSet.alias[key])
-  ) {
-    value = mixtureSet.set[mixtureSet.alias[key]];
-  } else if (typeof key === 'undefined') {
-    value = isValidArrayIndex(mixtureSet.default)
-      ? mixtureSet.set[mixtureSet.default]
-      : mixtureSet.set[0];
-  }
-
-  if (typeof value === 'function') {
-    const result = value(elementGet, compoundGet);
-    return isStringOrNumber(result) ? toString(result) : null;
-  }
-
-  return null;
+  return memo(get, new Map());
 }
 
 const createGetFunctionFromSuperSet =

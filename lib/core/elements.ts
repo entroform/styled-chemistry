@@ -12,32 +12,36 @@ import {
   arrayIsSet,
   isStringOrNumber,
   isValidArrayIndex,
+  memo,
 } from './utilities';
 
 const createGetFunctionFromSet =
-(elementSet: IElementSet): IElementGetFunction =>
-(key?: string | number): IElementSetArrayItem => {
-  if (!arrayIsSet(elementSet.set)) {
-    return null;
+(elementSet: IElementSet): IElementGetFunction => {
+  const get = (key?: string | number): IElementSetArrayItem => {
+    if (!arrayIsSet(elementSet.set)) {
+      return null;
+    }
+
+    let value: IElementSetArrayItem = null;
+
+    if (isValidArrayIndex(key)) {
+      value = elementSet.set[key];
+    } else if (
+        typeof key === 'string'
+      && typeof elementSet.alias === 'object'
+      && isValidArrayIndex(elementSet.alias[key])
+    ) {
+      value = elementSet.set[elementSet.alias[key]];
+    } else if (typeof key === 'undefined') {
+      value = isValidArrayIndex(elementSet.default)
+        ? elementSet.set[elementSet.default]
+        : elementSet.set[0];
+    }
+
+    return isStringOrNumber(value) ? value : null;
   }
 
-  let value: IElementSetArrayItem = null;
-
-  if (isValidArrayIndex(key)) {
-    value = elementSet.set[key];
-  } else if (
-       typeof key === 'string'
-    && typeof elementSet.alias === 'object'
-    && isValidArrayIndex(elementSet.alias[key])
-  ) {
-    value = elementSet.set[elementSet.alias[key]];
-  } else if (typeof key === 'undefined') {
-    value = isValidArrayIndex(elementSet.default)
-      ? elementSet.set[elementSet.default]
-      : elementSet.set[0];
-  }
-
-  return isStringOrNumber(value) ? value : null;
+  return memo(get, new Map());
 }
 
 const createGetFunctionFromSuperSet =

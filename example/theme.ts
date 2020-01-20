@@ -7,13 +7,55 @@ import {
   IElements,
   IMixtures,
   ITheme,
-} from '../system/interfaces';
+} from '../lib/interfaces';
 
 import {
   createTheme,
-} from '../system/core/theme';
+} from '../lib/core/theme';
 
 const elements: IElements = Object.freeze({
+  borderWidths: {
+    set: [0, 1, 2],
+    default: 1,
+  },
+  breakpoints: {
+    set: [
+      rem(480),
+      rem(768),
+      rem(960),
+    ],
+    alias: {
+      s: 0,
+      m: 1,
+      l: 2,
+    },
+  },
+  colors: {
+    white: {
+      set: [
+        hsl(0, 0, 1),
+      ],
+      default: 0,
+      alias: {},
+    },
+    grey: {
+      set: [
+        hsl(0, 0, 10),
+      ],
+      default: 0,
+      alias: {},
+    },
+    red: {
+      set: [
+        hsl(340, 1, 0.5),
+      ],
+    },
+    blue: {
+      set: [
+        hsl(240, 1, 0.5),
+      ],
+    },
+  },
   fontFamilies: {
     set: [
       `"Inter", "Helvetica Neue", Helvetica, Arial, sans-serif`,
@@ -42,46 +84,37 @@ const elements: IElements = Object.freeze({
     default: 1,
     alias: {},
   },
+  images: {
+    set: [],
+  },
   letterSpacings: {
     set: [0, 0.1, 0.2],
     default: 0,
     alias: {},
   },
   lineHeights: {
-    set: [0, 1, 1.2, 1.4, 2],
-    default: 1.5,
+    set: [
+      0,
+      1,
+      1.2,
+      1.3,
+      1.4,
+      1.5,
+      1.8,
+      2,
+    ],
+    default: 3,
   },
   opacities: {
     set: [0.1, 0.5],
   },
-  colors: {
-    white: {
-      set: [
-        hsl(0, 0, 0),
-      ],
-      default: 0,
-      alias: {},
-    },
-    grey: {
-      set: [
-        hsl(0, 0, 10),
-      ],
-      default: 0,
-      alias: {},
-    },
-    red: {
-      set: [
-        hsl(340, 1, 0.5),
-      ],
-    },
-    blue: {
-      set: [
-        hsl(240, 1, 0.5),
-      ],
-    },
+  radii: {
+    set: [0, 4, 8, 12, 20, 24],
+    default: 0,
+    alias: {},
   },
-  images: {
-    set: [],
+  sizes: {
+    set: [0, 4, 8, 12, 20, 24],
   },
   spaces: {
     set: [
@@ -97,32 +130,14 @@ const elements: IElements = Object.freeze({
       l: 8,
     },
   },
-  radii: {
-    set: [0, 4, 8, 12, 20, 24],
-    default: 0,
-    alias: {},
-  },
-  borderWidths: {
-    set: [0, 4, 8, 12, 20, 24],
-  },
-  sizes: {
-    set: [0, 4, 8, 12, 20, 24],
-  },
-  zIndices: {
-    set: [0, 1],
-  },
-  breakpoints: {
-    set: [
-      rem(480),
-      rem(768),
-      rem(960),
-    ],
+  times: {
+    set: [100, 200],
   },
   timingFunctions: {
     set: [],
   },
-  times: {
-    set: [100, 200],
+  zIndices: {
+    set: [0, 1],
   },
 });
 
@@ -148,9 +163,10 @@ const mixtures: IMixtures = Object.freeze({
   typography: {
     normalized: {
       set: [
-        ({ fontFamily, fontSize }) => `
+        ({ fontFamily, fontSize, lineHeight }) => `
           font-family: ${fontFamily('sans-serif')};
           font-size: ${fontSize('m')};
+          line-height: ${lineHeight()};
         `
       ],
     },
