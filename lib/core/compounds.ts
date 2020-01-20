@@ -45,7 +45,7 @@ const createGetFunctionFromSet =
 
     if (typeof value === 'function') {
       const result = value(elementGet);
-      return isStringOrNumber(result) ? toString(result) : null;
+      return isStringOrNumber(result) ? CSS.escape(toString(result)) : null;
     }
 
     return null;

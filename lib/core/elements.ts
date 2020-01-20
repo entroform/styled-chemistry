@@ -12,6 +12,7 @@ import {
   arrayIsSet,
   isStringOrNumber,
   isValidArrayIndex,
+  toString,
   memo,
 } from './utilities';
 
@@ -38,7 +39,7 @@ const createGetFunctionFromSet =
         : elementSet.set[0];
     }
 
-    return isStringOrNumber(value) ? value : null;
+    return isStringOrNumber(value) ? CSS.escape(toString(value)) : null;
   }
 
   return memo(get, new Map());
