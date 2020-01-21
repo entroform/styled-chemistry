@@ -40,7 +40,7 @@ const createGetFunctionFromSet =
         : elementSet.set[0];
     }
 
-    return isStringOrNumber(value) ? CSS.escape(toString(value)) : null;
+    return isStringOrNumber(value) ? toString(value) : null;
   }
 
   return memo(get, new Map());

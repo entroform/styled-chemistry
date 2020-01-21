@@ -3,17 +3,10 @@ import {
   rem,
 } from 'polished';
 import {
-  ICompounds,
-  IElements,
-  IMixtures,
-  ITheme,
-} from '../lib/interfaces';
-
-import {
   createTheme,
-} from '../lib/core/theme';
+} from '../build/esm/styled-chemistry';
 
-const elements: IElements = Object.freeze({
+const elements = Object.freeze({
   borderWidths: {
     set: [0, 1, 2],
     default: 1,
@@ -141,7 +134,7 @@ const elements: IElements = Object.freeze({
   },
 });
 
-const compounds: ICompounds = Object.freeze({
+const compounds = Object.freeze({
   gradients: {
     sunset: {
       set: [
@@ -159,7 +152,7 @@ const compounds: ICompounds = Object.freeze({
   },
 });
 
-const mixtures: IMixtures = Object.freeze({
+const mixtures = Object.freeze({
   typography: {
     normalized: {
       set: [
@@ -189,4 +182,4 @@ const mixtures: IMixtures = Object.freeze({
   },
 });
 
-export const theme: ITheme = createTheme(elements)(compounds)(mixtures);
+export const theme = createTheme(elements)(compounds)(mixtures);

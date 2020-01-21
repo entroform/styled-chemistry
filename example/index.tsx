@@ -8,17 +8,17 @@ import {
 
 import {
   StyleChemistryProvider,
-} from '../lib/core/provider';
+} from '../build/esm/styled-chemistry';
 
-import {
-  space,
-} from '../lib/style-props/space';
+console.log(StyleChemistryProvider);
 
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};
   color: ${props => props.theme.elements.color('white')()};
   font-size: ${props => props.theme.elements.fontSize('large')};
-  ${props => space(props.theme)(props)}
+  font-family: ${props => props.theme.elements.fontFamily(0)};
+  padding: ${props => props.theme.elements.space('m')};
+  ${props => props.theme.mixtures.typography('normalized')()}
 `;
 
 const ExampleComponent = () => (
