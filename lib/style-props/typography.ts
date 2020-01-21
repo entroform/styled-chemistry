@@ -1,8 +1,13 @@
 import {
+  IPropsToStyleMapArray,
+  ITheme,
+} from '../interfaces';
+
+import {
   mapPropsToStyles,
 } from '../core/style-props';
 
-const propsToStyleMap = theme => ([
+const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     propNames: ['fontFamily'],
     get: theme.elements.fontFamily,

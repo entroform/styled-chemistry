@@ -1,10 +1,7 @@
 import {
+  IPropsToStyleMapArray,
   ITheme,
 } from '../interfaces';
-
-import {
-  IPropsToStyleMapArray
-} from '../interfaces/style-props';
 
 import {
   mapPropsToStyles,

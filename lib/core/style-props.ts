@@ -15,8 +15,8 @@ import {
 
 import {
   arrayIsSet,
-  isStringOrNumber,
   isStringNumberOrNull,
+  isStringOrNumber,
   toString,
 } from './utilities';
 
@@ -83,9 +83,7 @@ const computePropValueWithSuperSetGetFunction =
 const computePropValueWithSetGetFunction =
 (get: ISetGetFunction) =>
 (value: unknown): IStringOrNull => {
-  const result = isStringOrNumber(value)
-    ? get(value)
-    : get();
+  const result = isStringOrNumber(value) ? get(value) : get();
   return (result !== null) ? toString(result) : null;
 }
 
@@ -117,9 +115,7 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   }
 
   return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
-    const _value = Array.isArray(value)
-      ? value
-      : [value];
+    const _value = Array.isArray(value) ? value : [value];
 
     let result = _value.map(a => compute(a));
 
@@ -184,11 +180,11 @@ export const mapPropsToStyles =
         setting.propNames.forEach(name => {
           if (typeof props[name] !== 'undefined') {
             result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
-          }  
+          }
         });
         return result;
       }, [] as IStringOrNull[][]);
-    
+
     // Combine and reduce breakpoints and styleValues.
     let result = styleValues
       .map(style => style[0])
@@ -218,7 +214,7 @@ export const mapPropsToStyles =
         setting.propNames.forEach(name => {
           if (typeof props[name] !== 'undefined') {
             result.push(mapPropToStyle(setting)(props[name]));
-          }  
+          }
         });
         return result;
       }, [] as IStringOrNull[])

@@ -11,7 +11,6 @@ import {
   IMixtures,
 } from './mixtures';
 
-
 export interface IThemeGetFunctions {
   readonly elements: IElementGetFunctions;
   readonly compounds: ICompoundGetFunctions;
