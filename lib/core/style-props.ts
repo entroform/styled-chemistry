@@ -87,7 +87,9 @@ const computePropValueWithSuperSetGetFunction =
 const computePropValueWithSetGetFunction =
 (get: ISetGetFunction) =>
 (value: unknown): string | null => {
-  const result = isStringOrNumber(value) ? get(value) : get();
+  const result = isStringOrNumber(value)
+    ? get(value)
+    : get();
   return (result !== null) ? toString(result) : null;
 }
 
@@ -119,13 +121,18 @@ const mapPropToStyleWithBreakpoints =
   }
 
   return (value: (ISuperSetGetFunctionValue | string | null)[]): (string | null)[] => {
-    const _value = Array.isArray(value) ? value : [value];
+    const _value = Array.isArray(value)
+      ? value
+      : [value];
+
     let result = _value.map(a => compute(a));
+
     // Map style properties to result values.
     if (mapSetting.styleProperties) {
       const mapStyleProperties = mapStylePropertiesToValue(mapSetting.styleProperties);
       result = result.map(mapStyleProperties);
     }
+
     return result;
   }
 }

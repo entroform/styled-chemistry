@@ -1,14 +1,19 @@
+import {
+  IStringOrNumber,
+  IStringNumberOrNull,
+} from '../interfaces';
+
 export const isNumber = (n: any): n is number => (
   typeof n === 'number'
   && !isNaN(n)
 );
 
-export const isStringOrNumber = (n: any): n is string | number => (
+export const isStringOrNumber = (n: any): n is IStringOrNumber => (
   isNumber(n)
   || typeof n === 'string'
 );
 
-export const isStringNumberOrNull = (n: any): n is string | number | null => (
+export const isStringNumberOrNull = (n: any): n is IStringNumberOrNull => (
   isStringOrNumber(n)
   || n === null
 );
@@ -24,7 +29,7 @@ export const isSet = <T>(set: any): set is T => (
   && Array.isArray(set.set) === true
 );
 
-export const toString = (n: string | number): string => (
+export const toString = (n: IStringOrNumber): string => (
   typeof n === 'number'
     ? n.toString()
     : n
@@ -35,3 +40,15 @@ export const arrayIsSet = <T>(n: any): n is T[] => (
   && Array.isArray(n)
   && n.length > 0
 );
+
+export const memo = <T>(func: Function, cache: Map<string, T>) => (...args) => {
+  const key = JSON.stringify(args);
+
+  if (cache.has(key)) {
+    return cache.get(key);
+  }
+
+  const value = func(...args);
+  cache.set(key, value);
+  return value;
+}
