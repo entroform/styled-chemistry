@@ -1,17 +1,17 @@
 import {
-  ITheme,
-} from '../interfaces';
-
-import {
   IPropsToStyleMap,
   IPropsToStyleMapConfig,
   IPropToStyleSetting,
   IPropToStyleSettingWithSetGetFunction,
   IPropToStyleSettingWithSuperSetGetFunction,
   ISetGetFunction,
+  IStringNumberOrNull,
+  IStringOrNull,
+  IStringOrNumber,
   ISuperSetGetFunction,
   ISuperSetGetFunctionValue,
-} from '../interfaces/style-props';
+  ITheme,
+} from '../interfaces';
 
 import {
   arrayIsSet,
@@ -38,7 +38,7 @@ import {
 // />
 
 // superSet: array
-// set: string | number
+// set: IStringOrNumber
 
 export const PROPS_TO_STYLE_MAP_DEFAULT_CONFIG: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
@@ -53,16 +53,12 @@ const isSuperSetFunctionValueArray = (value: any): value is ISuperSetGetFunction
   Array.isArray(value)
   && value.length === 2
   && typeof value[0] === 'string'
-  && (
-       typeof value[1] === 'string'
-    || typeof value[1] === 'number'
-    || value[1] === null
-  )
+  && isStringNumberOrNull(value[1])
 );
 
 const mapStylePropertiesToValue =
 (styleProperties: string[]) =>
-(value: string | number | null): string | null => (
+(value: IStringNumberOrNull): IStringOrNull => (
   isStringOrNumber(value)
     ? styleProperties.map(property => `${property}: ${value};`).join(`\n`)
     : null
@@ -70,8 +66,8 @@ const mapStylePropertiesToValue =
 
 const computePropValueWithSuperSetGetFunction =
 (get: ISuperSetGetFunction) =>
-(value: unknown): string | null => {
-  let result: string | number | null = null;
+(value: unknown): IStringOrNull => {
+  let result: IStringOrNull = null;
 
   if (isSuperSetFunctionValueArray(value)) {
     result = isStringOrNumber(value[1])
@@ -86,7 +82,7 @@ const computePropValueWithSuperSetGetFunction =
 
 const computePropValueWithSetGetFunction =
 (get: ISetGetFunction) =>
-(value: unknown): string | null => {
+(value: unknown): IStringOrNull => {
   const result = isStringOrNumber(value)
     ? get(value)
     : get();
@@ -95,19 +91,19 @@ const computePropValueWithSetGetFunction =
 
 // Two input types for mapPropToStyleWithBreakpoints
 // superSet
-// - [string | null, [string, string | number | null]]
-// - string | null
+// - [IStringOrNull, [string, IStringOrNumber | null]]
+// - IStringOrNull
 // set
-// - [string | number, string | number]
-// - string | number
+// - [IStringOrNumber, IStringOrNumber]
+// - IStringOrNumber
 // Should return an array with arrays of computed styles.
 
 // Two input types for mapPropToStyle
 // superSet
-// - [string, string | number]
+// - [string, IStringOrNumber]
 // - string
 // set
-// - string | number
+// - IStringOrNumber
 // Should return an array of computed styles.
 const mapPropToStyleWithBreakpoints =
 (mapSetting: IPropToStyleSetting) => {
@@ -120,7 +116,7 @@ const mapPropToStyleWithBreakpoints =
       : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
   }
 
-  return (value: (ISuperSetGetFunctionValue | string | null)[]): (string | null)[] => {
+  return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
     const _value = Array.isArray(value)
       ? value
       : [value];
@@ -138,8 +134,8 @@ const mapPropToStyleWithBreakpoints =
 }
 
 // Two input types:
-// [string, string | number]
-// string | number
+// [string, IStringOrNumber]
+// IStringOrNumber
 // Should return an array of computed styles.
 const mapPropToStyle =
 (mapSetting: IPropToStyleSetting) => {
@@ -152,7 +148,7 @@ const mapPropToStyle =
       : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
   }
 
-  return (value: (string | number)[] | string | number | null) => {
+  return (value: (IStringOrNumber)[] | IStringOrNumber | null) => {
     let result = compute(value);
 
     if (mapSetting.styleProperties) {
@@ -172,14 +168,14 @@ export const mapPropsToStyles =
 (props: any) => {
   const mapArray = map(theme);
 
-  let breakpointsAreAvailable: boolean = arrayIsSet<string | number>(props.breakpoints);
+  let breakpointsAreAvailable: boolean = arrayIsSet<IStringOrNumber>(props.breakpoints);
 
   // If enable breakpoints mapping: resolve breakpoints.
   if (
     config.enableBreakpointMapping
     && breakpointsAreAvailable
   ) {
-    const resolvedBreakpoints: (string | number)[] = props.breakpoints
+    const resolvedBreakpoints: IStringOrNumber[] = props.breakpoints
       .map(b => theme.elements.breakpoint(b) || b)
       .sort();
 
@@ -191,7 +187,7 @@ export const mapPropsToStyles =
           }  
         });
         return result;
-      }, [] as (string | null)[][]);
+      }, [] as IStringOrNull[][]);
     
     // Combine and reduce breakpoints and styleValues.
     let result = styleValues.map(style => style[0]).join(`\n`);
@@ -218,7 +214,7 @@ export const mapPropsToStyles =
             }  
           });
           return result;
-        }, [] as (string | null)[])
+        }, [] as IStringOrNull[])
       .join(`\n`);
   }
 }

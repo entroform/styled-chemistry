@@ -4,3 +4,5 @@ export * from './elements';
 export * from './compounds';
 export * from './mixtures';
 export * from './theme';
+
+export * from './style-props';

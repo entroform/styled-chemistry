@@ -35,7 +35,7 @@ const createGetFunctionFromSet =
     if (isValidArrayIndex(key)) {
       value = mixtureSet.set[key];
     } else if (
-        typeof key === 'string'
+         typeof key === 'string'
       && typeof mixtureSet.alias === 'object'
       && isValidArrayIndex(mixtureSet.alias[key])
     ) {

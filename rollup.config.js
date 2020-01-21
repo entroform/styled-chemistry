@@ -8,11 +8,11 @@ import pkg from './package.json';
 const extensions = ['.js', '.ts'];
 
 export default {
-  input: 'lib/doko.ts',
+  input: 'lib/index.ts',
   output: [
     {
       file: pkg.main,
-      name: 'doko',
+      name: 'styled-chemistry',
       format: 'commonjs',
       sourcemap: true,
       plugins: [
@@ -42,5 +42,10 @@ export default {
       extensions,
       runtimeHelpers: true,
     }),
+  ],
+  external: [
+    'react',
+    'react-dom',
+    'styled-components',
   ],
 }

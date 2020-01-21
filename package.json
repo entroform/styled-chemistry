@@ -1,7 +1,11 @@
 {
-  "name": "style-chemistry",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@nekobird/style-chemistry",
+  "version": "0.0.1",
+  "private": false,
+  "description": "A theming system for css-in-js.",
+  "keywords": [
+    "nekobird"
+  ],
   "homepage": "https://github.com/nekobird/style-system#readme",
   "bugs": {
     "url": "https://github.com/nekobird/style-system/issues"
@@ -10,22 +14,38 @@
     "type": "git",
     "url": "git+https://github.com/nekobird/style-system.git"
   },
-  "license": "ISC",
-  "author": "",
-  "main": "index.js",
+  "license": "MIT",
+  "author": "Andrew Prasetya",
+  "files": [
+    "build/**/*"
+  ],
+  "sideEffects": false,
+  "main": "build/commonjs/styled-chemistry.js",
+  "module": "build/esm/styled-chemistry.js",
+  "jsnext:main": "build/esm/styled-chemistry.js",
   "scripts": {
+    "build": "tsc --emitDeclarationOnly --outDir build/types/; rollup -c rollup.config.js",
+    "clean": "rimraf build",
+    "prepublishOnly": "npm run build",
     "start": "parcel ./example/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
     "polished": "^3.4.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "sass": "^1.25.0",
+    "typescript": "^3.7.5"
+  },
+  "peerDependencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "styled-components": "^5.0.0"
   },
-  "devDependencies": {
-    "parcel-bundler": "^1.12.4",
-    "sass": "^1.25.0",
-    "typescript": "^3.7.5"
+  "publishConfig": {
+    "access": "public"
   }
 }
