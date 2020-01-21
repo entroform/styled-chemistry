@@ -105,11 +105,11 @@ const computePropValueWithSetGetFunction =
 // set
 // - IStringOrNumber
 // Should return an array of computed styles.
-const mapPropToStyleWithBreakpoints =
-(mapSetting: IPropToStyleSetting) => {
+const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   let compute = a => a;
 
   mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
+
   if (typeof mapSetting.get === 'function') {
     compute = (typeof mapSetting.isSuperSet === 'boolean' && mapSetting.isSuperSet === true)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
@@ -137,11 +137,11 @@ const mapPropToStyleWithBreakpoints =
 // [string, IStringOrNumber]
 // IStringOrNumber
 // Should return an array of computed styles.
-const mapPropToStyle =
-(mapSetting: IPropToStyleSetting) => {
+const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
   let compute = a => a;
 
   mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
+
   if (typeof mapSetting.get === 'function') {
     compute = mapSetting.isSuperSet
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
@@ -190,10 +190,16 @@ export const mapPropsToStyles =
       }, [] as IStringOrNull[][]);
     
     // Combine and reduce breakpoints and styleValues.
-    let result = styleValues.map(style => style[0]).join(`\n`);
+    let result = styleValues
+      .map(style => style[0])
+      .join(`\n`);
+
     resolvedBreakpoints.forEach((breakpoint, index) => {
       if (isStringOrNumber(breakpoint)) {
-        const style = styleValues.map(style => style[index + 1]).join(`\n`);
+        const style = styleValues
+          .map(style => style[index + 1])
+          .join(`\n`);
+
         if (style.trim()) {
           result += `
             ${config.mediaRule(toString(breakpoint))} {
@@ -204,17 +210,17 @@ export const mapPropsToStyles =
       }
     });
     return result;
-  } else {
-    // Loop through map object.
-    return mapArray
-      .reduce((result, setting) => {
-          setting.propNames.forEach(name => {
-            if (typeof props[name] !== 'undefined') {
-              result.push(mapPropToStyle(setting)(props[name]));
-            }  
-          });
-          return result;
-        }, [] as IStringOrNull[])
-      .join(`\n`);
   }
+
+  // Loop through map object.
+  return mapArray
+    .reduce((result, setting) => {
+        setting.propNames.forEach(name => {
+          if (typeof props[name] !== 'undefined') {
+            result.push(mapPropToStyle(setting)(props[name]));
+          }  
+        });
+        return result;
+      }, [] as IStringOrNull[])
+    .join(`\n`);
 }
