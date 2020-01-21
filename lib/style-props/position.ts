@@ -28,4 +28,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const color = mapPropsToStyles()(propsToStyleMap);
+export const position = mapPropsToStyles()(propsToStyleMap);

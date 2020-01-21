@@ -54,6 +54,7 @@ const createGetFunctionFromSuperSet =
 
 export const createGetFunctionsFromElements =
 (elements: IElements): IElementGetFunctions => ({
+  borderStyles:   createGetFunctionFromSet(elements.borderStyles),
   borderWidth:    createGetFunctionFromSet(elements.borderWidths),
   breakpoint:     createGetFunctionFromSet(elements.breakpoints),
   color:          createGetFunctionFromSuperSet(elements.colors),

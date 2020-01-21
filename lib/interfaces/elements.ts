@@ -20,6 +20,7 @@ export type IElementGetFunction = (key?: IStringOrNumber) => IElementSetArrayIte
 export type IElementSuperGetFunction = (name: string) => IElementGetFunction;
 
 export interface IElements {
+  readonly borderStyles: IElementSet;
   readonly borderWidths: IElementSet;
   readonly breakpoints: IElementSet;
   readonly colors: IElementSuperSet;
@@ -39,6 +40,7 @@ export interface IElements {
 }
 
 export interface IElementGetFunctions {
+  readonly borderStyle: IElementGetFunction;
   readonly borderWidth: IElementGetFunction;
   readonly breakpoint: IElementGetFunction;
   readonly color: IElementSuperGetFunction;

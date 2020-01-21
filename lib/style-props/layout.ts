@@ -9,38 +9,38 @@ import {
 
 const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   {
-    propNames: ['width'],
     get: theme.elements.size,
+    propNames: ['width'],
     styleProperties: ['width'],
   },
   {
-    propNames: ['height'],
     get: theme.elements.size,
+    propNames: ['height'],
     styleProperties: ['height'],
   },
   {
-    propNames: ['minWidth'],
     get: theme.elements.size,
+    propNames: ['minWidth'],
     styleProperties: ['min-width'],
   },
   {
-    propNames: ['maxWidth'],
     get: theme.elements.size,
+    propNames: ['maxWidth'],
     styleProperties: ['max-width'],
   },
   {
-    propNames: ['minHeight'],
     get: theme.elements.size,
+    propNames: ['minHeight'],
     styleProperties: ['min-height'],
   },
   {
-    propNames: ['maxHeight'],
     get: theme.elements.size,
+    propNames: ['maxHeight'],
     styleProperties: ['max-height'],
   },
   {
-    propNames: ['size'],
     get: theme.elements.size,
+    propNames: ['size'],
     styleProperties: ['width', 'height'],
   },
   {

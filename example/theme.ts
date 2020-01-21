@@ -7,6 +7,10 @@ import {
 } from '../build/esm/styled-chemistry';
 
 const elements = Object.freeze({
+  borderStyles: {
+    set: ['solid'],
+    default: 0,
+  },
   borderWidths: {
     set: [0, 1, 2],
     default: 1,

@@ -9,34 +9,29 @@ import {
 
 const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   {
-    propNames: ['fontFamily'],
     get: theme.elements.fontFamily,
+    propNames: ['fontFamily'],
     styleProperties: ['font-family'],
-    isSuperSet: false,
   },
   {
-    propNames: ['fontSize'],
     get: theme.elements.fontSize,
+    propNames: ['fontSize'],
     styleProperties: ['font-size'],
-    isSuperSet: false,
   },
   {
-    propNames: ['fontWeight'],
     get: theme.elements.fontWeight,
+    propNames: ['fontWeight'],
     styleProperties: ['font-weight'],
-    isSuperSet: false,
   },
   {
-    propNames: ['lineHeight'],
     get: theme.elements.lineHeight,
+    propNames: ['lineHeight'],
     styleProperties: ['line-height'],
-    isSuperSet: false,
   },
   {
-    propNames: ['letterSpacing'],
     get: theme.elements.letterSpacing,
+    propNames: ['letterSpacing'],
     styleProperties: ['letter-spacing'],
-    isSuperSet: false,
   },
   {
     propNames: ['textAlign'],
