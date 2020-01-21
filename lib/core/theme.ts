@@ -37,3 +37,7 @@ export const createTheme = (elements: IElements) => {
     }
   }
 }
+
+export const updateTheme = (elements: IElements) => {
+  
+}

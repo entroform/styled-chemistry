@@ -54,7 +54,7 @@ const createGetFunctionFromSuperSet =
 
 export const createGetFunctionsFromElements =
 (elements: IElements): IElementGetFunctions => ({
-  borderStyles:   createGetFunctionFromSet(elements.borderStyles),
+  borderStyle:    createGetFunctionFromSet(elements.borderStyles),
   borderWidth:    createGetFunctionFromSet(elements.borderWidths),
   breakpoint:     createGetFunctionFromSet(elements.breakpoints),
   color:          createGetFunctionFromSuperSet(elements.colors),
@@ -72,3 +72,5 @@ export const createGetFunctionsFromElements =
   timingFunction: createGetFunctionFromSet(elements.timingFunctions),
   zIndex:         createGetFunctionFromSet(elements.zIndices),
 });
+
+// Set new elements value...

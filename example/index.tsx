@@ -8,9 +8,9 @@ import {
 
 import {
   StyleChemistryProvider,
+  space,
+  flexbox,
 } from '../build/esm/styled-chemistry';
-
-console.log(StyleChemistryProvider);
 
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};
@@ -19,6 +19,9 @@ const StyledTextComponent = styled.div`
   font-family: ${props => props.theme.elements.fontFamily(0)};
   padding: ${props => props.theme.elements.space('m')};
   ${props => props.theme.mixtures.typography('normalized')()}
+  ${props => space(props.theme)(props)}
+  display: flex;
+  ${props => flexbox(props.theme)(props)}
 `;
 
 const ExampleComponent = () => (
@@ -26,10 +29,11 @@ const ExampleComponent = () => (
     <div>Hello World</div>
 
     <StyledTextComponent
-      breakpoints={[0, '300px', 2]}
+      breakpoints={[0, '480px', 2]}
       m={4}
       ml={['xs', '20px', 'l']}
       p={'l'}
+      justifyContent={['center', 'flex-end']}
     >
       StarBucks
     </StyledTextComponent>
