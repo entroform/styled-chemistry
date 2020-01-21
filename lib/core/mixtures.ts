@@ -9,6 +9,7 @@ import {
   IMixtureSetArrayItem,
   IMixtureSuperGetFunction,
   IMixtureSuperSet,
+  IStringOrNumber,
 } from '../interfaces';
 
 import {
@@ -23,7 +24,7 @@ const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundGet: ICompoundGetFunctions) =>
 (mixtureSet: IMixtureSet): IMixtureGetFunction => 
-(key?: string | number): IMixtureGetFunctionResult => {
+(key?: IStringOrNumber): IMixtureGetFunctionResult => {
   if (!arrayIsSet(mixtureSet.set)) {
     return null;
   }

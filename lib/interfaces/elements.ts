@@ -1,9 +1,13 @@
 import {
+  IStringOrNull,
+  IStringOrNumber,
+} from './common';
+import {
   ISet,
   ISuperSet,
 } from './set';
 
-export type IElementSetArrayItem = string | number | null;
+export type IElementSetArrayItem = IStringOrNull;
 
 export type IElementTransformFunction = (value: IElementSetArrayItem) => IElementSetArrayItem;
 
@@ -12,7 +16,7 @@ export interface IElementSet extends ISet<IElementSetArrayItem> {
 }
 export type IElementSuperSet = ISuperSet<IElementSetArrayItem>;
 
-export type IElementGetFunction = (key?: string | number) => IElementSetArrayItem;
+export type IElementGetFunction = (key?: IStringOrNumber) => IElementSetArrayItem;
 export type IElementSuperGetFunction = (name: string) => IElementGetFunction;
 
 export interface IElements {

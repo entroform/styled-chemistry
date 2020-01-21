@@ -8,6 +8,7 @@ import {
   ICompoundSuperGetFunction,
   ICompoundSuperSet,
   IElementGetFunctions,
+  IStringOrNumber,
 } from '../interfaces';
 
 import {
@@ -21,7 +22,7 @@ import {
 const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundSet: ICompoundSet): ICompoundGetFunction => 
-(key?: string | number): ICompoundGetFunctionResult => {
+(key?: IStringOrNumber): ICompoundGetFunctionResult => {
   if (!arrayIsSet(compoundSet.set)) {
     return null;
   }

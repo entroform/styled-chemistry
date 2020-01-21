@@ -6,6 +6,7 @@ import {
   IElementSetArrayItem,
   IElementSuperGetFunction,
   IElementSuperSet,
+  IStringOrNumber,
 } from '../interfaces';
 
 import {
@@ -16,7 +17,7 @@ import {
 
 const createGetFunctionFromSet =
 (elementSet: IElementSet): IElementGetFunction =>
-(key?: string | number): IElementSetArrayItem => {
+(key?: IStringOrNumber): IElementSetArrayItem => {
   if (!arrayIsSet(elementSet.set)) {
     return null;
   }

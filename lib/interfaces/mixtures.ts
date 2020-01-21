@@ -1,4 +1,8 @@
 import {
+  IStringOrNull,
+  IStringOrNumber,
+} from './common';
+import {
   ISet,
   ISuperSet,
 } from './set';
@@ -9,7 +13,7 @@ import {
   ICompoundGetFunctions,
 } from './compounds';
 
-export type IMixtureGetFunctionResult = string | null;
+export type IMixtureGetFunctionResult = IStringOrNull;
 
 export type IMixtureSetArrayItem = (
   elementGetFunctions: IElementGetFunctions,
@@ -19,7 +23,7 @@ export type IMixtureSetArrayItem = (
 export type IMixtureSet = ISet<IMixtureSetArrayItem>;
 export type IMixtureSuperSet = ISuperSet<IMixtureSetArrayItem>;
 
-export type IMixtureGetFunction = (key?: string | number) => IMixtureGetFunctionResult;
+export type IMixtureGetFunction = (key?: IStringOrNumber) => IMixtureGetFunctionResult;
 export type IMixtureSuperGetFunction = (name: string) => IMixtureGetFunction;
 
 export interface IMixtures {
