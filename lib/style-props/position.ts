@@ -9,22 +9,33 @@ import {
 
 const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   {
-    get: theme.elements.color,
-    isSuperSet: true,
-    propNames: ['color'],
-    styleProperties: ['color'],
+    propNames: ['position'],
+    styleProperties: ['position'],
   },
   {
-    get: theme.elements.color,
-    isSuperSet: true,
-    propNames: ['bg', 'backgroundColor'],
-    styleProperties: ['background-color'],
+    get: theme.elements.zIndex,
+    propNames: ['zIndex'],
+    styleProperties: ['z-index'],
   },
   {
-    get: theme.elements.opacity,
-    isSuperSet: false,
-    propNames: ['opacity'],
-    styleProperties: ['opacity'],
+    get: theme.elements.space,
+    propNames: ['top'],
+    styleProperties: ['top'],
+  },
+  {
+    get: theme.elements.space,
+    propNames: ['right'],
+    styleProperties: ['right'],
+  },
+  {
+    get: theme.elements.space,
+    propNames: ['bottom'],
+    styleProperties: ['bottom'],
+  },
+  {
+    get: theme.elements.space,
+    propNames: ['left'],
+    styleProperties: ['left'],
   },
 ]);
 
