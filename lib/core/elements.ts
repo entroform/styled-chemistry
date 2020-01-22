@@ -6,14 +6,14 @@ import {
   IElementSetArrayItem,
   IElementSuperGetFunction,
   IElementSuperSet,
+  IStringNumberOrNull,
   IStringOrNumber,
 } from '../interfaces';
 
 import {
-  aliasIsSet,
   arrayIsSet,
+  getSetValueIndex,
   isStringOrNumber,
-  isValidArrayIndex,
   memo,
   toString,
 } from './utilities';
@@ -24,26 +24,15 @@ const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction 
       return null;
     }
 
-    let value: IElementSetArrayItem = null;
-
-    if (isValidArrayIndex(key)) {
-      value = elementSet.set[key];
-    } else if (aliasIsSet<IElementSet>(elementSet)(key)) {
-      value = elementSet.set[elementSet.alias![key]];
-    } else if (typeof key === 'undefined') {
-      value = isValidArrayIndex(elementSet.default)
-        ? elementSet.set[elementSet.default]
-        : elementSet.set[0];
-    }
-
+    const index = getSetValueIndex<IElementSet>(elementSet)(key);
+    const value: IElementSetArrayItem = index ? elementSet.set[index] : null;
     return isStringOrNumber(value) ? toString(value) : null;
   }
 
   return memo(get, new Map());
 }
 
-const createGetFunctionFromSuperSet =
-(elementSuperSet: IElementSuperSet): IElementSuperGetFunction =>
+const createGetFunctionFromSuperSet = (elementSuperSet: IElementSuperSet): IElementSuperGetFunction =>
 (name: string): IElementGetFunction => (
   createGetFunctionFromSet(elementSuperSet[name])
 );
@@ -70,3 +59,18 @@ export const createGetFunctionsFromElements =
 });
 
 // Set new elements value...
+
+const createUpdateFunctionFromSet =
+(elementSet: IElementSet) =>
+(get: IElementGetFunction) =>
+(key?: IStringOrNumber) =>
+(value: IStringOrNumber) => {
+  const result = getSetValueIndex<IElementSet>(elementSet)(key);
+
+  if (!result) return null;
+
+  return {
+    ...elementSet,
+    set: [...elementSet.set]
+  }
+}

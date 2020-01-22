@@ -13,11 +13,10 @@ import {
 } from '../interfaces';
 
 import {
-  aliasIsSet,
   arrayIsSet,
+  getSetValueIndex,
   isSet,
   isStringOrNumber,
-  isValidArrayIndex,
   memo,
   toString,
 } from './utilities';
@@ -31,17 +30,8 @@ const createGetFunctionFromSet =
       return null;
     }
 
-    let value: IMixtureSetArrayItem | null = null;
-
-    if (isValidArrayIndex(key)) {
-      value = mixtureSet.set[key];
-    } else if (aliasIsSet<IMixtureSet>(mixtureSet)(key)) {
-      value = mixtureSet.set[mixtureSet.alias![key]];
-    } else if (typeof key === 'undefined') {
-      value = isValidArrayIndex(mixtureSet.default)
-        ? mixtureSet.set[mixtureSet.default]
-        : mixtureSet.set[0];
-    }
+    const index = getSetValueIndex<IMixtureSet>(mixtureSet)(key);
+    const value: IMixtureSetArrayItem | null = index ? mixtureSet.set[index] : null;
 
     if (typeof value === 'function') {
       const result = value(elementGet, compoundGet);

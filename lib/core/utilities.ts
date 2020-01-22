@@ -36,6 +36,19 @@ export const aliasIsSet = <T extends ISet<any>>(set: T) => (key: any): key is st
   && isValidArrayIndex(set.alias[key])
 );
 
+export const getSetValueIndex = <T extends ISet<any>>(set: T) =>
+(key?: IStringOrNumber): number | null => {
+  if (isValidArrayIndex(key)) {
+    return key;
+  } else if (aliasIsSet<T>(set)(key)) {
+    return set.alias![key];
+  } else if (typeof key === 'undefined') {
+    return isValidArrayIndex(set.default) ? set.default : 0;
+  }
+
+  return null;
+}
+
 export const toString = (n: IStringOrNumber): string => (
   typeof n === 'number'
     ? n.toString()

@@ -12,7 +12,6 @@ import {
   ITheme,
 } from '../interfaces/theme';
 
-
 export interface IThemeProviderProps {
   theme: ITheme;
 }
@@ -21,10 +20,8 @@ export const StyleChemistryContext = createContext(null);
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case '':
-
-    case 'decrement':
-      return {count: state.count - 1};
+    case 'update':
+      return state;
     default:
       return state;
   }

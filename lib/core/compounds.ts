@@ -9,14 +9,14 @@ import {
   ICompoundSuperSet,
   IElementGetFunctions,
   IStringOrNumber,
+  ISet,
 } from '../interfaces';
 
 import {
-  aliasIsSet,
   arrayIsSet,
+  getSetValueIndex,
   isSet,
   isStringOrNumber,
-  isValidArrayIndex,
   memo,
   toString,
 } from './utilities';
@@ -29,17 +29,8 @@ const createGetFunctionFromSet =
       return null;
     }
 
-    let value: ICompoundSetArrayItem | null = null;
-
-    if (isValidArrayIndex(key)) {
-      value = compoundSet.set[key];
-    } else if (aliasIsSet<ICompoundSet>(compoundSet)(key)) {
-      value = compoundSet.set[compoundSet.alias![key]];
-    } else if (typeof key === 'undefined') {
-      value = isValidArrayIndex(compoundSet.default)
-        ? compoundSet.set[compoundSet.default]
-        : compoundSet.set[0];
-    }
+    const index = getSetValueIndex<ICompoundSet>(compoundSet)(key);
+    const value: ICompoundSetArrayItem | null = index ? compoundSet.set[index] : null;
 
     if (typeof value === 'function') {
       const result = value(elementGet);
