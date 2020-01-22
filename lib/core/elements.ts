@@ -10,15 +10,15 @@ import {
 } from '../interfaces';
 
 import {
+  aliasIsSet,
   arrayIsSet,
   isStringOrNumber,
   isValidArrayIndex,
-  toString,
   memo,
+  toString,
 } from './utilities';
 
-const createGetFunctionFromSet =
-(elementSet: IElementSet): IElementGetFunction => {
+const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction => {
   const get = (key?: IStringOrNumber): IElementSetArrayItem => {
     if (!arrayIsSet(elementSet.set)) {
       return null;
@@ -28,12 +28,8 @@ const createGetFunctionFromSet =
 
     if (isValidArrayIndex(key)) {
       value = elementSet.set[key];
-    } else if (
-         typeof key === 'string'
-      && typeof elementSet.alias === 'object'
-      && isValidArrayIndex(elementSet.alias[key])
-    ) {
-      value = elementSet.set[elementSet.alias[key]];
+    } else if (aliasIsSet<IElementSet>(elementSet)(key)) {
+      value = elementSet.set[elementSet.alias![key]];
     } else if (typeof key === 'undefined') {
       value = isValidArrayIndex(elementSet.default)
         ? elementSet.set[elementSet.default]

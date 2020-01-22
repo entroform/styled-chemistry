@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     propNames: ['background'],
     styleProperties: ['background'],
@@ -31,4 +31,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const background = mapPropsToStyles()(propsToStyleMap);
+export const background = createStyleProps()(mapPropsToStyles);

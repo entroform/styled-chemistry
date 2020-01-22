@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     propNames: ['alignItems'],
     styleProperties: ['align-items'],
@@ -62,4 +62,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const flexbox = mapPropsToStyles()(propsToStyleMap);
+export const flexbox = createStyleProps()(mapPropsToStyles);

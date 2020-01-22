@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     propNames: ['position'],
     styleProperties: ['position'],
@@ -39,4 +39,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const position = mapPropsToStyles()(propsToStyleMap);
+export const position = createStyleProps()(mapPropsToStyles);

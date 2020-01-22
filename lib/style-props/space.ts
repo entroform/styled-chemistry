@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     get: theme.elements.space,
     propNames: ['m', 'margin'],
@@ -70,4 +70,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const space = mapPropsToStyles()(propsToStyleMap);
+export const space = createStyleProps()(mapPropsToStyles);

@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     get: theme.elements.color,
     isSuperSet: true,
@@ -28,4 +28,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const color = mapPropsToStyles()(propsToStyleMap);
+export const color = createStyleProps()(mapPropsToStyles);

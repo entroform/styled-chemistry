@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     get: theme.elements.fontFamily,
     propNames: ['fontFamily'],
@@ -43,4 +43,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const typography = mapPropsToStyles()(propsToStyleMap);
+export const typography = createStyleProps()(mapPropsToStyles);

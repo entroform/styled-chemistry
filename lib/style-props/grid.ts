@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const createStyleProps = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     get: theme.elements.space,
     isSuperSet: false,
@@ -64,4 +64,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const grid = mapPropsToStyles()(propsToStyleMap);
+export const grid = createStyleProps()(createStyleProps);

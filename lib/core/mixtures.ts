@@ -13,6 +13,7 @@ import {
 } from '../interfaces';
 
 import {
+  aliasIsSet,
   arrayIsSet,
   isSet,
   isStringOrNumber,
@@ -34,12 +35,8 @@ const createGetFunctionFromSet =
 
     if (isValidArrayIndex(key)) {
       value = mixtureSet.set[key];
-    } else if (
-         typeof key === 'string'
-      && typeof mixtureSet.alias === 'object'
-      && isValidArrayIndex(mixtureSet.alias[key])
-    ) {
-      value = mixtureSet.set[mixtureSet.alias[key]];
+    } else if (aliasIsSet<IMixtureSet>(mixtureSet)(key)) {
+      value = mixtureSet.set[mixtureSet.alias![key]];
     } else if (typeof key === 'undefined') {
       value = isValidArrayIndex(mixtureSet.default)
         ? mixtureSet.set[mixtureSet.default]

@@ -4,10 +4,10 @@ import {
 } from '../interfaces';
 
 import {
-  mapPropsToStyles,
+  createStyleProps,
 } from '../core/style-props';
 
-const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     propNames: ['text-shadow'],
     styleProperties: ['text-shadow'],
@@ -18,4 +18,4 @@ const propsToStyleMap = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const shadow = mapPropsToStyles()(propsToStyleMap);
+export const shadow = createStyleProps()(mapPropsToStyles);

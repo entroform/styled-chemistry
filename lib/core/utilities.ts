@@ -1,6 +1,7 @@
 import {
   IStringOrNumber,
   IStringNumberOrNull,
+  ISet,
 } from '../interfaces';
 
 export const isNumber = (n: any): n is number => (
@@ -27,6 +28,12 @@ export const isSet = <T>(set: any): set is T => (
   set
   && typeof set.set !== 'object'
   && Array.isArray(set.set) === true
+);
+
+export const aliasIsSet = <T extends ISet<any>>(set: T) => (key: any): key is string => (
+  typeof key === 'string'
+  && typeof set.alias === 'object'
+  && isValidArrayIndex(set.alias[key])
 );
 
 export const toString = (n: IStringOrNumber): string => (

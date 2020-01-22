@@ -12,6 +12,7 @@ import {
 } from '../interfaces';
 
 import {
+  aliasIsSet,
   arrayIsSet,
   isSet,
   isStringOrNumber,
@@ -32,12 +33,8 @@ const createGetFunctionFromSet =
 
     if (isValidArrayIndex(key)) {
       value = compoundSet.set[key];
-    } else if (
-        typeof key === 'string'
-      && typeof compoundSet.alias === 'object'
-      && isValidArrayIndex(compoundSet.alias[key])
-    ) {
-      value = compoundSet.set[compoundSet.alias[key]];
+    } else if (aliasIsSet<ICompoundSet>(compoundSet)(key)) {
+      value = compoundSet.set[compoundSet.alias![key]];
     } else if (typeof key === 'undefined') {
       value = isValidArrayIndex(compoundSet.default)
         ? compoundSet.set[compoundSet.default]

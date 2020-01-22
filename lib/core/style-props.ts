@@ -157,7 +157,7 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
 }
 
 // It all comes down to this:
-export const mapPropsToStyles =
+export const createStyleProps =
 (config: IPropsToStyleMapConfig = PROPS_TO_STYLE_MAP_DEFAULT_CONFIG) =>
 (map: IPropsToStyleMap) =>
 (theme: ITheme) =>
