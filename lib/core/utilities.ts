@@ -5,23 +5,19 @@ import {
 } from '../interfaces';
 
 export const isNumber = (n: any): n is number => (
-  typeof n === 'number'
-  && !isNaN(n)
+  typeof n === 'number' && !isNaN(n)
 );
 
 export const isStringOrNumber = (n: any): n is IStringOrNumber => (
-  isNumber(n)
-  || typeof n === 'string'
+  isNumber(n) || typeof n === 'string'
 );
 
 export const isStringNumberOrNull = (n: any): n is IStringNumberOrNull => (
-  isStringOrNumber(n)
-  || n === null
+  isStringOrNumber(n) || n === null
 );
 
 export const isValidArrayIndex = (n: any): n is number => (
-  isNumber(n)
-  && n >= 0
+  isNumber(n) && n >= 0
 );
 
 export const isSet = <T>(set: any): set is T => (
@@ -50,15 +46,11 @@ export const getSetValueIndex = <T extends ISet<any>>(set: T) =>
 }
 
 export const toString = (n: IStringOrNumber): string => (
-  typeof n === 'number'
-    ? n.toString()
-    : n
+  typeof n === 'number' ? n.toString() : n
 );
 
 export const arrayIsSet = <T>(n: any): n is T[] => (
-  typeof n === 'object'
-  && Array.isArray(n)
-  && n.length > 0
+  typeof n === 'object' && Array.isArray(n) && n.length > 0
 );
 
 export const memo = <T>(func: Function, cache: Map<string, T>) => (...args) => {
@@ -69,6 +61,8 @@ export const memo = <T>(func: Function, cache: Map<string, T>) => (...args) => {
   }
 
   const value = func(...args);
+
   cache.set(key, value);
+
   return value;
 }

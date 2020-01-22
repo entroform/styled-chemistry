@@ -139,12 +139,12 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
   mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
 
   if (typeof mapSetting.get === 'function') {
-    compute = mapSetting.isSuperSet
+    compute = mapSetting.isSuperSet 
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
       : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
   }
 
-  return (value: (IStringOrNumber)[] | IStringOrNumber | null) => {
+  return (value: IStringOrNumber[] | IStringOrNumber | null) => {
     let result = compute(value);
 
     if (mapSetting.styleProperties) {
