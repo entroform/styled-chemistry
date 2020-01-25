@@ -6,7 +6,6 @@ import {
   IElementSetArrayItem,
   IElementSuperGetFunction,
   IElementSuperSet,
-  IStringNumberOrNull,
   IStringOrNumber,
 } from '../interfaces';
 
@@ -25,7 +24,9 @@ const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction 
     }
 
     const index = getSetValueIndex<IElementSet>(elementSet)(key);
-    const value: IElementSetArrayItem = index ? elementSet.set[index] : null;
+    const value: IElementSetArrayItem = index
+      ? elementSet.set[index]
+      : null;
     return isStringOrNumber(value) ? toString(value) : null;
   }
 

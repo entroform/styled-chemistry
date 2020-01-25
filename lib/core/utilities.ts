@@ -22,12 +22,14 @@ export const isValidArrayIndex = (n: any): n is number => (
 
 export const isSet = <T>(set: any): set is T => (
   set
-  && typeof set.set !== 'object'
-  && Array.isArray(set.set) === true
+  && 'set' in set
+  && typeof set.set === 'object'
+  && Array.isArray(set.set)
 );
 
 export const aliasIsSet = <T extends ISet<any>>(set: T) => (key: any): key is string => (
   typeof key === 'string'
+  && 'alias' in set
   && typeof set.alias === 'object'
   && isValidArrayIndex(set.alias[key])
 );

@@ -9,7 +9,6 @@ import {
   ICompoundSuperSet,
   IElementGetFunctions,
   IStringOrNumber,
-  ISet,
 } from '../interfaces';
 
 import {
@@ -30,11 +29,15 @@ const createGetFunctionFromSet =
     }
 
     const index = getSetValueIndex<ICompoundSet>(compoundSet)(key);
-    const value: ICompoundSetArrayItem | null = index ? compoundSet.set[index] : null;
+    const value: ICompoundSetArrayItem | null = index
+      ? compoundSet.set[index]
+      : null;
 
     if (typeof value === 'function') {
       const result = value(elementGet);
-      return isStringOrNumber(result) ? toString(result) : null;
+      return isStringOrNumber(result)
+        ? toString(result)
+        : null;
     }
 
     return null;

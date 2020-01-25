@@ -31,11 +31,15 @@ const createGetFunctionFromSet =
     }
 
     const index = getSetValueIndex<IMixtureSet>(mixtureSet)(key);
-    const value: IMixtureSetArrayItem | null = index ? mixtureSet.set[index] : null;
+    const value: IMixtureSetArrayItem | null = index
+      ? mixtureSet.set[index]
+      : null;
 
     if (typeof value === 'function') {
       const result = value(elementGet, compoundGet);
-      return isStringOrNumber(result) ? toString(result) : null;
+      return isStringOrNumber(result)
+        ? toString(result)
+        : null;
     }
 
     return null;
