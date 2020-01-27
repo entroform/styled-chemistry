@@ -48,7 +48,7 @@ export const getSetValueIndex = <T extends ISet<any>>(set: T) =>
 }
 
 export const toString = (n: IStringOrNumber): string => (
-  typeof n === 'number' ? n.toString() : n
+  isNumber(n) ? n.toString() : n
 );
 
 export const arrayIsSet = <T>(n: any): n is T[] => (

@@ -109,7 +109,11 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
 
   if (typeof mapSetting.get === 'function') {
-    compute = (typeof mapSetting.isSuperSet === 'boolean' && mapSetting.isSuperSet)
+    compute = (
+      'isSuperSet' in mapSetting
+      && typeof mapSetting.isSuperSet === 'boolean'
+      && mapSetting.isSuperSet
+    )
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
       : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
   }
@@ -121,8 +125,7 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
 
     // Map style properties to result values.
     if (mapSetting.styleProperties) {
-      const mapStyleProperties = mapStylePropertiesToValue(mapSetting.styleProperties);
-      result = result.map(mapStyleProperties);
+      return result.map(mapStylePropertiesToValue(mapSetting.styleProperties));
     }
 
     return result;

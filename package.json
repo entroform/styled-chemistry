@@ -42,7 +42,7 @@
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
     "parcel-bundler": "^1.12.4",
-    "polished": "^3.4.2",
+    "polished": "^3.4.3",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
