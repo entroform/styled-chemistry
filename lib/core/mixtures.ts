@@ -13,7 +13,7 @@ import {
 } from '../interfaces';
 
 import {
-  arrayIsSet,
+  isValidArrayWithItems,
   getSetValueIndex,
   isSet,
   isStringOrNumber,
@@ -26,7 +26,7 @@ const createGetFunctionFromSet =
 (compoundGet: ICompoundGetFunctions) =>
 (mixtureSet: IMixtureSet): IMixtureGetFunction => {
   const get = (key?: IStringOrNumber): IMixtureGetFunctionResult => {
-    if (!arrayIsSet(mixtureSet.set)) {
+    if (!isValidArrayWithItems(mixtureSet.set)) {
       return null;
     }
 

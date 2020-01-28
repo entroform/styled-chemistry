@@ -10,7 +10,7 @@ import {
 } from '../interfaces';
 
 import {
-  arrayIsSet,
+  isValidArrayWithItems,
   getSetValueIndex,
   isStringOrNumber,
   memo,
@@ -19,7 +19,7 @@ import {
 
 const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction => {
   const get = (key?: IStringOrNumber): IElementSetArrayItem => {
-    if (!arrayIsSet(elementSet.set)) {
+    if (!isValidArrayWithItems(elementSet.set)) {
       return null;
     }
 

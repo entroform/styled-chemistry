@@ -14,7 +14,7 @@ import {
 } from '../interfaces';
 
 import {
-  arrayIsSet,
+  isValidArrayWithItems,
   isStringNumberOrNull,
   isStringOrNumber,
   toString,
@@ -167,7 +167,7 @@ export const createStyleProps =
 (props: any) => {
   const mapArray = map(theme);
 
-  let breakpointsAreAvailable: boolean = arrayIsSet<IStringOrNumber>(props.breakpoints);
+  let breakpointsAreAvailable: boolean = isValidArrayWithItems<IStringOrNumber>(props.breakpoints);
 
   // If enable breakpoints mapping: resolve breakpoints.
   if (

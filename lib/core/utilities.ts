@@ -1,7 +1,7 @@
 import {
-  IStringOrNumber,
-  IStringNumberOrNull,
   ISet,
+  IStringNumberOrNull,
+  IStringOrNumber,
 } from '../interfaces';
 
 export const isNumber = (n?: any): n is number => (
@@ -55,7 +55,7 @@ export const toString = (n: IStringOrNumber): string => (
   isNumber(n) ? n.toString() : n
 );
 
-export const arrayIsSet = <T>(n: any): n is T[] => (
+export const isValidArrayWithItems = <T>(n: any): n is T[] => (
   typeof n === 'object' && Array.isArray(n) && n.length > 0
 );
 

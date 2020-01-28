@@ -12,7 +12,7 @@ import {
 } from '../interfaces';
 
 import {
-  arrayIsSet,
+  isValidArrayWithItems,
   getSetValueIndex,
   isSet,
   isStringOrNumber,
@@ -24,7 +24,7 @@ const createGetFunctionFromSet =
 (elementGet: IElementGetFunctions) =>
 (compoundSet: ICompoundSet): ICompoundGetFunction => {
   const get = (key?: IStringOrNumber): ICompoundGetFunctionResult => {
-    if (!arrayIsSet(compoundSet.set)) {
+    if (!isValidArrayWithItems(compoundSet.set)) {
       return null;
     }
 
