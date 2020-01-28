@@ -4,20 +4,24 @@ import {
   ISet,
 } from '../interfaces';
 
-export const isNumber = (n: any): n is number => (
+export const isNumber = (n?: any): n is number => (
   typeof n === 'number' && !isNaN(n)
 );
 
-export const isStringOrNumber = (n: any): n is IStringOrNumber => (
+export const isInteger = (n?: any): n is number => {
+  return isNumber(n) && n % 1 === 0;
+};
+
+export const isStringOrNumber = (n?: any): n is IStringOrNumber => (
   isNumber(n) || typeof n === 'string'
 );
 
-export const isStringNumberOrNull = (n: any): n is IStringNumberOrNull => (
+export const isStringNumberOrNull = (n?: any): n is IStringNumberOrNull => (
   isStringOrNumber(n) || n === null
 );
 
-export const isValidArrayIndex = (n: any): n is number => (
-  isNumber(n) && n >= 0
+export const isValidArrayIndex = (n?: any): n is number => (
+  isInteger(n) && n >= 0
 );
 
 export const isSet = <T>(set: any): set is T => (
