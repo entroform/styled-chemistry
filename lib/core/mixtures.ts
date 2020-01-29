@@ -13,10 +13,10 @@ import {
 } from '../interfaces';
 
 import {
-  isValidArrayWithItems,
   getSetValueIndex,
   isSet,
   isStringOrNumber,
+  isValidArrayWithItems,
   memo,
   toString,
 } from './utilities';

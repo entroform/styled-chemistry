@@ -14,9 +14,9 @@ import {
 } from '../interfaces';
 
 import {
-  isValidArrayWithItems,
   isStringNumberOrNull,
   isStringOrNumber,
+  isValidArrayWithItems,
   toString,
 } from './utilities';
 

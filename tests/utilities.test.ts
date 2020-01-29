@@ -14,7 +14,7 @@ describe('isNumber', () => {
     expect(isNumber(-123)).toBeTruthy();
   });
 
-  it(`should return false if it's not a number`, () => {
+  it(`should return false if not a number is given`, () => {
     expect(isNumber('123')).toBeFalsy();
     expect(isNumber('hello')).toBeFalsy();
     expect(isNumber(NaN)).toBeFalsy();
@@ -25,13 +25,13 @@ describe('isNumber', () => {
 });
 
 describe('isInteger', () => {
-  it(`should return true if a number is given`, () => {
+  it(`should return true if an integer is given`, () => {
     expect(isInteger(0)).toBeTruthy();
     expect(isInteger(123)).toBeTruthy();
     expect(isInteger(-123)).toBeTruthy();
   });
 
-  it(`should return false if it's not a number`, () => {
+  it(`should return false if not an integer is given`, () => {
     expect(isInteger(123.4)).toBeFalsy();
     expect(isInteger('123')).toBeFalsy();
     expect(isInteger('hello')).toBeFalsy();
@@ -52,7 +52,7 @@ describe('isStringOrNumber', () => {
     expect(isStringOrNumber('123')).toBeTruthy();
   });
 
-  it(`should return false if it's not a number`, () => {
+  it(`should return false if not a number or string is given`, () => {
     expect(isStringOrNumber(NaN)).toBeFalsy();
     expect(isStringOrNumber(null)).toBeFalsy();
     expect(isStringOrNumber(undefined)).toBeFalsy();
@@ -71,7 +71,7 @@ describe('isStringNumberOrNull', () => {
     expect(isStringNumberOrNull(null)).toBeTruthy();
   });
 
-  it(`should return false if it's not a string, number, or null`, () => {
+  it(`should return false if not a string, number, or null is given`, () => {
     expect(isStringNumberOrNull(NaN)).toBeFalsy();
     expect(isStringNumberOrNull(undefined)).toBeFalsy();
     expect(isStringNumberOrNull()).toBeFalsy();
@@ -79,12 +79,12 @@ describe('isStringNumberOrNull', () => {
 });
 
 describe('isValidArrayIndex', () => {
-  it(`should return true if a string or number is given`, () => {
+  it(`should return true if an integer greater or equal to zero is given`, () => {
     expect(isValidArrayIndex(0)).toBeTruthy();
     expect(isValidArrayIndex(10)).toBeTruthy();
   });
 
-  it(`should return false if it's not a number`, () => {
+  it(`should return false if not an integer greater or equal to zero is given`, () => {
     expect(isValidArrayIndex(-10)).toBeFalsy();
     expect(isValidArrayIndex(123.123)).toBeFalsy();
     expect(isValidArrayIndex(NaN)).toBeFalsy();
