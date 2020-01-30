@@ -3,12 +3,13 @@
     "baseUrl": ".",
     "declaration": true,
     "declarationDir": "./build/types/",
+    "esModuleInterop": true,
+    "jsx": "react",
     "lib": [
       "dom.iterable",
       "dom",
       "esnext"
     ],
-    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
@@ -21,7 +22,6 @@
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "jsx": "react",
   },
   "include": [
     "./lib/**/*"
