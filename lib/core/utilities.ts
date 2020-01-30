@@ -4,27 +4,27 @@ import {
   IStringOrNumber,
 } from '../interfaces';
 
-export const isNumber = (n?: any): n is number => (
-  typeof n === 'number' && !isNaN(n)
+export const isNumber = (value?: any): value is number => (
+  typeof value === 'number' && !isNaN(value)
 );
 
-export const isInteger = (n?: any): n is number => {
-  return isNumber(n) && n % 1 === 0;
+export const isInteger = (value?: any): value is number => {
+  return isNumber(value) && value % 1 === 0;
 };
 
-export const isStringOrNumber = (n?: any): n is IStringOrNumber => (
-  isNumber(n) || typeof n === 'string'
+export const isStringOrNumber = (value?: any): value is IStringOrNumber => (
+  isNumber(value) || typeof value === 'string'
 );
 
-export const isStringNumberOrNull = (n?: any): n is IStringNumberOrNull => (
-  isStringOrNumber(n) || n === null
+export const isStringNumberOrNull = (value?: any): value is IStringNumberOrNull => (
+  isStringOrNumber(value) || value === null
 );
 
-export const isValidArrayIndex = (n?: any): n is number => (
-  isInteger(n) && n >= 0
+export const isValidArrayIndex = (value?: any): value is number => (
+  isInteger(value) && value >= 0
 );
 
-export const isSet = <T>(set: any): set is T => (
+export const isSet = <T>(set?: any): set is T => (
   set
   && 'set' in set
   && typeof set.set === 'object'
@@ -51,22 +51,22 @@ export const getSetValueIndex = <T extends ISet<any>>(set: T) =>
   return null;
 }
 
-export const toString = (n: IStringOrNumber): string => (
-  isNumber(n) ? n.toString() : n
+export const toString = (value: IStringOrNumber): string => (
+  isNumber(value) ? value.toString() : value
 );
 
-export const isValidArrayWithItems = <T>(n: any): n is T[] => (
-  typeof n === 'object' && Array.isArray(n) && n.length > 0
+export const isValidArrayWithItems = <T>(value: any): value is T[] => (
+  typeof value === 'object' && Array.isArray(value) && value.length > 0
 );
 
-export const memo = <T>(func: Function, cache: Map<string, T>) => (...args) => {
+export const memo = <T>(fn: Function, cache: Map<string, T>) => (...args) => {
   const key = JSON.stringify(args);
 
   if (cache.has(key)) {
     return cache.get(key);
   }
 
-  const value = func(...args);
+  const value = fn(...args);
 
   cache.set(key, value);
 

@@ -45,11 +45,11 @@ export const PROPS_TO_STYLE_MAP_DEFAULT_CONFIG: IPropsToStyleMapConfig = {
   mediaRule: a => `@media only screen and (min-width: ${a})`,
 };
 
-// Handl Leaf nodes.
+// Handle leaf nodes.
 
 // Helpers
 
-const isSuperSetFunctionValueArray = (value: any): value is ISuperSetGetFunctionValue => (
+const isSuperSetFunctionValueArray = (value?: any): value is ISuperSetGetFunctionValue => (
   Array.isArray(value)
   && value.length === 2
   && typeof value[0] === 'string'
@@ -119,16 +119,11 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   }
 
   return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
-    const _value = Array.isArray(value) ? value : [value];
-
-    let result = _value.map(a => compute(a));
-
+    const result = Array.from(value).map(a => compute(a));
     // Map style properties to result values.
-    if (mapSetting.styleProperties) {
-      return result.map(mapStylePropertiesToValue(mapSetting.styleProperties));
-    }
-
-    return result;
+    return mapSetting.styleProperties
+      ? result.map(mapStylePropertiesToValue(mapSetting.styleProperties))
+      : result;
   }
 }
 
@@ -147,16 +142,11 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
       : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
   }
 
-  return (value: IStringOrNumber[] | IStringOrNumber | null) => {
-    let result = compute(value);
-
-    if (mapSetting.styleProperties) {
-      const mapStyleProperties = mapStylePropertiesToValue(mapSetting.styleProperties);
-      result = mapStyleProperties(result);
-    }
-
-    return result;
-  }
+  return (value: IStringOrNumber[] | IStringOrNumber | null) => (
+    mapSetting.styleProperties
+      ? mapStylePropertiesToValue(mapSetting.styleProperties)(compute(value))
+      : compute(value)
+  );
 }
 
 // It all comes down to this:
