@@ -171,9 +171,8 @@ export const createStyleProps =
     const styleValues = mapArray
       .reduce((result, setting) => {
         setting.propNames.forEach(name => {
-          if (typeof props[name] !== 'undefined') {
-            result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
-          }
+          typeof props[name] !== 'undefined'
+            && result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
         });
         return result;
       }, [] as IStringOrNull[][]);
@@ -205,9 +204,8 @@ export const createStyleProps =
   return mapArray
     .reduce((result, setting) => {
         setting.propNames.forEach(name => {
-          if (typeof props[name] !== 'undefined') {
-            result.push(mapPropToStyle(setting)(props[name]));
-          }
+          typeof props[name] !== 'undefined'
+            && result.push(mapPropToStyle(setting)(props[name]));
         });
         return result;
       }, [] as IStringOrNull[])
