@@ -67,7 +67,7 @@ const mapStylePropertiesToValue =
 const computePropValueWithSuperSetGetFunction =
 (get: ISuperSetGetFunction) =>
 (value: unknown): IStringOrNull => {
-  let result: IStringOrNull = null;
+  let result: IStringNumberOrNull = null;
 
   if (isSuperSetFunctionValueArray(value)) {
     result = isStringOrNumber(value[1])

@@ -10,6 +10,7 @@ const extensions = ['.js', '.ts'];
 
 export default {
   input: 'lib/index.ts',
+
   output: [
     {
       file: pkg.main,
@@ -26,6 +27,7 @@ export default {
       sourcemap: true,
     },
   ],
+
   plugins: [
     external(),
     resolve({
@@ -45,6 +47,7 @@ export default {
       runtimeHelpers: true,
     }),
   ],
+
   external: [
     'react',
     'react-dom',

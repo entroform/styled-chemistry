@@ -25,9 +25,9 @@ export const createTheme = (elements: IElements) => {
     return (mixtures: IMixtures = {}): ITheme => {
       const mixtureGet: IMixtureGetFunctions = createGetFunctionsFromMixtures(elementGet)(compoundGet)(mixtures);
       return {
-        elements:  elementGet,
+        elements: elementGet,
         compounds: compoundGet,
-        mixtures:  mixtureGet,
+        mixtures: mixtureGet,
         original: {
           elements,
           compounds,
@@ -36,8 +36,4 @@ export const createTheme = (elements: IElements) => {
       };
     }
   }
-}
-
-export const updateTheme = (elements: IElements) => {
-  
 }

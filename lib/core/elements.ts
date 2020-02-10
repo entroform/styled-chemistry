@@ -31,7 +31,8 @@ const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction 
   return memo(get, new Map());
 }
 
-const createGetFunctionFromSuperSet = (elementSuperSet: IElementSuperSet): IElementSuperGetFunction =>
+const createGetFunctionFromSuperSet =
+(elementSuperSet: IElementSuperSet): IElementSuperGetFunction =>
 (name: string): IElementGetFunction => (
   createGetFunctionFromSet(elementSuperSet[name])
 );
@@ -56,20 +57,3 @@ export const createGetFunctionsFromElements =
   timingFunction: createGetFunctionFromSet(elements.timingFunctions),
   zIndex:         createGetFunctionFromSet(elements.zIndices),
 });
-
-// Set new elements value...
-
-const createUpdateFunctionFromSet =
-(elementSet: IElementSet) =>
-(get: IElementGetFunction) =>
-(key?: IStringOrNumber) =>
-(value: IStringOrNumber) => {
-  const result = getSetValueIndex<IElementSet>(elementSet)(key);
-
-  if (!result) return null;
-
-  return {
-    ...elementSet,
-    set: [...elementSet.set]
-  }
-}
