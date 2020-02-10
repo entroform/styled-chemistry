@@ -13,6 +13,7 @@ import {
   getSetValueIndex,
   isStringOrNumber,
   isValidArrayWithItems,
+  isValidArrayIndex,
   memo,
   toString,
 } from './utilities';
@@ -24,7 +25,11 @@ const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction 
     }
 
     const index = getSetValueIndex<IElementSet>(elementSet)(key);
-    const value: IElementSetArrayItem = index ? elementSet.set[index] : null;
+
+    const value: IElementSetArrayItem = isValidArrayIndex(index)
+      ? elementSet.set[index]
+      : null;
+
     return isStringOrNumber(value) ? toString(value) : null;
   }
 

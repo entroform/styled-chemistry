@@ -8,7 +8,7 @@ import {
   StyleChemistryProvider,
   space,
   flexbox,
-} from '../build/esm/styled-chemistry';
+} from '../lib';
 
 const StyledTextComponent = styled.div`
   background-image: ${props => props.theme.compounds.gradients('sunset')()};

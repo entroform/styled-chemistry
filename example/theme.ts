@@ -4,7 +4,7 @@ import {
 } from 'polished';
 import {
   createTheme,
-} from '../build/esm/styled-chemistry';
+} from '../lib';
 
 const elements = Object.freeze({
   borderStyles: {
