@@ -17,6 +17,7 @@ import {
   isStringNumberOrNull,
   isStringOrNumber,
   isValidArrayWithItems,
+  toArray,
   toString,
 } from './utilities';
 
@@ -119,7 +120,7 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   }
 
   return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
-    const result = Array.from(value).map(a => compute(a));
+    const result = toArray(value).map(a => compute(a));
     // Map style properties to result values.
     return mapSetting.styleProperties
       ? result.map(mapStylePropertiesToValue(mapSetting.styleProperties))

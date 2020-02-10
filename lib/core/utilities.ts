@@ -55,6 +55,8 @@ export const toString = (value: IStringOrNumber): string => (
   isNumber(value) ? value.toString() : value
 );
 
+export const toArray = <T>(value: any): T[] => Array.isArray(value) ? value : [value];
+
 export const isValidArrayWithItems = <T>(value: any): value is T[] => (
   typeof value === 'object' && Array.isArray(value) && value.length > 0
 );
