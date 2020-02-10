@@ -37,7 +37,7 @@ const createGetFunctionFromSet =
 
     if (typeof value === 'function') {
       const result = value(elementGet);
-      console.log(result);
+
       return isStringOrNumber(result)
         ? toString(result)
         : null;

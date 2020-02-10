@@ -30,7 +30,9 @@ const createGetFunctionFromSet = (elementSet: IElementSet): IElementGetFunction 
       ? elementSet.set[index]
       : null;
 
-    return isStringOrNumber(value) ? toString(value) : null;
+    return isStringOrNumber(value)
+      ? toString(value)
+      : null;
   }
 
   return memo(get, new Map());
