@@ -39,8 +39,8 @@ export const aliasIsSet = <T extends ISet<any>>(set: T) => (key: any): key is st
 );
 
 export const getSetValueIndex = <T extends ISet<any>>(set: T) =>
-(key?: IStringOrNumber): number | null => {
-  return isValidArrayIndex(key)
+(key?: IStringOrNumber): number | null => (
+  isValidArrayIndex(key)
     ? key
     : aliasIsSet<T>(set)(key)
       ? set.alias![key]
@@ -48,7 +48,8 @@ export const getSetValueIndex = <T extends ISet<any>>(set: T) =>
         ? isValidArrayIndex(set.default)
           ? set.default
           : 0
-        : null}
+        : null
+);
 
 export const toString = (value: IStringOrNumber): string => (
   isNumber(value) ? value.toString() : value
