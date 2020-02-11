@@ -61,7 +61,9 @@ const mapStylePropertiesToValue =
 (styleProperties: string[]) =>
 (value: IStringNumberOrNull): IStringOrNull => (
   isStringOrNumber(value)
-    ? styleProperties.map(property => `${property}: ${value};`).join(`\n`)
+    ? styleProperties
+      .map(property => `${property}: ${value};`)
+      .join(`\n`)
     : null
 );
 
@@ -95,6 +97,13 @@ const computePropValueWithSetGetFunction =
     : null;
 }
 
+
+const mapSettingIsSuperSet = (mapSetting: IPropToStyleSetting): mapSetting is IPropToStyleSettingWithSuperSetGetFunction => (
+  'isSuperSet' in mapSetting
+  && typeof mapSetting.isSuperSet === 'boolean'
+  && mapSetting.isSuperSet === true
+);
+
 // Two input types for mapPropToStyleWithBreakpoints
 // superSet
 // - [IStringOrNull, [string, IStringOrNumber | null]]
@@ -117,13 +126,9 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
 
   if (typeof mapSetting.get === 'function') {
-    compute = (
-      'isSuperSet' in mapSetting
-      && typeof mapSetting.isSuperSet === 'boolean'
-      && mapSetting.isSuperSet
-    )
+    compute = mapSettingIsSuperSet(mapSetting)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-      : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
+      : computePropValueWithSetGetFunction(mapSetting.get);
   }
 
   return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
@@ -145,9 +150,9 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
   mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
 
   if (typeof mapSetting.get === 'function') {
-    compute = mapSetting.isSuperSet 
+    compute = mapSettingIsSuperSet(mapSetting)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-      : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
+      : computePropValueWithSetGetFunction(mapSetting.get);
   }
 
   return (value: IStringOrNumber[] | IStringOrNumber | null) => (
