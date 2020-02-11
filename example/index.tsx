@@ -8,6 +8,7 @@ import {
   StyleChemistryProvider,
   space,
   flexbox,
+  grid,
 } from '../lib';
 
 const StyledTextComponent = styled.div`
@@ -18,8 +19,9 @@ const StyledTextComponent = styled.div`
   padding: ${props => props.theme.elements.space('m')};
   ${props => props.theme.mixtures.typography('normalized')()}
   ${props => space(props.theme)(props)}
-  display: flex;
-  ${props => flexbox(props.theme)(props)}
+
+  display: grid;
+  ${props => grid(props.theme)(props)}
 `;
 
 const ExampleComponent = () => (
@@ -27,13 +29,11 @@ const ExampleComponent = () => (
     <div>Hello World</div>
 
     <StyledTextComponent
-      breakpoints={[0, '480px', 2]}
-      m={4}
-      ml={['xs', '20px', 'l']}
-      p={'l'}
-      justifyContent={['center', 'flex-end']}
+      breakpoints={['480px', '768px']}
+      gridTemplateColumns={['50% 50%', '75% 25%', '50% 50%']}
     >
-      StarBucks
+      <div>Mcdonalds</div>
+      <div>Mcdonalds</div>
     </StyledTextComponent>
   </>
 );

@@ -70,17 +70,15 @@ const mapStylePropertiesToValue =
 const computePropValueWithSuperSetGetFunction =
 (get: ISuperSetGetFunction) =>
 (value: unknown): IStringOrNull => {
-  let result: IStringNumberOrNull = null;
-
-  if (isSuperSetFunctionValueArray(value)) {
-    result = isStringOrNumber(value[1])
+  const result: IStringNumberOrNull = isSuperSetFunctionValueArray(value)
+    ? isStringOrNumber(value[1])
       ? get(value[0])(value[1])
-      : get(value[0])();
-  } else if (typeof value === 'string') {
-    result = get(value)();
-  }
+      : get(value[0])()
+    : typeof value === 'string'
+      ? get(value)()
+      : null;
 
-  return (result !== null)
+  return result !== null
     ? toString(result)
     : null;
 }
@@ -121,15 +119,11 @@ const mapSettingIsSuperSet = (mapSetting: IPropToStyleSetting): mapSetting is IP
 // - IStringOrNumber
 // Should return an array of computed styles.
 const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
-  let compute = a => a;
-
-  mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
-
-  if (typeof mapSetting.get === 'function') {
-    compute = mapSettingIsSuperSet(mapSetting)
+  const compute = mapSettingHasGetFunction(mapSetting)
+    ? mapSettingIsSuperSet(mapSetting)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-      : computePropValueWithSetGetFunction(mapSetting.get);
-  }
+      : computePropValueWithSetGetFunction(mapSetting.get)
+    : a => a;
 
   return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
     const result = toArray(value).map(a => compute(a));
@@ -140,20 +134,20 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
   }
 }
 
+const mapSettingHasGetFunction = (mapSetting: IPropToStyleSetting): mapSetting is IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction => (
+  'get' in mapSetting && typeof mapSetting.get === 'function'
+);
+
 // Two input types:
 // [string, IStringOrNumber]
 // IStringOrNumber
 // Should return an array of computed styles.
 const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
-  let compute = a => a;
-
-  mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
-
-  if (typeof mapSetting.get === 'function') {
-    compute = mapSettingIsSuperSet(mapSetting)
+  const compute = mapSettingHasGetFunction(mapSetting)
+    ? mapSettingIsSuperSet(mapSetting)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-      : computePropValueWithSetGetFunction(mapSetting.get);
-  }
+      : computePropValueWithSetGetFunction(mapSetting.get)
+    : a => a;
 
   return (value: IStringOrNumber[] | IStringOrNumber | null) => (
     mapSetting.styleProperties
@@ -193,27 +187,28 @@ export const createStyleProps =
       );
 
     // Combine and reduce breakpoints and styleValues.
-    let result = styleValues
-      .map(style => style[0])
-      .join(`\n`);
-
-    resolvedBreakpoints.forEach((breakpoint, index) => {
-      if (isStringOrNumber(breakpoint)) {
-        const style = styleValues
-          .map(style => style[index + 1])
-          .join(`\n`);
-
-        if (style.trim()) {
-          result += `
-            ${config.mediaRule(toString(breakpoint))} {
-              ${style}
-            }
-          `;
+    return resolvedBreakpoints.reduce(
+      (result, breakpoint, index) => {
+        if (isStringOrNumber(breakpoint)) {
+          const style = styleValues
+            .map(style => style[index + 1])
+            .join(`\n`);
+  
+          if (style.trim()) {
+            result += `
+              ${config.mediaRule(toString(breakpoint))} {
+                ${style}
+              }
+            `;
+          }
         }
-      }
-    });
 
-    return result;
+        return result;
+      },
+      styleValues
+        .map(style => style[0])
+        .join(`\n`)
+    );
   }
 
   // Loop through map object.
