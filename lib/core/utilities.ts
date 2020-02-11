@@ -8,9 +8,9 @@ export const isNumber = (value?: any): value is number => (
   typeof value === 'number' && !isNaN(value)
 );
 
-export const isInteger = (value?: any): value is number => {
-  return isNumber(value) && value % 1 === 0;
-};
+export const isInteger = (value?: any): value is number => (
+  isNumber(value) && value % 1 === 0
+);
 
 export const isStringOrNumber = (value?: any): value is IStringOrNumber => (
   isNumber(value) || typeof value === 'string'
