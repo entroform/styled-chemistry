@@ -1,6 +1,6 @@
 {
-  "name": "@nekobird/style-chemistry",
-  "version": "0.0.1",
+  "name": "@nekobird/styled-chemistry",
+  "version": "0.0.2",
   "private": false,
   "description": "A theming system for css-in-js.",
   "keywords": [
@@ -20,6 +20,7 @@
   "main": "build/commonjs/styled-chemistry.js",
   "module": "build/esm/styled-chemistry.js",
   "jsnext:main": "build/esm/styled-chemistry.js",
+  "types": "build/types/lib/index.d.ts",
   "files": [
     "build/**/*"
   ],
