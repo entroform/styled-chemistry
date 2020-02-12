@@ -16,26 +16,26 @@
   },
   "license": "MIT",
   "author": "Andrew Prasetya",
-  "files": [
-    "build/**/*"
-  ],
   "sideEffects": false,
   "main": "build/commonjs/styled-chemistry.js",
   "module": "build/esm/styled-chemistry.js",
   "jsnext:main": "build/esm/styled-chemistry.js",
+  "files": [
+    "build/**/*"
+  ],
   "scripts": {
     "build": "tsc --emitDeclarationOnly --outDir build/types/; rollup -c rollup.config.js",
     "clean": "rimraf build",
+    "coverage": "jest --coverage",
     "prepublishOnly": "npm run build",
     "start": "parcel ./example/index.html",
-    "test": "jest --watch",
-    "coverage": "jest --coverage"
+    "test": "jest --watch"
   },
   "dependencies": {
+    "polished": "^3.4.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "styled-components": "^5.0.1",
-    "polished": "^3.4.4"
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -43,7 +43,7 @@
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-typescript": "^7.8.3",
     "@types/jest": "^25.1.2",
-    "@types/node": "^13.7.0",
+    "@types/node": "^13.7.1",
     "jest": "^25.1.0",
     "parcel-bundler": "^1.12.4",
     "rollup-plugin-babel": "^4.3.3",
