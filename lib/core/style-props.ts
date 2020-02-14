@@ -38,18 +38,16 @@ import {
 //   color={[['red', 0]]}
 // />
 
-// superSet: array
 // set: IStringOrNumber
+// superSet: array
 
 export const PROPS_TO_STYLE_MAP_DEFAULT_CONFIG: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
   mediaRule: a => `@media only screen and (min-width: ${a})`,
 };
 
-// Handle leaf nodes.
 
 // Helpers
-
 const isSuperSetFunctionValueArray = (value?: any): value is ISuperSetGetFunctionValue => (
   Array.isArray(value)
   && value.length === 2
@@ -57,19 +55,15 @@ const isSuperSetFunctionValueArray = (value?: any): value is ISuperSetGetFunctio
   && isStringNumberOrNull(value[1])
 );
 
-const mapStylePropertiesToValue =
-(styleProperties: string[]) =>
-(value: IStringNumberOrNull): IStringOrNull => (
+const mapStylePropertiesToCSSRules = (styleProperties: string[]) => (value: IStringNumberOrNull): IStringOrNull => (
   isStringOrNumber(value)
     ? styleProperties
-      .map(property => `${property}: ${value};`)
-      .join(`\n`)
+        .map(property => `${property}: ${value};`)
+        .join(`\n`)
     : null
 );
 
-const computePropValueWithSuperSetGetFunction =
-(get: ISuperSetGetFunction) =>
-(value: unknown): IStringOrNull => {
+const computePropValueWithSuperSetGetFunction = (get: ISuperSetGetFunction) => (value: unknown): IStringOrNull => {
   const result: IStringNumberOrNull = isSuperSetFunctionValueArray(value)
     ? isStringOrNumber(value[1])
       ? get(value[0])(value[1])
@@ -83,9 +77,7 @@ const computePropValueWithSuperSetGetFunction =
     : null;
 }
 
-const computePropValueWithSetGetFunction =
-(get: ISetGetFunction) =>
-(value: unknown): IStringOrNull => {
+const computePropValueWithSetGetFunction = (get: ISetGetFunction) => (value: unknown): IStringOrNull => {
   const result = isStringOrNumber(value)
     ? get(value)
     : get();
@@ -129,7 +121,7 @@ const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
     const result = toArray(value).map(a => compute(a));
     // Map style properties to result values.
     return mapSetting.styleProperties
-      ? result.map(mapStylePropertiesToValue(mapSetting.styleProperties))
+      ? result.map(mapStylePropertiesToCSSRules(mapSetting.styleProperties))
       : result;
   }
 }
@@ -151,7 +143,7 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
 
   return (value: IStringOrNumber[] | IStringOrNumber | null) => (
     mapSetting.styleProperties
-      ? mapStylePropertiesToValue(mapSetting.styleProperties)(compute(value))
+      ? mapStylePropertiesToCSSRules(mapSetting.styleProperties)(compute(value))
       : compute(value)
   );
 }
