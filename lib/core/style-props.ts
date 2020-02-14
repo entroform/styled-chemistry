@@ -11,6 +11,7 @@ import {
   ISuperSetGetFunction,
   ISuperSetGetFunctionValue,
   ITheme,
+  IPropsToStyleMapArray,
 } from '../interfaces';
 
 import {
@@ -148,63 +149,57 @@ const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
   );
 }
 
-// It all comes down to this:
-export const createStyleProps =
+const createStylePropsWithBreakpointMapping =
 (config: IPropsToStyleMapConfig = PROPS_TO_STYLE_MAP_DEFAULT_CONFIG) =>
-(map: IPropsToStyleMap) =>
+(mapArray: IPropsToStyleMapArray) =>
 (theme: ITheme) =>
 (props: any) => {
-  const mapArray = map(theme);
+  const resolvedBreakpoints: IStringOrNumber[] = props.breakpoints
+    .map(b => theme.elements.breakpoint(b) || b)
+    .sort();
 
-  // If enable breakpoints mapping: resolve breakpoints.
-  if (
-    config.enableBreakpointMapping
-    && isValidArrayWithItems<IStringOrNumber>(props.breakpoints)
-  ) {
-    const resolvedBreakpoints: IStringOrNumber[] = props.breakpoints
-      .map(b => theme.elements.breakpoint(b) || b)
-      .sort();
-
-    const styleValues = mapArray
-      .reduce(
-        (result, setting) => {
-          setting.propNames.forEach(name => {
-            typeof props[name] !== 'undefined'
-              && result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
-          });
-
-          return result;
-        },
-        [] as IStringOrNull[][]
-      );
-
-    // Combine and reduce breakpoints and styleValues.
-    return resolvedBreakpoints.reduce(
-      (result, breakpoint, index) => {
-        if (isStringOrNumber(breakpoint)) {
-          const style = styleValues
-            .map(style => style[index + 1])
-            .join(`\n`);
-  
-          if (style.trim()) {
-            result += `
-              ${config.mediaRule(toString(breakpoint))} {
-                ${style}
-              }
-            `;
-          }
-        }
+  const styleValues = mapArray
+    .reduce(
+      (result, setting) => {
+        setting.propNames.forEach(name => {
+          typeof props[name] !== 'undefined'
+            && result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
+        });
 
         return result;
       },
-      styleValues
-        .map(style => style[0])
-        .join(`\n`)
+      [] as IStringOrNull[][]
     );
-  }
 
-  // Loop through map object.
-  return mapArray
+  // Combine and reduce breakpoints and styleValues.
+  return resolvedBreakpoints.reduce(
+    (result, breakpoint, index) => {
+      if (isStringOrNumber(breakpoint)) {
+        const style = styleValues
+          .map(style => style[index + 1])
+          .join(`\n`);
+
+        result += style.trim()
+          ? `
+              ${config.mediaRule(toString(breakpoint))} {
+                ${style}
+              }
+            `
+          : '';
+      }
+
+      return result;
+    },
+    styleValues
+      .map(style => style[0])
+      .join(`\n`)
+  );
+}
+
+const createStylePropsWIthoutBreakpointMapping =
+(mapArray: IPropsToStyleMapArray) =>
+(props: any) => (
+  mapArray
     .reduce(
       (result, setting) => {
         setting.propNames.forEach(name => {
@@ -216,5 +211,16 @@ export const createStyleProps =
       },
       [] as IStringOrNull[]
     )
-    .join(`\n`);
-}
+    .join(`\n`)
+);
+
+// It all comes down to this:
+export const createStyleProps =
+(config: IPropsToStyleMapConfig = PROPS_TO_STYLE_MAP_DEFAULT_CONFIG) =>
+(map: IPropsToStyleMap) =>
+(theme: ITheme) =>
+(props: any) => (
+  config.enableBreakpointMapping && isValidArrayWithItems<IStringOrNumber>(props.breakpoints)
+    ? createStylePropsWithBreakpointMapping(config)(map(theme))(theme)(props)
+    : createStylePropsWIthoutBreakpointMapping(map(theme))(props)
+);
