@@ -1,13 +1,13 @@
 import {
-  IStringOrNull,
   IStringOrNumber,
+  IStringNumberOrNull,
 } from './common';
 import {
   ISet,
   ISuperSet,
 } from './set';
 
-export type IElementSetArrayItem = IStringOrNull;
+export type IElementSetArrayItem = IStringNumberOrNull;
 
 export type IElementTransformFunction = (value: IElementSetArrayItem) => IElementSetArrayItem;
 

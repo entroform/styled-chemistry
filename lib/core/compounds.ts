@@ -12,10 +12,11 @@ import {
 } from '../interfaces';
 
 import {
-  isValidArrayWithItems,
   getSetValueIndex,
   isSet,
   isStringOrNumber,
+  isValidArrayIndex,
+  isValidArrayWithItems,
   memo,
   toString,
 } from './utilities';
@@ -29,12 +30,14 @@ const createGetFunctionFromSet =
     }
 
     const index = getSetValueIndex<ICompoundSet>(compoundSet)(key);
-    const value: ICompoundSetArrayItem | null = index
+
+    const value: ICompoundSetArrayItem | null = isValidArrayIndex(index)
       ? compoundSet.set[index]
       : null;
 
     if (typeof value === 'function') {
       const result = value(elementGet);
+
       return isStringOrNumber(result)
         ? toString(result)
         : null;

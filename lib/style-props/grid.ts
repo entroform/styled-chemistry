@@ -7,7 +7,7 @@ import {
   createStyleProps,
 } from '../core/style-props';
 
-const createStyleProps = (theme: ITheme): IPropsToStyleMapArray => ([
+const mapPropsToStyles = (theme: ITheme): IPropsToStyleMapArray => ([
   {
     get: theme.elements.space,
     isSuperSet: false,
@@ -64,4 +64,4 @@ const createStyleProps = (theme: ITheme): IPropsToStyleMapArray => ([
   },
 ]);
 
-export const grid = createStyleProps()(createStyleProps);
+export const grid = createStyleProps()(mapPropsToStyles);

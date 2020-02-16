@@ -11,12 +11,14 @@ import {
   ISuperSetGetFunction,
   ISuperSetGetFunctionValue,
   ITheme,
+  IPropsToStyleMapArray,
 } from '../interfaces';
 
 import {
   isStringNumberOrNull,
   isStringOrNumber,
   isValidArrayWithItems,
+  toArray,
   toString,
 } from './utilities';
 
@@ -37,18 +39,16 @@ import {
 //   color={[['red', 0]]}
 // />
 
-// superSet: array
 // set: IStringOrNumber
+// superSet: array
 
 export const PROPS_TO_STYLE_MAP_DEFAULT_CONFIG: IPropsToStyleMapConfig = {
   enableBreakpointMapping: true,
   mediaRule: a => `@media only screen and (min-width: ${a})`,
 };
 
-// Handle leaf nodes.
 
 // Helpers
-
 const isSuperSetFunctionValueArray = (value?: any): value is ISuperSetGetFunctionValue => (
   Array.isArray(value)
   && value.length === 2
@@ -56,36 +56,44 @@ const isSuperSetFunctionValueArray = (value?: any): value is ISuperSetGetFunctio
   && isStringNumberOrNull(value[1])
 );
 
-const mapStylePropertiesToValue =
-(styleProperties: string[]) =>
-(value: IStringNumberOrNull): IStringOrNull => (
+const mapStylePropertiesToCSSRules = (styleProperties: string[]) => (value: IStringNumberOrNull): IStringOrNull => (
   isStringOrNumber(value)
-    ? styleProperties.map(property => `${property}: ${value};`).join(`\n`)
+    ? styleProperties
+        .map(property => `${property}: ${value};`)
+        .join(`\n`)
     : null
 );
 
-const computePropValueWithSuperSetGetFunction =
-(get: ISuperSetGetFunction) =>
-(value: unknown): IStringOrNull => {
-  let result: IStringOrNull = null;
-
-  if (isSuperSetFunctionValueArray(value)) {
-    result = isStringOrNumber(value[1])
+const computePropValueWithSuperSetGetFunction = (get: ISuperSetGetFunction) => (value: unknown): IStringOrNull => {
+  const result: IStringNumberOrNull = isSuperSetFunctionValueArray(value)
+    ? isStringOrNumber(value[1])
       ? get(value[0])(value[1])
-      : get(value[0])();
-  } else if (typeof value === 'string') {
-    result = get(value)();
-  }
+      : get(value[0])()
+    : typeof value === 'string'
+      ? get(value)()
+      : null;
 
-  return (result !== null) ? toString(result) : null;
+  return result !== null
+    ? toString(result)
+    : null;
 }
 
-const computePropValueWithSetGetFunction =
-(get: ISetGetFunction) =>
-(value: unknown): IStringOrNull => {
-  const result = isStringOrNumber(value) ? get(value) : get();
-  return (result !== null) ? toString(result) : null;
+const computePropValueWithSetGetFunction = (get: ISetGetFunction) => (value: unknown): IStringOrNull => {
+  const result = isStringOrNumber(value)
+    ? get(value)
+    : get();
+
+  return (result !== null)
+    ? toString(result)
+    : null;
 }
+
+
+const mapSettingIsSuperSet = (mapSetting: IPropToStyleSetting): mapSetting is IPropToStyleSettingWithSuperSetGetFunction => (
+  'isSuperSet' in mapSetting
+  && typeof mapSetting.isSuperSet === 'boolean'
+  && mapSetting.isSuperSet === true
+);
 
 // Two input types for mapPropToStyleWithBreakpoints
 // superSet
@@ -104,112 +112,115 @@ const computePropValueWithSetGetFunction =
 // - IStringOrNumber
 // Should return an array of computed styles.
 const mapPropToStyleWithBreakpoints = (mapSetting: IPropToStyleSetting) => {
-  let compute = a => a;
-
-  mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
-
-  if (typeof mapSetting.get === 'function') {
-    compute = (
-      'isSuperSet' in mapSetting
-      && typeof mapSetting.isSuperSet === 'boolean'
-      && mapSetting.isSuperSet
-    )
+  const compute = mapSettingHasGetFunction(mapSetting)
+    ? mapSettingIsSuperSet(mapSetting)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-      : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
-  }
+      : computePropValueWithSetGetFunction(mapSetting.get)
+    : a => a;
 
   return (value: (ISuperSetGetFunctionValue | IStringOrNull)[]): IStringOrNull[] => {
-    const result = Array.from(value).map(a => compute(a));
+    const result = toArray(value).map(a => compute(a));
     // Map style properties to result values.
     return mapSetting.styleProperties
-      ? result.map(mapStylePropertiesToValue(mapSetting.styleProperties))
+      ? result.map(mapStylePropertiesToCSSRules(mapSetting.styleProperties))
       : result;
   }
 }
+
+const mapSettingHasGetFunction = (mapSetting: IPropToStyleSetting): mapSetting is IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction => (
+  'get' in mapSetting && typeof mapSetting.get === 'function'
+);
 
 // Two input types:
 // [string, IStringOrNumber]
 // IStringOrNumber
 // Should return an array of computed styles.
 const mapPropToStyle = (mapSetting: IPropToStyleSetting) => {
-  let compute = a => a;
-
-  mapSetting = mapSetting as IPropToStyleSettingWithSetGetFunction | IPropToStyleSettingWithSuperSetGetFunction;
-
-  if (typeof mapSetting.get === 'function') {
-    compute = mapSetting.isSuperSet 
+  const compute = mapSettingHasGetFunction(mapSetting)
+    ? mapSettingIsSuperSet(mapSetting)
       ? computePropValueWithSuperSetGetFunction(mapSetting.get)
-      : computePropValueWithSetGetFunction(mapSetting.get as ISetGetFunction);
-  }
+      : computePropValueWithSetGetFunction(mapSetting.get)
+    : a => a;
 
   return (value: IStringOrNumber[] | IStringOrNumber | null) => (
     mapSetting.styleProperties
-      ? mapStylePropertiesToValue(mapSetting.styleProperties)(compute(value))
+      ? mapStylePropertiesToCSSRules(mapSetting.styleProperties)(compute(value))
       : compute(value)
   );
 }
+
+const createStylePropsWithBreakpointMapping =
+(config: IPropsToStyleMapConfig = PROPS_TO_STYLE_MAP_DEFAULT_CONFIG) =>
+(mapArray: IPropsToStyleMapArray) =>
+(theme: ITheme) =>
+(props: any) => {
+  const resolvedBreakpoints: IStringOrNumber[] = props.breakpoints
+    .map(b => theme.elements.breakpoint(b) || b)
+    .sort();
+
+  const styleValues = mapArray
+    .reduce(
+      (result, setting) => {
+        setting.propNames.forEach(name => {
+          typeof props[name] !== 'undefined'
+            && result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
+        });
+
+        return result;
+      },
+      [] as IStringOrNull[][]
+    );
+
+  // Combine and reduce breakpoints and styleValues.
+  return resolvedBreakpoints.reduce(
+    (result, breakpoint, index) => {
+      if (isStringOrNumber(breakpoint)) {
+        const style = styleValues
+          .map(style => style[index + 1])
+          .join(`\n`);
+
+        result += style.trim()
+          ? `
+              ${config.mediaRule(toString(breakpoint))} {
+                ${style}
+              }
+            `
+          : '';
+      }
+
+      return result;
+    },
+    styleValues
+      .map(style => style[0])
+      .join(`\n`)
+  );
+}
+
+const createStylePropsWIthoutBreakpointMapping =
+(mapArray: IPropsToStyleMapArray) =>
+(props: any) => (
+  mapArray
+    .reduce(
+      (result, setting) => {
+        setting.propNames.forEach(name => {
+          typeof props[name] !== 'undefined'
+            && result.push(mapPropToStyle(setting)(props[name]));
+        });
+
+        return result;
+      },
+      [] as IStringOrNull[]
+    )
+    .join(`\n`)
+);
 
 // It all comes down to this:
 export const createStyleProps =
 (config: IPropsToStyleMapConfig = PROPS_TO_STYLE_MAP_DEFAULT_CONFIG) =>
 (map: IPropsToStyleMap) =>
 (theme: ITheme) =>
-(props: any) => {
-  const mapArray = map(theme);
-
-  let breakpointsAreAvailable: boolean = isValidArrayWithItems<IStringOrNumber>(props.breakpoints);
-
-  // If enable breakpoints mapping: resolve breakpoints.
-  if (
-    config.enableBreakpointMapping
-    && breakpointsAreAvailable
-  ) {
-    const resolvedBreakpoints: IStringOrNumber[] = props.breakpoints
-      .map(b => theme.elements.breakpoint(b) || b)
-      .sort();
-
-    const styleValues = mapArray
-      .reduce((result, setting) => {
-        setting.propNames.forEach(name => {
-          if (typeof props[name] !== 'undefined') {
-            result.push(mapPropToStyleWithBreakpoints(setting)(props[name]));
-          }
-        });
-        return result;
-      }, [] as IStringOrNull[][]);
-
-    // Combine and reduce breakpoints and styleValues.
-    let result = styleValues
-      .map(style => style[0])
-      .join(`\n`);
-
-    resolvedBreakpoints.forEach((breakpoint, index) => {
-      if (isStringOrNumber(breakpoint)) {
-        const style = styleValues
-          .map(style => style[index + 1])
-          .join(`\n`);
-
-        if (style.trim()) {
-          result += `
-            ${config.mediaRule(toString(breakpoint))} {
-              ${style}
-            }
-          `;
-        }
-      }
-    });
-    return result;
-  }
-
-  // Loop through map object.
-  return mapArray
-    .reduce((result, setting) => {
-        setting.propNames.forEach(name => {
-          if (typeof props[name] !== 'undefined') {
-            result.push(mapPropToStyle(setting)(props[name]));
-          }
-        });
-        return result;
-      }, [] as IStringOrNull[])
-    .join(`\n`);
-}
+(props: any) => (
+  config.enableBreakpointMapping && isValidArrayWithItems<IStringOrNumber>(props.breakpoints)
+    ? createStylePropsWithBreakpointMapping(config)(map(theme))(theme)(props)
+    : createStylePropsWIthoutBreakpointMapping(map(theme))(props)
+);

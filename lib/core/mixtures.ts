@@ -16,6 +16,7 @@ import {
   getSetValueIndex,
   isSet,
   isStringOrNumber,
+  isValidArrayIndex,
   isValidArrayWithItems,
   memo,
   toString,
@@ -31,7 +32,8 @@ const createGetFunctionFromSet =
     }
 
     const index = getSetValueIndex<IMixtureSet>(mixtureSet)(key);
-    const value: IMixtureSetArrayItem | null = index
+
+    const value: IMixtureSetArrayItem | null = isValidArrayIndex(index)
       ? mixtureSet.set[index]
       : null;
 

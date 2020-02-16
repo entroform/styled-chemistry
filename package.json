@@ -1,6 +1,6 @@
 {
-  "name": "@nekobird/style-chemistry",
-  "version": "0.0.1",
+  "name": "@nekobird/styled-chemistry",
+  "version": "0.0.2",
   "private": false,
   "description": "A theming system for css-in-js.",
   "keywords": [
@@ -16,22 +16,24 @@
   },
   "license": "MIT",
   "author": "Andrew Prasetya",
-  "files": [
-    "build/**/*"
-  ],
   "sideEffects": false,
   "main": "build/commonjs/styled-chemistry.js",
   "module": "build/esm/styled-chemistry.js",
   "jsnext:main": "build/esm/styled-chemistry.js",
+  "types": "build/types/lib/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
   "scripts": {
     "build": "tsc --emitDeclarationOnly --outDir build/types/; rollup -c rollup.config.js",
     "clean": "rimraf build",
+    "coverage": "jest --coverage",
     "prepublishOnly": "npm run build",
     "start": "parcel ./example/index.html",
-    "test": "jest --watch",
-    "coverage": "jest --coverage"
+    "test": "jest --watch"
   },
   "dependencies": {
+    "polished": "^3.4.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "styled-components": "^5.0.1"
@@ -45,7 +47,6 @@
     "@types/node": "^13.7.1",
     "jest": "^25.1.0",
     "parcel-bundler": "^1.12.4",
-    "polished": "^3.4.4",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
